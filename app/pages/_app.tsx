@@ -8,15 +8,19 @@ import Layout from '../components/Layout';
 import { useApollo } from '../lib/apollo';
 import { AuthProvider } from '../lib/useAuth';
 
+import { ChakraProvider } from "@chakra-ui/react"
+
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
 
   return (
     <ApolloProvider client={apolloClient}>
       <AuthProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ChakraProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ChakraProvider>
       </AuthProvider>
     </ApolloProvider>
   );
