@@ -1,0 +1,30 @@
+:root {
+  --color-dark-text: #333;
+  --ds-color__indigo: #223c50;
+  --ds-color__lavender: #ad7a99;
+  --ds-color__teal: #2f6690;
+  --ds-color__petrol: #5ca2b2;
+  --ds-color__purple: #78679e;
+  --ds-color__lilac: #a076fc;
+  --ds-color__lavender--light: #e4b9d6;
+  --ds-color__teal--light: #55a3ce;
+  --ds-color__petrol--light: #96dde7;
+  --ds-color__purple--light: #b7a4da;
+  --ds-color__lavender--dark: #753a5b;
+  --ds-color__teal--dark: #082851;
+  --ds-color__petrol--dark: #21667c;
+  --ds-color__purple--dark: #382961;
+  --ds-color__aqua: #81e1da;
+  --ds-color__azure: #197eff;
+  --ds-color__pink: #ff62ba;
+  --ds-color__grey: #8d8d8f;
+  --ds-color__grey--light: #c4c4c4;
+  --ds-color__warning: #ffbc42;
+  --ds-color_error: #fa6357;
+  --ds-color__white: #fff;
+
+  --ds-font__dinpro: 'DINPro', Helvetica, Arial, sans-serif;
+  --ds-font__dinpro--cond: 'DINPro-Cond', Helvetica, Arial, sans-serif;
+  --ds-font__dinpro--cond-light: 'DINPro-Cond-Light', Helvetica, Arial, sans-serif;
+  --ds-font__tradegothic: 'TradeGothic', Helvetica, Arial, sans-serif;
+}

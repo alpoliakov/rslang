@@ -1,3 +1,6 @@
+/* ----------- Variables ------------- */
+@import url('./variables.css');
+
 * {
   padding: 0;
   margin: 0;
@@ -6,11 +9,23 @@
 
 html,
 body {
-  font-family: 'Alegreya', serif;
+  font-family: 'TradeGothic LT', serif;
+  height: 100%;
+  width: 100%;
 }
 
-h1 {
-  font-family: 'Alegreya', serif;
+.main_container {
+  min-height: 100vh;
+  max-width: 100%;
+  margin: 0 auto;
+  display: grid;
+  row-gap: 20px;
+  align-items: center;
+  justify-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  grid-template-rows: 70px 1fr auto;
+  background: linear-gradient(to top, var(--ds-color__indigo) 0, var(--ds-color__indigo) 100%);
 }
 
 /* ----------- Loading ------------- */
