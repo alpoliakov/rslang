@@ -1,0 +1,9 @@
+query CurrentUser {
+  currentUser {
+    _id
+    name
+    email
+    avatar
+    registrationDate
+  }
+}

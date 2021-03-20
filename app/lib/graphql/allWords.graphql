@@ -1,0 +1,18 @@
+query AllWords {
+  allWords {
+    _id
+    group
+    page
+    word
+    image
+    audio
+    audioMeaning
+    audioExample
+    textMeaning
+    textExample
+    transcription
+    textExampleTranslate
+    textMeaningTranslate
+    wordTranslate
+  }
+}

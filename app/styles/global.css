@@ -1,0 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'Alegreya', serif;
+}
+
+h1 {
+  font-family: 'Alegreya', serif;
+}
+
+/* ----------- Loading ------------- */
+@import url('./loading.css');

@@ -1,0 +1,15 @@
+query Statistic {
+  statistic {
+    _id
+    learnedWords
+    user {
+      _id
+      name
+      email
+    }
+    optional {
+      title
+      description
+    }
+  }
+}
