@@ -1,0 +1,83 @@
+.sprint-container {
+  background-color: rgb(88, 89, 94);
+  background-blend-mode: color-burn;
+  background-image: url('https://images.pexels.com/photos/6109124/pexels-photo-6109124.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 10% auto 10%;
+}
+
+.timer {
+  grid-column-start: 1;
+  margin-left: 35%;
+  margin-top: 20px;
+  color: white;
+  font-size: 30px;
+}
+
+.sprint-close {
+  grid-column-start: 3;
+  margin-right: 35%;
+  color: white;
+  font-size: 50px;
+}
+
+.sprint-board-outer {
+  grid-column-start: 2;
+  margin: auto;
+  border: solid white;
+  width: 60%;
+  height: 50%;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 20% auto 10% 10% 20% 10%;
+}
+
+.sprint-buttons {
+  grid-row-start: 5;
+  margin: auto;
+}
+
+.sprint-arrows {
+  grid-row-start: 6;
+  margin: auto;
+
+  color: white;
+  font-size: 30px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.sprint-english {
+  grid-row-start: 3;
+  margin: auto;
+  color: white;
+  font-size: 30px;
+}
+
+.sprint-translation {
+  grid-row-start: 4;
+  margin: auto;
+  color: rgb(212, 211, 211);
+  font-size: 20px;
+}
+
+.sprint-icons {
+  grid-row-start: 1;
+  margin: auto;
+
+  color: white;
+  font-size: 30px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.sprint-pics {
+  grid-row-start: 2;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
