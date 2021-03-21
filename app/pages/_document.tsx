@@ -15,7 +15,7 @@ class MyDocument extends Document {
           <meta name="HandheldFriendly" content="true" />
           <meta name="keywords" content="rs-lang" />
           <meta name="description" content="RS Lang" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             rel="preload"
             as="style"

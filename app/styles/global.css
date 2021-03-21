@@ -9,7 +9,7 @@
 
 html,
 body {
-  font-family: 'TradeGothic LT', serif;
+  font-family: 'Alegreya', serif;
   height: 100%;
   width: 100%;
 }
@@ -22,11 +22,31 @@ body {
   row-gap: 20px;
   align-items: center;
   justify-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
   grid-template-rows: 70px 1fr auto;
-  background: linear-gradient(to top, var(--ds-color__indigo) 0, var(--ds-color__indigo) 100%);
+  /*background: linear-gradient(to top, var(--ds-color__indigo) 0, var(--ds-color__indigo) 100%);*/
 }
 
 /* ----------- Loading ------------- */
+
 @import url('./loading.css');
+
+/* ----------- Shadow text -------------- */
+
+/*Shadow*/
+
+.shadow__item {
+  filter: drop-shadow(10px 10px 10px hsl(0, 0%, 15%));
+  transition: 0.4s ease-in-out;
+}
+
+.hover__item {
+  transition: 0.4s ease-in-out;
+}
+
+.hover__item:hover {
+  filter: drop-shadow(5px 5px 5px hsl(0, 0%, 15%));
+}
+
+.text-light-shadow {
+  text-shadow: 1px 1px 1px #000;
+}
