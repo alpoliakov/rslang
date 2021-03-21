@@ -1,3 +1,4 @@
+import { Box, Heading } from '@chakra-ui/layout';
 import Head from 'next/head';
 import React, { useState } from 'react';
 
@@ -11,11 +12,34 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <Box>
       <Head>
         <title>Home Page</title>
       </Head>
-      <h1>Home page</h1>
-    </div>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+      <Heading as="h1">Home page</Heading>
+    </Box>
   );
 }
