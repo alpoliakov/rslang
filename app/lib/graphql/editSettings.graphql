@@ -1,0 +1,16 @@
+mutation EditSettings($input: SettingsInput!) {
+  editSettings(input: $input) {
+    _id
+    user {
+      _id
+      name
+      email
+      avatar
+    }
+    wordsPerDay
+    optional {
+      title
+      description
+    }
+  }
+}

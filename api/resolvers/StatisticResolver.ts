@@ -10,11 +10,12 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 
-import { Statistic, StatisticModel } from '../entity/Statistic';
+import { OptionalStatistic, Statistic, StatisticModel } from '../entity/Statistic';
 import { User, UserModel } from '../entity/User';
 import { isAuth } from '../middleware/isAuth';
 import { ObjectIdScalar } from '../schema/object-id.scalar';
 import { MyContext } from '../types/MyContext';
+import { StatisticInput } from '../types/StatisticInput';
 
 @Resolver(() => Statistic)
 export class StatisticResolver {
@@ -22,6 +23,29 @@ export class StatisticResolver {
   @UseMiddleware(isAuth)
   statistic(@Ctx() ctx: MyContext) {
     return StatisticModel.findOne({ user: ctx.res.locals.userId });
+  }
+
+  @Mutation(() => Statistic)
+  @UseMiddleware(isAuth)
+  async editStatistic(
+    @Arg('input') statisticInput: StatisticInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<Statistic> {
+    const { id, title, description, learnedWords } = statisticInput;
+    const optional = { title, description };
+
+    const statistic = await StatisticModel.findOneAndUpdate(
+      { _id: id, user: ctx.res.locals.userId },
+      {
+        optional: { ...optional } as OptionalStatistic,
+        learnedWords,
+      },
+      { runValidators: true, new: true },
+    );
+    if (!statistic) {
+      throw new Error('Statistic not found');
+    }
+    return statistic;
   }
 
   @Mutation(() => Boolean)
