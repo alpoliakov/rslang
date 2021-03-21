@@ -1,3 +1,5 @@
+import { useColorModeValue } from '@chakra-ui/color-mode';
+import { Box } from '@chakra-ui/layout';
 import Head from 'next/head';
 import React from 'react';
 
@@ -5,8 +7,10 @@ import Footer from './Footer';
 import Header from './Header';
 
 export default function Layout({ children }) {
+  const bg = useColorModeValue('gray.50', '#223c50');
+
   return (
-    <div className="main_container">
+    <Box className="main_container" bg={bg}>
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,6 +22,6 @@ export default function Layout({ children }) {
       <Header />
       {children}
       <Footer />
-    </div>
+    </Box>
   );
 }
