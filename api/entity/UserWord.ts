@@ -9,10 +9,12 @@ import { Word } from './Word';
 @ObjectType()
 class OptionalUserWord {
   @Field()
+  @Property({ nullable: true })
   title: string;
 
   @Field()
-  description: string;
+  @Property({ nullable: true })
+  repeat: boolean;
 }
 
 @ObjectType()

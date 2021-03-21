@@ -10,11 +10,12 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 
-import { Settings, SettingsModel } from '../entity/Settings';
+import { OptionalSettings, Settings, SettingsModel } from '../entity/Settings';
 import { User, UserModel } from '../entity/User';
 import { isAuth } from '../middleware/isAuth';
 import { ObjectIdScalar } from '../schema/object-id.scalar';
 import { MyContext } from '../types/MyContext';
+import { SettingsInput } from '../types/SettingsInput';
 
 @Resolver(() => Settings)
 export class SettingsResolver {
@@ -22,6 +23,28 @@ export class SettingsResolver {
   @UseMiddleware(isAuth)
   settings(@Ctx() ctx: MyContext) {
     return SettingsModel.findOne({ user: ctx.res.locals.userId });
+  }
+
+  @Mutation(() => Settings)
+  @UseMiddleware(isAuth)
+  async editSettings(
+    @Arg('input') settingsInput: SettingsInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<Settings> {
+    const { id, title, description, wordsPerDay } = settingsInput;
+    const optional = { title, description };
+    const settings = await SettingsModel.findOneAndUpdate(
+      { _id: id, user: ctx.res.locals.userId },
+      {
+        optional: { ...optional } as OptionalSettings,
+        wordsPerDay,
+      },
+      { runValidators: true, new: true },
+    );
+    if (!settings) {
+      throw new Error('Settings not found');
+    }
+    return settings;
   }
 
   @Mutation(() => Boolean)

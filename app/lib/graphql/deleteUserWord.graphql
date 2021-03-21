@@ -1,0 +1,3 @@
+mutation DeleteUserWord($userWordId: ObjectId!) {
+  deleteUserWord(userWordId: $userWordId)
+}
