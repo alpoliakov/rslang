@@ -64,7 +64,7 @@
 }
 
 .sprint-board-inner {
-  background-color: rgb(71, 72, 73);
+  background-color: rgba(92, 125, 158, 0.726);
   grid-row-start: 2;
   margin: auto;
   border: solid rgb(212, 211, 211);
