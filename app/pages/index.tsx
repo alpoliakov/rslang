@@ -6,6 +6,7 @@ import GradientContainer from '../components/GradientContainer';
 import Loading from '../components/Loading';
 import Player from '../components/Player';
 import Promo from '../components/Promo';
+import AboutTeam from "../components/AboutTeam";
 
 export default function Home() {
   const [state, setState] = useState(false);
@@ -18,17 +19,19 @@ export default function Home() {
       <Head>
         <title>Home Page</title>
       </Head>
-      <GradientContainer mb={20}>
+      <Box mb={20}>
         <Promo />
-      </GradientContainer>
-      <GradientContainer>
+      </Box>
+      <Box mb={20}>
         <Heading as="h2" textAlign={'center'}>
           Демонстрация работы с приложением
         </Heading>
         <Box h={400}>
           <Player videoUrl="https://www.youtube.com/watch?v=XqZsoesa55w" />
         </Box>
-      </GradientContainer>
+      </Box>
+
+      <AboutTeam />
     </Container>
   );
 }
