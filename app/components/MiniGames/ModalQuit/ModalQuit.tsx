@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-const ModalQuit = () => {
+const ModalQuit = ({ quitGame, setQuitGame }) => {
   const [showMod, setModal] = useState(true);
   useHotkeys('esc', () => setModal(false));
   useHotkeys('enter', () => setModal(false));
 
   const handleClickClose = () => {
     setModal(!showMod);
+    setQuitGame(!quitGame);
   };
 
   const handleClickReturn = () => {
     setModal(!showMod);
+    setQuitGame(!quitGame);
   };
 
   return (
