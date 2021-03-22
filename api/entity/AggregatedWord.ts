@@ -7,7 +7,7 @@ import { User } from './User';
 import { Word } from './Word';
 
 @ObjectType()
-class OptionalAggregatedWord {
+export class OptionalAggregatedWord {
   @Field()
   @Property({ nullable: true })
   title: string;

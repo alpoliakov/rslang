@@ -21,14 +21,16 @@ export default function SignUp() {
     },
   };
 
+  const MotionBox = motion(Box);
+
   return (
     <Box>
       <Head>
         <title>Sign Up</title>
       </Head>
-      <motion.div initial="initial" animate="enter" exit="exit" variants={postVariants}>
+      <MotionBox initial="initial" animate="enter" exit="exit" variants={postVariants}>
         <h1>Sign Up Page</h1>
-      </motion.div>
+      </MotionBox>
     </Box>
   );
 }

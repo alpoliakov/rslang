@@ -47,7 +47,7 @@ export class UserResolver {
     );
 
     if (!user) {
-      throw new Error('Stream not found');
+      throw new Error('User not found');
     }
     return user;
   }
