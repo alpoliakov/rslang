@@ -8,22 +8,39 @@ import {
   NotAllowedIcon,
   BellIcon,
   CloseIcon,
-  WarningIcon,
 } from '@chakra-ui/icons';
 import { ModalQuit } from '../ModalQuit/ModalQuit';
 import { RiMusic2Fill } from 'react-icons/ri';
+import { GiSpeakerOff, GiSpeaker } from 'react-icons/gi';
+import { useHotkeys } from 'react-hotkeys-hook';
+import useSound from 'use-sound';
 
 const Sprint = () => {
   const [isSoundOn, setSound] = useState(true);
+  const [isMusicOn, setMusic] = useState(true);
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
 
+  const [correct] = useSound('/sounds/correct.mp3');
+  const [incorrect] = useSound('/sounds/incorrect.mp3');
+
+  useHotkeys('left', () => handleAnswer());
+  useHotkeys('right', () => handleAnswer());
+
   const handleAnswer = () => {
     setCounter(counter + 10);
+
+    if (isMusicOn) {
+      incorrect();
+    }
   };
 
   const onSwitchSound = () => {
     setSound(!isSoundOn);
+  };
+
+  const onSwitchMusic = () => {
+    setMusic(!isMusicOn);
   };
 
   const onQuitGame = () => {
@@ -41,10 +58,9 @@ const Sprint = () => {
             <IconButton
               className="sprint-music"
               variant="ghost"
-              size="lg"
-              colorScheme={isSoundOn ? 'whiteAlpha' : 'red'}
+              colorScheme={isMusicOn ? 'whiteAlpha' : 'red'}
               aria-label="Switch sound"
-              onClick={onSwitchSound}
+              onClick={onSwitchMusic}
               icon={<RiMusic2Fill />}
             />
           </div>
@@ -59,16 +75,20 @@ const Sprint = () => {
               <IconButton
                 className="sprint-sound"
                 variant="ghost"
-                colorScheme={isSoundOn ? 'green' : 'red'}
+                colorScheme="whiteAlpha"
                 aria-label="Switch sound"
                 onClick={onSwitchSound}
-                icon={<BellIcon />}
+                icon={isSoundOn ? <GiSpeaker /> : <GiSpeakerOff />}
               />
             </div>
             <div className="sprint-pics">
-              <img src="https://img.icons8.com/fluent/50/000000/osprey.png" />
-              <img src="https://img.icons8.com/fluent/50/000000/falcon.png" />
-              <img src="https://img.icons8.com/fluent/50/000000/peacock.png" />
+              {/* <img src="https://img.icons8.com/color/48/000000/kawaii-egg.png" alt="egg" />
+              <img src="https://img.icons8.com/color/48/000000/dinosaur-egg.png" alt="dino-egg" /> */}
+              <img
+                src="https://img.icons8.com/color/96/000000/kawaii-dinosaur--v2.png"
+                alt="dino-baby"
+              />
+              {/* <img src="https://img.icons8.com/color/96/000000/european-dragon.png" alt="dragon" /> */}
             </div>
             <div className="sprint-english">daily</div>
             <div className="sprint-translation">высокомерный</div>
