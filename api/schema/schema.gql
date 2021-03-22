@@ -16,7 +16,7 @@ input AggregatedWordInput {
   id: ObjectId
   repeat: Boolean
   title: String
-  word: ObjectId!
+  word: ObjectId
 }
 
 input AuthInput {
@@ -40,14 +40,16 @@ input EditUserInput {
 type Mutation {
   createAggregatedWord(input: AggregatedWordInput!): AggregatedWord!
   createUserWord(input: UserWordInput!): UserWord!
-  deleteAggregatedWord(userWordId: ObjectId!): Boolean!
+  deleteAggregatedWord(aggregatedWordId: ObjectId!): Boolean!
   deleteSettings(settingId: ObjectId!): Boolean!
   deleteStatistic(statisticId: ObjectId!): Boolean!
   deleteUser(userId: ObjectId!): Boolean!
   deleteUserWord(userWordId: ObjectId!): Boolean!
+  editAggregatedWord(input: AggregatedWordInput!): AggregatedWord!
   editSettings(input: SettingsInput!): Settings!
   editStatistic(input: StatisticInput!): Statistic!
   editUser(input: EditUserInput!): User!
+  editUserWord(input: UserWordInput!): UserWord!
   login(input: AuthInput!): UserResponse!
   register(input: AuthInput!): UserResponse!
 }
@@ -145,7 +147,7 @@ input UserWordInput {
   id: ObjectId
   repeat: Boolean
   title: String
-  word: ObjectId!
+  word: ObjectId
 }
 
 type Word {

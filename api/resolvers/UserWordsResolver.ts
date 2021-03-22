@@ -11,7 +11,7 @@ import {
 } from 'type-graphql';
 
 import { User, UserModel } from '../entity/User';
-import { UserWord, UserWordModel } from '../entity/UserWord';
+import { OptionalUserWord, UserWord, UserWordModel } from '../entity/UserWord';
 import { Word, WordModel } from '../entity/Word';
 import { isAuth } from '../middleware/isAuth';
 import { ObjectIdScalar } from '../schema/object-id.scalar';
@@ -73,6 +73,32 @@ export class UserWordsResolver {
     } as UserWord);
 
     await userWord.save();
+
+    return userWord;
+  }
+
+  @Mutation(() => UserWord)
+  @UseMiddleware(isAuth)
+  async editUserWord(
+    @Arg('input') userWordInput: UserWordInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<UserWord | null> {
+    const { id, difficulty, title, repeat } = userWordInput;
+
+    const optional = { title, repeat } as OptionalUserWord;
+
+    const userWord = UserWordModel.findOneAndUpdate(
+      { _id: id, user: ctx.res.locals.userId },
+      {
+        difficulty,
+        optional: optional,
+      },
+      { runValidators: true, new: true },
+    );
+
+    if (!userWord) {
+      throw new Error('User word not found!');
+    }
 
     return userWord;
   }

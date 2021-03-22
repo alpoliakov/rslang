@@ -95,7 +95,7 @@ export default function Header() {
           )}
           {!user && (
             <WrapItem>
-              <NextLink href={'/auth/signup'}>
+              <NextLink href={'/auth/signin'}>
                 <Button mr="5" w={0} h={0}>
                   <Icon
                     as={RiLoginCircleLine}

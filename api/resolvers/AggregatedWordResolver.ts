@@ -10,7 +10,11 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 
-import { AggregatedWord, AggregatedWordModel } from '../entity/AggregatedWord';
+import {
+  AggregatedWord,
+  AggregatedWordModel,
+  OptionalAggregatedWord,
+} from '../entity/AggregatedWord';
 import { User, UserModel } from '../entity/User';
 import { Word, WordModel } from '../entity/Word';
 import { isAuth } from '../middleware/isAuth';
@@ -77,10 +81,35 @@ export class AggregatedWordResolver {
     return aggregatedWord;
   }
 
+  @Mutation(() => AggregatedWord)
+  @UseMiddleware(isAuth)
+  async editAggregatedWord(
+    @Arg('input') aggregatedWordInput: AggregatedWordInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<AggregatedWord | null> {
+    const { id, difficulty, title, repeat } = aggregatedWordInput;
+    const optional = { title, repeat } as OptionalAggregatedWord;
+
+    const aggregatedWord = AggregatedWordModel.findOneAndUpdate(
+      { _id: id, user: ctx.res.locals.userId },
+      {
+        difficulty,
+        optional,
+      },
+      { runValidators: true, new: true },
+    );
+
+    if (!aggregatedWord) {
+      throw new Error('Aggregated word not found!');
+    }
+
+    return aggregatedWord;
+  }
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deleteAggregatedWord(
-    @Arg('userWordId', () => ObjectIdScalar) aggregatedWordId: ObjectId,
+    @Arg('aggregatedWordId', () => ObjectIdScalar) aggregatedWordId: ObjectId,
     @Ctx() ctx: MyContext,
   ): Promise<boolean | undefined> {
     const deleted = await AggregatedWordModel.findOneAndDelete({

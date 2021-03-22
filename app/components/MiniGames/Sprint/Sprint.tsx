@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { ArrowBackIcon, ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { CloseButton } from '@chakra-ui/react';
-import { Timer } from './Timer';
 import { Button, ButtonGroup } from '@chakra-ui/react';
-import { ArrowForwardIcon, ArrowBackIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
+import React, { useState } from 'react';
+
 import { ModalQuit } from '../ModalQuit/ModalQuit';
+import { Timer } from './Timer';
 
 const Sprint = () => {
   const [showGame, setShowGame] = useState(true);
@@ -21,9 +22,9 @@ const Sprint = () => {
             <NotAllowedIcon />
           </div>
           <div className="sprint-pics">
-            <img src="https://img.icons8.com/fluent/50/000000/osprey.png" />
-            <img src="https://img.icons8.com/fluent/50/000000/falcon.png" />
-            <img src="https://img.icons8.com/fluent/50/000000/peacock.png" />
+            <img src="https://img.icons8.com/fluent/50/000000/osprey.png" alt="osprey" />
+            <img src="https://img.icons8.com/fluent/50/000000/falcon.png" alt="falcon" />
+            <img src="https://img.icons8.com/fluent/50/000000/peacock.png" alt="peacock" />
           </div>
           <div className="sprint-english">daily</div>
           <div className="sprint-translation">высокомерный</div>
