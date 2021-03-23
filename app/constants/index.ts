@@ -7,4 +7,14 @@ const MenuTitle = {
   STATISTICS: 'Статистика',
 };
 
-export { localHost, MenuTitle };
+const RED = {
+  LIGHT: '#FF0088',
+  DARK: '#AF004B',
+};
+
+const GREEN = {
+  LIGHT: '#59BAB7',
+  DARK: '#006B69',
+};
+
+export { GREEN, localHost, MenuTitle, RED };

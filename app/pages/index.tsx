@@ -8,6 +8,7 @@ import MainAccordion from '../components/MainAccordion/';
 import Player from '../components/Player';
 import Promo from '../components/Promo';
 import Menu from "../components/Menu";
+import Features from '../components/Features';
 
 export default function Home() {
   const [state, setState] = useState(false);
@@ -20,11 +21,14 @@ export default function Home() {
       <Head>
         <title>Home Page</title>
       </Head>
-      <Menu />
+      <Box mb={10}>
+        <Menu />
+      </Box>
       <MainAccordion>
         <Box p={[1, 5, 20]}>
           <Promo />
         </Box>
+        <Features />
         <Box p={5}>
           <Heading as="h2" textAlign={'center'}>
             Демонстрация работы с приложением

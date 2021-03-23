@@ -3,6 +3,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { GiClick } from 'react-icons/gi';
+import { GREEN, RED } from '../../constants';
 
 const accordionTitleStyle = {
   borderRadius: '10px',
@@ -21,8 +22,8 @@ const ClickHint = () => (
 const Accordion = ({ i, expanded, setExpanded, content }) => {
   const isOpen = i === expanded;
 
-  const menuItemColor = useColorModeValue('#FF0088', '#AF004B');
-  const menuItemHoverColor = useColorModeValue('#59BAB7', '#006B69');
+  const menuItemColor = useColorModeValue(RED.LIGHT, RED.DARK);
+  const menuItemHoverColor = useColorModeValue(GREEN.LIGHT, GREEN.DARK);
 
   return (
     <>

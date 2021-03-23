@@ -3,7 +3,7 @@ import { Avatar, Link } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-const TeamMember = ({ name, githubName, githubUrl, avatarUrl }) => {
+const TeamMember = ({ name, githubName, githubUrl, avatarUrl, children }) => {
   return (
     <motion.div whileHover={{ scale: 1.05 }} transition={{ ease: 'linear', duration: 0.3 }}>
       <Flex
@@ -18,12 +18,7 @@ const TeamMember = ({ name, githubName, githubUrl, avatarUrl }) => {
         <Flex direction="column" justify="center" align="center">
           <Avatar size="lg" name={name} src={avatarUrl} />
           <Link href={githubUrl}>{githubName}</Link>
-          <Stack direction="row">
-            <Badge>Backend</Badge>
-            <Badge colorScheme="green">Саванна</Badge>
-            <Badge colorScheme="red">Ы</Badge>
-            <Badge colorScheme="purple">Ленивец</Badge>
-          </Stack>
+          <Stack direction="row">{children}</Stack>
         </Flex>
       </Flex>
     </motion.div>
@@ -45,26 +40,42 @@ const AboutTeam = () => {
           name="Alexsandr Poliakov"
           avatarUrl="https://bit.ly/sage-adebayo"
           githubUrl="https://github.com/alpoliakov"
-          githubName="@alpoliakov"
-        />
+          githubName="@alpoliakov">
+          <Badge>Backend</Badge>
+          <Badge colorScheme="green">Саванна</Badge>
+          <Badge colorScheme="red">Ы</Badge>
+          <Badge colorScheme="purple">Ленивец</Badge>
+        </TeamMember>
         <TeamMember
-          name="Alexsandr Poliakov"
+          name="Yaroslava Mashnenko"
           avatarUrl="https://bit.ly/sage-adebayo"
-          githubUrl="https://github.com/alpoliakov"
-          githubName="@alpoliakov"
-        />
+          githubUrl="https://github.com/ya-mashnenko"
+          githubName="@ya-mashnenko">
+          <Badge>Backend</Badge>
+          <Badge colorScheme="green">Саванна</Badge>
+          <Badge colorScheme="red">Ы</Badge>
+          <Badge colorScheme="purple">Ленивец</Badge>
+        </TeamMember>
         <TeamMember
-          name="Alexsandr Poliakov"
+          name="Ivan Tur"
           avatarUrl="https://bit.ly/sage-adebayo"
-          githubUrl="https://github.com/alpoliakov"
-          githubName="@alpoliakov"
-        />
+          githubUrl="https://github.com/buiiz"
+          githubName="@buiiz">
+          <Badge>Backend</Badge>
+          <Badge colorScheme="green">Саванна</Badge>
+          <Badge colorScheme="red">Ы</Badge>
+          <Badge colorScheme="purple">Ленивец</Badge>
+        </TeamMember>
         <TeamMember
-          name="Alexsandr Poliakov"
+          name="Sergey Klimov"
           avatarUrl="https://bit.ly/sage-adebayo"
-          githubUrl="https://github.com/alpoliakov"
-          githubName="@alpoliakov"
-        />
+          githubUrl="https://github.com/w1r3d7"
+          githubName="@w1r3d7">
+          <Badge>Backend</Badge>
+          <Badge colorScheme="green">Саванна</Badge>
+          <Badge colorScheme="red">Ы</Badge>
+          <Badge colorScheme="purple">Ленивец</Badge>
+        </TeamMember>
       </Grid>
     </>
   );

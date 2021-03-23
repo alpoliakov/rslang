@@ -4,41 +4,48 @@ import React from 'react';
 import { BiStats } from 'react-icons/bi';
 import { FaBook, FaGamepad } from 'react-icons/fa';
 
-import { MenuTitle } from '../../constants';
+import { GREEN, MenuTitle, RED } from '../../constants';
+
+const MENU_ICON_SIZE = 30;
 
 const Menu = () => {
-  const menuItemColor = useColorModeValue('#FF0088', '#AF004B');
-  const menuItemHoverColor = useColorModeValue('#59BAB7', '#006B69');
+  const menuItemColor = useColorModeValue(RED.LIGHT, RED.DARK);
+  const menuItemHoverColor = useColorModeValue(GREEN.LIGHT, GREEN.DARK);
 
   const MenuItem = ({ menuTitle, children }) => (
     <Link>
-      <Square
-        size={150}
+      <Flex
+        h={70}
+        minW={200}
+        p={5}
+        justify="space-around"
+        align="center"
+        direction="row"
         bg={menuItemColor}
         _hover={{ bg: menuItemHoverColor }}
         style={{ transition: 'all 200ms linear' }}
         borderRadius="xl">
-        <Text fontSize={20} transform={{ rotate: '45deg' }}>
-          <Center>{children}</Center>
+        {children}
+        <Text fontSize="xl" transform={{ rotate: '45deg' }}>
           {menuTitle}
         </Text>
-      </Square>
+      </Flex>
     </Link>
   );
 
   return (
-    <Flex p={5} justify="space-around" templateColumns="repeat(4, 1fr)">
+    <Flex p={5} wrap="wrap" justify="space-around" templateColumns="repeat(4, 1fr)">
       <MenuItem menuTitle={MenuTitle.DICTIONARY}>
-        <FaBook fontSize={30} />
+        <FaBook fontSize={MENU_ICON_SIZE} />
       </MenuItem>
       <MenuItem menuTitle={MenuTitle.GAME_1}>
-        <FaGamepad fontSize={30} />
+        <FaGamepad fontSize={MENU_ICON_SIZE} />
       </MenuItem>
       <MenuItem menuTitle={MenuTitle.GAME_2}>
-        <FaGamepad fontSize={30} />
+        <FaGamepad fontSize={MENU_ICON_SIZE} />
       </MenuItem>
       <MenuItem menuTitle={MenuTitle.STATISTICS}>
-        <BiStats fontSize={30} />
+        <BiStats fontSize={MENU_ICON_SIZE} />
       </MenuItem>
     </Flex>
   );
