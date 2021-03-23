@@ -51,9 +51,10 @@ body {
   text-shadow: 1px 1px 1px #000;
 }
 
-
 /* ----------- Mini Games -------------- */
 
 @import url('./../components/MiniGames/Sprint/sprint.styles.css');
 
 @import url('./../components/MiniGames/ModalQuit/modalQuit.styles.css');
+
+@import url('./../components/MiniGames/ChooseLevelModal/ChooseLeveloModal.styles.css');
