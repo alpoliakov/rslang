@@ -58,3 +58,5 @@ body {
 @import url('./../components/MiniGames/ModalQuit/modalQuit.styles.css');
 
 @import url('./../components/MiniGames/ChooseLevelModal/ChooseLeveloModal.styles.css');
+
+@import url('./../components/MiniGames/ModalEndGame/ModalEndGame.styles.css');
