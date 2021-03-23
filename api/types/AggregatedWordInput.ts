@@ -14,8 +14,8 @@ export class AggregatedWordInput implements Partial<AggregatedWord> {
   @Field({ nullable: true })
   title?: string;
 
-  @Field()
-  word: ObjectId;
+  @Field({ nullable: true })
+  word?: ObjectId;
 
   @Field({ nullable: true })
   repeat?: boolean;

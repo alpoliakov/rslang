@@ -14,8 +14,8 @@ export class UserWordInput implements Partial<UserWord> {
   @Field({ nullable: true })
   title?: string;
 
-  @Field()
-  word: ObjectId;
+  @Field({ nullable: true })
+  word?: ObjectId;
 
   @Field({ nullable: true })
   repeat?: boolean;
