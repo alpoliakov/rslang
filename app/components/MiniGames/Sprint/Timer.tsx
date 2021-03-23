@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 
-const Timer = () => {
+const Timer = ({ setTimeOver, timeOver }) => {
   const [timeLeft, setTime] = useState(59);
 
   useEffect(() => {
     if (timeLeft === 0) {
-      // setTimeOver(!timeOver);
+      setTimeOver(!timeOver);
       // setTimer(!showTimer);
       return;
     }
@@ -17,7 +18,14 @@ const Timer = () => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  return <div className="timer">{`0${timeLeft}`.slice(-2)}</div>;
+  return (
+    <div className="timer">
+      <CircularProgress isIndeterminate value={100} color="pink" thickness="2px" size="70px">
+        <CircularProgressLabel>{`0${timeLeft}`.slice(-2)}</CircularProgressLabel>
+      </CircularProgress>
+    </div>
+  );
+  // <div className="timer">{`0${timeLeft}`.slice(-2)}</div>;
 };
 
 export { Timer };
