@@ -1,7 +1,6 @@
 import {
   ArrowBackIcon,
   ArrowForwardIcon,
-  BellIcon,
   CheckCircleIcon,
   CloseIcon,
   NotAllowedIcon,

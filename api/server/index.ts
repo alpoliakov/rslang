@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import express from 'express';
+import path from 'path';
 
 import createSchema from '../schema';
 import createSession from '../session';
@@ -12,24 +13,23 @@ const port = process.env.PORT || 8000;
 
 async function createServer() {
   try {
-    // 1. create mongoose connection
     await createSession();
-    // 2. create express server
+
     const app = express();
 
-    // allow CORS from client app
     const corsOptions = {
       origin: 'http://localhost:3000',
       credentials: true,
     };
+
+    app.use('/files', express.static(path.join(__dirname, '../files')));
+
     app.use(cors(corsOptions));
 
-    // allow JSON requests
     app.use(express.json());
 
     const schema = await createSchema();
 
-    // 3. create GraphQL server
     const apolloServer = new ApolloServer({
       schema,
       context: ({ req, res }) => ({ req, res }),

@@ -7,12 +7,14 @@ import { User } from './User';
 import { Word } from './Word';
 
 @ObjectType()
-class OptionalUserWord {
+export class OptionalUserWord {
   @Field()
+  @Property({ nullable: true })
   title: string;
 
   @Field()
-  description: string;
+  @Property({ nullable: true })
+  repeat: boolean;
 }
 
 @ObjectType()
@@ -30,11 +32,11 @@ export class UserWord {
 
   @Field(() => Word)
   @Property({ ref: Word, required: true })
-  word: Ref<Word>;
+  word?: Ref<Word>;
 
   @Field(() => User)
   @Property({ ref: User, required: true })
-  user: Ref<User>;
+  user?: Ref<User>;
 }
 
 export const UserWordModel = getModelForClass(UserWord);

@@ -6,14 +6,14 @@ import { Ref } from '../types/Ref';
 import { User } from './User';
 
 @ObjectType()
-class OptionalStatistic {
-  @Field()
+export class OptionalStatistic {
+  @Field({ nullable: true })
   @Property({ nullable: true })
-  title: string;
+  title?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property({ nullable: true })
-  description: string;
+  description?: string;
 }
 
 @ObjectType()

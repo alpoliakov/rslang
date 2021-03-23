@@ -1,0 +1,3 @@
+mutation DeleteAggregatedWord($aggregatedWordId: ObjectId!) {
+  deleteAggregatedWord(aggregatedWordId: $aggregatedWordId)
+}

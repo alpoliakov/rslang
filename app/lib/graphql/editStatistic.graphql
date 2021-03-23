@@ -1,0 +1,16 @@
+mutation EditStatistic($input: StatisticInput!) {
+  editStatistic(input: $input) {
+    _id
+    user {
+      _id
+      name
+      email
+      avatar
+    }
+    learnedWords
+    optional {
+      title
+      description
+    }
+  }
+}
