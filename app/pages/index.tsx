@@ -7,6 +7,7 @@ import Loading from '../components/Loading';
 import MainAccordion from '../components/MainAccordion/';
 import Player from '../components/Player';
 import Promo from '../components/Promo';
+import Menu from "../components/Menu";
 
 export default function Home() {
   const [state, setState] = useState(false);
@@ -19,7 +20,7 @@ export default function Home() {
       <Head>
         <title>Home Page</title>
       </Head>
-
+      <Menu />
       <MainAccordion>
         <Box p={[1, 5, 20]}>
           <Promo />
@@ -32,7 +33,9 @@ export default function Home() {
             <Player videoUrl="https://www.youtube.com/watch?v=XqZsoesa55w" />
           </Box>
         </Box>
-        <AboutTeam />
+        <Box pb={5}>
+          <AboutTeam />
+        </Box>
       </MainAccordion>
     </Container>
   );

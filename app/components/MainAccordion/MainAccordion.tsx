@@ -1,5 +1,7 @@
+import { Flex } from '@chakra-ui/layout';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
+import { GiClick } from 'react-icons/gi';
 
 const accordionTitleStyle = {
   borderRadius: '10px',
@@ -9,6 +11,12 @@ const accordionTitleStyle = {
   marginBottom: '20px',
 };
 
+const ClickHint = () => (
+  <Flex justify="flex-end" align="center">
+    <GiClick fontSize={30} />
+  </Flex>
+);
+
 const Accordion = ({ i, expanded, setExpanded, content }) => {
   const isOpen = i === expanded;
 
@@ -17,8 +25,9 @@ const Accordion = ({ i, expanded, setExpanded, content }) => {
       <motion.div
         style={accordionTitleStyle}
         animate={{ backgroundColor: isOpen ? '#FF0088' : '#0055FF' }}
-        onClick={() => setExpanded(isOpen ? false : i)}
-      />
+        onClick={() => setExpanded(isOpen ? false : i)}>
+        {!isOpen && ClickHint()}
+      </motion.div>
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
