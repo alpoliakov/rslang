@@ -7,14 +7,14 @@ const MenuTitle = {
   STATISTICS: 'Статистика',
 };
 
-const RED = {
+const ACTIVE = {
   LIGHT: '#FF0088',
   DARK: '#AF004B',
 };
 
-const GREEN = {
+const PASSIVE = {
   LIGHT: '#59BAB7',
   DARK: '#006B69',
 };
 
-export { GREEN, localHost, MenuTitle, RED };
+export { ACTIVE, localHost, MenuTitle, PASSIVE };

@@ -4,13 +4,13 @@ import React from 'react';
 import { BiStats } from 'react-icons/bi';
 import { FaBook, FaGamepad } from 'react-icons/fa';
 
-import { GREEN, MenuTitle, RED } from '../../constants';
+import { PASSIVE, MenuTitle, ACTIVE } from '../../constants';
 
 const MENU_ICON_SIZE = 30;
 
 const Menu = () => {
-  const menuItemColor = useColorModeValue(RED.LIGHT, RED.DARK);
-  const menuItemHoverColor = useColorModeValue(GREEN.LIGHT, GREEN.DARK);
+  const menuItemColor = useColorModeValue(ACTIVE.LIGHT, ACTIVE.DARK);
+  const menuItemHoverColor = useColorModeValue(PASSIVE.LIGHT, PASSIVE.DARK);
 
   const MenuItem = ({ menuTitle, children }) => (
     <Link>
