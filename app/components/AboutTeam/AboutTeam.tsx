@@ -3,7 +3,7 @@ import { Avatar, Link } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-const TeamMember = ({ name }) => {
+const TeamMember = ({ name, githubName, githubUrl, avatarUrl }) => {
   return (
     <motion.div whileHover={{ scale: 1.05 }} transition={{ ease: 'linear', duration: 0.3 }}>
       <Flex
@@ -16,8 +16,8 @@ const TeamMember = ({ name }) => {
         borderColor="gray.300"
         borderRadius="lg">
         <Flex direction="column" justify="center" align="center">
-          <Avatar size="lg" name={name} src="https://bit.ly/sage-adebayo" />
-          <Link href="https://github.com/alpoliakov">@alpoliakov</Link>
+          <Avatar size="lg" name={name} src={avatarUrl} />
+          <Link href={githubUrl}>{githubName}</Link>
           <Stack direction="row">
             <Badge>Backend</Badge>
             <Badge colorScheme="green">Саванна</Badge>
@@ -36,11 +36,35 @@ const AboutTeam = () => {
       <Heading as="h2" textAlign="center">
         Наша команда
       </Heading>
-      <Grid templateColumns={['repeat(1, 1fr)', , 'repeat(2, 1fr)']} gap={10} w="80%" mx="auto">
-        <TeamMember name="Alexsandr Poliakov" />
-        <TeamMember name="Alexsandr Poliakov" />
-        <TeamMember name="Alexsandr Poliakov" />
-        <TeamMember name="Alexsandr Poliakov" />
+      <Grid
+        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)']}
+        gap={10}
+        w="80%"
+        mx="auto">
+        <TeamMember
+          name="Alexsandr Poliakov"
+          avatarUrl="https://bit.ly/sage-adebayo"
+          githubUrl="https://github.com/alpoliakov"
+          githubName="@alpoliakov"
+        />
+        <TeamMember
+          name="Alexsandr Poliakov"
+          avatarUrl="https://bit.ly/sage-adebayo"
+          githubUrl="https://github.com/alpoliakov"
+          githubName="@alpoliakov"
+        />
+        <TeamMember
+          name="Alexsandr Poliakov"
+          avatarUrl="https://bit.ly/sage-adebayo"
+          githubUrl="https://github.com/alpoliakov"
+          githubName="@alpoliakov"
+        />
+        <TeamMember
+          name="Alexsandr Poliakov"
+          avatarUrl="https://bit.ly/sage-adebayo"
+          githubUrl="https://github.com/alpoliakov"
+          githubName="@alpoliakov"
+        />
       </Grid>
     </>
   );
