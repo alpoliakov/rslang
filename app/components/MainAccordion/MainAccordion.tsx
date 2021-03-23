@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { GiClick } from 'react-icons/gi';
@@ -12,7 +13,7 @@ const accordionTitleStyle = {
 };
 
 const ClickHint = () => (
-  <Flex justify="flex-end" align="center">
+  <Flex justify="center" align="center">
     <GiClick fontSize={30} />
   </Flex>
 );
@@ -20,11 +21,14 @@ const ClickHint = () => (
 const Accordion = ({ i, expanded, setExpanded, content }) => {
   const isOpen = i === expanded;
 
+  const menuItemColor = useColorModeValue('#FF0088', '#AF004B');
+  const menuItemHoverColor = useColorModeValue('#59BAB7', '#006B69');
+
   return (
     <>
       <motion.div
         style={accordionTitleStyle}
-        animate={{ backgroundColor: isOpen ? '#FF0088' : '#0055FF' }}
+        animate={{ backgroundColor: isOpen ? menuItemColor : menuItemHoverColor }}
         onClick={() => setExpanded(isOpen ? false : i)}>
         {!isOpen && ClickHint()}
       </motion.div>
