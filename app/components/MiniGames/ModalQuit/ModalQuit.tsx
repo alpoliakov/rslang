@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 const ModalQuit = ({ quitGame, setQuitGame }) => {

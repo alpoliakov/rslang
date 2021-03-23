@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { Timer } from './Timer';
-import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
 import {
-  ArrowForwardIcon,
   ArrowBackIcon,
-  CheckCircleIcon,
-  NotAllowedIcon,
+  ArrowForwardIcon,
   BellIcon,
+  CheckCircleIcon,
   CloseIcon,
+  NotAllowedIcon,
 } from '@chakra-ui/icons';
-import { ModalQuit } from '../ModalQuit/ModalQuit';
-import { RiMusic2Fill } from 'react-icons/ri';
-import { GiSpeakerOff, GiSpeaker } from 'react-icons/gi';
+import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
+import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
+
+import { ModalQuit } from '../ModalQuit/ModalQuit';
+import { Timer } from './Timer';
 
 const Sprint = () => {
   const [isSoundOn, setSound] = useState(true);
