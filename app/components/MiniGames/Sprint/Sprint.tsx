@@ -5,13 +5,16 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
+import { changePicture, egg, extraPoints } from 'components/MiniGames/utils/utils';
 
-const Sprint = () => {
+const Sprint = ({ counter, setCounter }) => {
   const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
-  const [counter, setCounter] = useState(0);
+  // const [counter, setCounter] = useState(0);
   const [isCorrect, setIsCorrect] = useState(Boolean);
   const [resultIcons, setResultIcons] = useState([]);
+  const [correctAnswersArr, setCorrectAnswersArr] = useState(0);
+  const [pic, setPic] = useState(egg);
 
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
@@ -20,17 +23,31 @@ const Sprint = () => {
   useHotkeys('right', () => handleAnswer());
 
   const handleAnswer = () => {
+    // if (resultIcons.length > 3) {
+    //   setResultIcons([]);
+    // }
     setIsCorrect(true);
-    setCounter(counter + 10);
-    // isCorrect ? resultIcons.push(<CheckCircleIcon />) : resultIcons.push(<NotAllowedIcon />);
+    setCounter(counter + extraPoints(pic));
+
+    isCorrect ? setCorrectAnswersArr(correctAnswersArr + 1) : setCorrectAnswersArr(0);
+
+    changePicture(correctAnswersArr, pic, setPic);
+
+    setResultIcons(
+      isCorrect
+        ? resultIcons.concat([<CheckCircleIcon />])
+        : resultIcons.concat([<NotAllowedIcon />]),
+    );
 
     if (isMusicOn) {
-      incorrect();
+      correct();
     }
   };
 
   useEffect(() => {
-    isCorrect ? resultIcons.concat(<CheckCircleIcon />) : resultIcons.concat(<NotAllowedIcon />);
+    if (resultIcons.length > 3) {
+      setResultIcons([]);
+    }
   }, [resultIcons]);
 
   const onSwitchSound = () => {
@@ -57,7 +74,6 @@ const Sprint = () => {
             icon={<RiMusic2Fill />}
           />
         </div>
-
         <div className="sprint-board-inner">
           <div className="sprint-icons">
             <div className="sprint-result-icons">
@@ -75,13 +91,7 @@ const Sprint = () => {
             />
           </div>
           <div className="sprint-pics">
-            {/* <img src="https://img.icons8.com/color/48/000000/kawaii-egg.png" alt="egg" />
-              <img src="https://img.icons8.com/color/48/000000/dinosaur-egg.png" alt="dino-egg" /> */}
-            <img
-              src="https://img.icons8.com/color/96/000000/kawaii-dinosaur--v2.png"
-              alt="dino-baby"
-            />
-            {/* <img src="https://img.icons8.com/color/96/000000/european-dragon.png" alt="dragon" /> */}
+            <img src={pic} alt="dino-baby" />
           </div>
           <div className="sprint-english">daily</div>
           <div className="sprint-translation">высокомерный</div>
