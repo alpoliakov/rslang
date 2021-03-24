@@ -21,18 +21,20 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
     <>
       {showMod ? (
         <div className="modal-container">
-          <div className="modal" id="modal">
-            <h2>Хотите выйти из игры?</h2>
-            <div className="content">Прогресс будет утерян</div>
-            <div className="actions">
-              <ButtonGroup size="md" spacing="12">
-                <Button colorScheme="green" className="green-button" onClick={handleClickClose}>
-                  Да
-                </Button>
-                <Button colorScheme="red" onClick={handleClickReturn}>
-                  Нет
-                </Button>
-              </ButtonGroup>
+          <div className="modal">
+            <div className="modal-box">
+              <div className="modal-ask">Хотите выйти из игры?</div>
+              <div className="content">Прогресс будет утерян</div>
+              <div className="actions">
+                <ButtonGroup size="md" spacing="12">
+                  <Button colorScheme="green" className="green-button" onClick={handleClickClose}>
+                    Да
+                  </Button>
+                  <Button colorScheme="red" onClick={handleClickReturn}>
+                    Нет
+                  </Button>
+                </ButtonGroup>
+              </div>
             </div>
           </div>
         </div>
