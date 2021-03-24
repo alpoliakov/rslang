@@ -4,8 +4,8 @@ import { Sprint } from 'components/MiniGames/Sprint/Sprint';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { Timer } from 'components/MiniGames/Sprint/Timer';
-import { ModalQuit } from 'components/MiniGames/ModalQuit/ModalQuit';
-import { ModalEndGame } from 'components/MiniGames/ModalEndGame/ModalEndGame';
+import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
+import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);
