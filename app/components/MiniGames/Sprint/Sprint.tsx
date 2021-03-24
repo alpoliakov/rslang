@@ -1,10 +1,4 @@
-import {
-  ArrowBackIcon,
-  ArrowForwardIcon,
-  CheckCircleIcon,
-  CloseIcon,
-  NotAllowedIcon,
-} from '@chakra-ui/icons';
+import { ArrowBackIcon, ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -12,13 +6,9 @@ import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
 
-import { ModalQuit } from '../ModalQuit/ModalQuit';
-import { Timer } from './Timer';
-
 const Sprint = () => {
   const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
-  const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isCorrect, setIsCorrect] = useState(Boolean);
   const [resultIcons, setResultIcons] = useState([]);
@@ -51,14 +41,8 @@ const Sprint = () => {
     setMusic(!isMusicOn);
   };
 
-  const onQuitGame = () => {
-    setQuitGame(true);
-  };
-
   return (
     <>
-      {/* <div className="sprint-container">
-        <Timer /> */}
       <div className="sprint-board-outer">
         <div className="sprint-board-head">
           <div key="counter" className="sprint-counter">
@@ -117,16 +101,6 @@ const Sprint = () => {
           </div>
         </div>
       </div>
-      {/* <IconButton
-          className="sprint-close"
-          colorScheme="whiteAlpha"
-          aria-label="Close game"
-          variant="ghost"
-          onClick={onQuitGame}
-          icon={<CloseIcon />}
-        /> */}
-      {/* </div> */}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
     </>
   );
 };
