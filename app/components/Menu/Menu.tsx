@@ -9,8 +9,8 @@ import { PASSIVE, MenuTitle, ACTIVE } from '../../constants';
 const MENU_ICON_SIZE = 30;
 
 const Menu = () => {
-  const menuItemColor = useColorModeValue(ACTIVE.LIGHT, ACTIVE.DARK);
-  const menuItemHoverColor = useColorModeValue(PASSIVE.LIGHT, PASSIVE.DARK);
+  const menuItemColor = useColorModeValue(PASSIVE.LIGHT, PASSIVE.DARK);
+  const menuItemHoverColor = useColorModeValue(ACTIVE.LIGHT, ACTIVE.DARK);
 
   const MenuItem = ({ menuTitle, children }) => (
     <Link>
@@ -34,7 +34,7 @@ const Menu = () => {
   );
 
   return (
-    <Flex p={5} wrap="wrap" justify="space-around" templateColumns="repeat(4, 1fr)">
+    <Flex p={5} wrap="wrap" justify="space-around">
       <MenuItem menuTitle={MenuTitle.DICTIONARY}>
         <FaBook fontSize={MENU_ICON_SIZE} />
       </MenuItem>
