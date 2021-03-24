@@ -19,7 +19,7 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
 
   return (
     <>
-      {showMod ? (
+      {showMod && (
         <div className="modal-container">
           <div className="modal">
             <div className="modal-box">
@@ -38,7 +38,7 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };
