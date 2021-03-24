@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-const ModalEndGame = ({ timeOver, setTimeOver }) => {
+const ModalEndGame = ({ timeOver, setTimeOver, counter }) => {
   const [showMod, setModal] = useState(true);
   useHotkeys('esc', () => setTimeOver(!timeOver));
   useHotkeys('enter', () => setTimeOver(!timeOver));
@@ -24,7 +24,7 @@ const ModalEndGame = ({ timeOver, setTimeOver }) => {
         <div className="modalEnd-result">
           Поздравляю! Твой результат <br />
           <CircularProgress isIndeterminate value={100} color="pink" thickness="2px" size="200px">
-            <CircularProgressLabel size="40px">60</CircularProgressLabel>
+            <CircularProgressLabel size="40px">{counter}</CircularProgressLabel>
           </CircularProgress>
           <br /> баллов!
           <div className="actions">

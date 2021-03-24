@@ -12,6 +12,7 @@ import { BiFullscreen, BiExitFullscreen } from 'react-icons/bi';
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
+  const [counter, setCounter] = useState(0);
 
   const fullScreen = useFullScreenHandle();
 
@@ -32,7 +33,7 @@ export default function SprintGamePage() {
       </Head>
       <FullScreen handle={fullScreen} className="sprint-container">
         <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
-        <Sprint />
+        <Sprint counter={counter} setCounter={setCounter} />
         <div className="sprint-close-full">
           <IconButton
             colorScheme="whiteAlpha"
@@ -61,7 +62,7 @@ export default function SprintGamePage() {
         </div>
       </FullScreen>
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} />}
+      {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />}
     </>
   );
 }
