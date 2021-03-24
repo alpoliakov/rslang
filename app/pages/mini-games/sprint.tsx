@@ -6,13 +6,18 @@ import React, { useState } from 'react';
 import { Timer } from 'components/MiniGames/Sprint/Timer';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import { BiFullscreen, BiExitFullscreen } from 'react-icons/bi';
 
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
 
+  const fullScreen = useFullScreenHandle();
+
   const onQuitGame = () => {
     setQuitGame(true);
+    fullScreen.exit();
   };
 
   return (
@@ -25,20 +30,38 @@ export default function SprintGamePage() {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
-      <div className="sprint-container">
+      <FullScreen handle={fullScreen} className="sprint-container">
         <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
         <Sprint />
-        <IconButton
-          className="sprint-close"
-          colorScheme="whiteAlpha"
-          aria-label="Close game"
-          variant="ghost"
-          onClick={onQuitGame}
-          icon={<CloseIcon />}
-        />
-      </div>
+        <div className="sprint-close-full">
+          <IconButton
+            colorScheme="whiteAlpha"
+            aria-label="Close game"
+            variant="ghost"
+            onClick={onQuitGame}
+            icon={<CloseIcon />}
+          />
+          {fullScreen.active ? (
+            <IconButton
+              colorScheme="whiteAlpha"
+              aria-label="Full screen game"
+              variant="ghost"
+              onClick={fullScreen.exit}
+              icon={<BiExitFullscreen />}
+            />
+          ) : (
+            <IconButton
+              colorScheme="whiteAlpha"
+              aria-label="Full screen game"
+              variant="ghost"
+              onClick={fullScreen.enter}
+              icon={<BiFullscreen />}
+            />
+          )}
+        </div>
+      </FullScreen>
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {timeOver && <ModalEndGame />}
+      {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} />}
     </>
   );
 }
