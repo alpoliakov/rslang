@@ -1,4 +1,5 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { Container } from '@chakra-ui/layout';
 import {
   Avatar,
   Box,
@@ -6,6 +7,11 @@ import {
   Flex,
   Heading,
   Icon,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   useColorMode,
   useColorModeValue,
@@ -14,9 +20,11 @@ import {
 import { motion } from 'framer-motion';
 import NextLink from 'next/link';
 import React, { useState } from 'react';
+import { BiChevronDown, BiMenu } from 'react-icons/bi';
 import { IoInvertModeOutline, IoInvertModeSharp } from 'react-icons/io5';
 import { RiLoginCircleLine, RiMoonLine } from 'react-icons/ri';
 
+import { MenuTitle } from '../constants';
 import { useAuth } from '../lib/useAuth';
 
 const transition = {
@@ -47,72 +55,87 @@ export default function Header() {
   const MotionBox = motion(Box);
 
   return (
-    <Flex
-      alignItems="center"
-      justifyContent="center"
-      bg={bg}
-      p="1"
-      w="100%"
-      position="sticky"
-      top="0"
-      zIndex="10">
-      <Flex alignItems="center" justifyContent="space-between" w="90%">
-        <Box p="1">
-          <NextLink href="/">
-            <Heading size="md">Header</Heading>
-          </NextLink>
-        </Box>
-        <Spacer />
-        <Flex alignItems="center" p="1">
-          <Button w={0} h={0} onClick={toggleColorMode} mr="5">
-            {colorMode === 'light' ? (
-              <Icon
-                as={RiMoonLine}
-                w={7}
-                h={7}
-                color="gray.400"
-                className="shadow__item hover__item"
-                _hover={{
-                  color: '#223c50',
-                }}
-              />
-            ) : (
-              <Icon
-                as={SunIcon}
-                w={7}
-                h={7}
-                color={color}
-                _hover={{
-                  color: 'red.600',
-                }}
-              />
+    <Box boxShadow="md" bg={bg} position="sticky" top="0" p={1} zIndex="10" w="100%">
+      <Container maxW="container.xl" w="100%">
+        <Flex alignItems="center" justifyContent="space-between">
+          <Link p="1">
+            <NextLink href="/">
+              <Heading size="md" p={1}>
+                RS Lang
+              </Heading>
+            </NextLink>
+          </Link>
+          <Spacer />
+          <Flex alignItems="center" p="1">
+            <Button w={0} h={0} onClick={toggleColorMode} mr="5">
+              {colorMode === 'light' ? (
+                <Icon
+                  as={RiMoonLine}
+                  w={7}
+                  h={7}
+                  color="gray.400"
+                  className="shadow__item hover__item"
+                  _hover={{
+                    color: '#223c50',
+                  }}
+                />
+              ) : (
+                <Icon
+                  as={SunIcon}
+                  w={7}
+                  h={7}
+                  color={color}
+                  _hover={{
+                    color: 'red.600',
+                  }}
+                />
+              )}
+            </Button>
+            {user && (
+              <WrapItem>
+                <Avatar size="md" name="Prospero" src="/images/hacker.png" />{' '}
+              </WrapItem>
             )}
-          </Button>
-          {user && (
-            <WrapItem>
-              <Avatar size="md" name="Prospero" src="/images/hacker.png" />{' '}
-            </WrapItem>
-          )}
-          {!user && (
-            <WrapItem>
-              <NextLink href={'/auth/signin'}>
-                <Button mr="5" w={0} h={0}>
-                  <Icon
-                    as={RiLoginCircleLine}
-                    w={7}
-                    h={7}
-                    color={color}
-                    _hover={{
-                      color: colorMode === 'light' ? '#223c50' : 'red.600',
-                    }}
-                    className="shadow__item hover__item"
-                  />
-                </Button>
-              </NextLink>
-            </WrapItem>
-          )}
+            {!user && (
+              <WrapItem>
+                <NextLink href={'/auth/signin'}>
+                  <Button mr="5" w={0} h={0}>
+                    <Icon
+                      as={RiLoginCircleLine}
+                      w={7}
+                      h={7}
+                      color={color}
+                      _hover={{
+                        color: colorMode === 'light' ? '#223c50' : 'red.600',
+                      }}
+                      className="shadow__item hover__item"
+                    />
+                  </Button>
+                </NextLink>
+              </WrapItem>
+            )}
+            <Menu>
+              <MenuButton as={Button} rightIcon={<BiChevronDown />}>
+                <Icon
+                  as={BiMenu}
+                  w={7}
+                  h={7}
+                  color={color}
+                  aria-label="Кнопка меню"
+                  _hover={{
+                    color: colorMode === 'light' ? '#223c50' : 'red.600',
+                  }}
+                />
+              </MenuButton>
+              <MenuList>
+                {Object.values(MenuTitle).map((title) => {
+                  return <MenuItem>{title}</MenuItem>;
+                })}
+              </MenuList>
+            </Menu>
+          </Flex>
         </Flex>
-      </Flex>
-    </Flex>
+      </Container>
+    </Box>
   );
 }

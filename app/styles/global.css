@@ -22,7 +22,7 @@ body {
   row-gap: 20px;
   align-items: center;
   justify-items: center;
-  grid-template-rows: 70px 1fr auto;
+  grid-template-rows: 50px 1fr auto;
   /*background: linear-gradient(to top, var(--ds-color__indigo) 0, var(--ds-color__indigo) 100%);*/
 }
 
