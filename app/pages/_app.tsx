@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { AnimatePresence } from 'framer-motion';
 // import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Layout from '../components/Layout';
 import { useApollo } from '../lib/apollo';
@@ -14,17 +14,24 @@ import { Chakra } from '../src/Chakra';
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
 
+  useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }, []);
+
   return (
     <ApolloProvider client={apolloClient}>
-      <AuthProvider>
-        <Chakra cookies={pageProps.cookies}>
-          <AnimatePresence exitBeforeEnter>
-            <Layout>
+      <Chakra cookies={pageProps.cookies}>
+        <AuthProvider>
+          <Layout>
+            <AnimatePresence exitBeforeEnter>
               <Component {...pageProps} />
-            </Layout>
-          </AnimatePresence>
-        </Chakra>
-      </AuthProvider>
+            </AnimatePresence>
+          </Layout>
+        </AuthProvider>
+      </Chakra>
     </ApolloProvider>
   );
 }

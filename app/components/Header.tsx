@@ -1,4 +1,3 @@
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
@@ -11,11 +10,9 @@ import {
   useColorModeValue,
   WrapItem,
 } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
 import NextLink from 'next/link';
 import React, { useState } from 'react';
-import { IoInvertModeOutline, IoInvertModeSharp } from 'react-icons/io5';
-import { RiLoginCircleLine, RiMoonLine } from 'react-icons/ri';
+import { RiLoginCircleLine, RiLogoutCircleLine, RiMoonLine, RiSunLine } from 'react-icons/ri';
 
 import { useAuth } from '../lib/useAuth';
 
@@ -41,10 +38,7 @@ export default function Header() {
   const hoverColor = useColorModeValue('#223c50', 'red.600');
   const [isOpen, setIsOpen] = useState(false);
 
-  const { user } = useAuth();
-
-  const MotionFlex = motion(Flex);
-  const MotionBox = motion(Box);
+  const { user, signOut } = useAuth();
 
   return (
     <Flex
@@ -78,7 +72,7 @@ export default function Header() {
               />
             ) : (
               <Icon
-                as={SunIcon}
+                as={RiSunLine}
                 w={7}
                 h={7}
                 color={color}
@@ -90,7 +84,21 @@ export default function Header() {
           </Button>
           {user && (
             <WrapItem>
-              <Avatar size="md" name="Prospero" src="/images/hacker.png" />{' '}
+              <Flex alignItems="center">
+                <Avatar size="md" name="avatar" src={user.avatar} />{' '}
+                <Button mr="5" w={0} h={0} onClick={() => signOut()}>
+                  <Icon
+                    as={RiLogoutCircleLine}
+                    w={7}
+                    h={7}
+                    color={color}
+                    _hover={{
+                      color: colorMode === 'light' ? '#223c50' : 'red.600',
+                    }}
+                    className="shadow__item hover__item"
+                  />
+                </Button>
+              </Flex>
             </WrapItem>
           )}
           {!user && (
