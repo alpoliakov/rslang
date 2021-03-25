@@ -1,54 +1,36 @@
 import { ArrowBackIcon, ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { changePicture, egg, extraPoints } from 'components/MiniGames/utils/utils';
+import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
-import { changePicture, egg, extraPoints } from 'components/MiniGames/utils/utils';
 
 const Sprint = ({ counter, setCounter }) => {
   const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
-  // const [counter, setCounter] = useState(0);
-  const [isCorrect, setIsCorrect] = useState(Boolean);
-  const [resultIcons, setResultIcons] = useState([]);
-  const [correctAnswersArr, setCorrectAnswersArr] = useState(0);
+  const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
   const [pic, setPic] = useState(egg);
 
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
 
-  useHotkeys('left', () => handleAnswer());
-  useHotkeys('right', () => handleAnswer());
-
   const handleAnswer = () => {
-    // if (resultIcons.length > 3) {
-    //   setResultIcons([]);
-    // }
-    setIsCorrect(true);
+    const currentAnswers = [...correctAnswersArr, true];
+    const correctInRow =
+      currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
+
     setCounter(counter + extraPoints(pic));
-
-    isCorrect ? setCorrectAnswersArr(correctAnswersArr + 1) : setCorrectAnswersArr(0);
-
-    changePicture(correctAnswersArr, pic, setPic);
-
-    setResultIcons(
-      isCorrect
-        ? resultIcons.concat([<CheckCircleIcon />])
-        : resultIcons.concat([<NotAllowedIcon />]),
-    );
+    setCorrectAnswersArr(currentAnswers);
+    changePicture(correctInRow, setPic);
+    console.log(correctInRow);
 
     if (isMusicOn) {
       correct();
     }
   };
-
-  useEffect(() => {
-    if (resultIcons.length > 3) {
-      setResultIcons([]);
-    }
-  }, [resultIcons]);
+  useHotkeys('left, right', handleAnswer, [counter, correctAnswersArr]);
 
   const onSwitchSound = () => {
     setSound(!isSoundOn);
@@ -77,9 +59,11 @@ const Sprint = ({ counter, setCounter }) => {
         <div className="sprint-board-inner">
           <div className="sprint-icons">
             <div className="sprint-result-icons">
-              {resultIcons.map((icon, key) => (
-                <React.Fragment key={key}>{icon}</React.Fragment>
-              ))}
+              {correctAnswersArr
+                .slice(-(correctAnswersArr.length % 4 || 4))
+                .map((isCorrectAnswer, i) =>
+                  isCorrectAnswer ? <CheckCircleIcon key={i} /> : <NotAllowedIcon key={i} />,
+                )}
             </div>
             <IconButton
               className="sprint-sound"
