@@ -3,12 +3,12 @@ import { useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { BsAlarm, BsController, BsExclamationTriangleFill, BsFillCursorFill } from 'react-icons/bs';
 
-import { ACTIVE } from '../../constants';
+import { ACTIVE_BUTTON_COLOR } from '../../constants';
 
 const FEATURE_ICON_SIZE = 50;
 
 const FeatureCard = ({ description, children }) => {
-  const borderColor = useColorModeValue(ACTIVE.LIGHT, ACTIVE.DARK);
+  const borderColor = useColorModeValue(ACTIVE_BUTTON_COLOR.LIGHT, ACTIVE_BUTTON_COLOR.DARK);
 
   return (
     <Flex

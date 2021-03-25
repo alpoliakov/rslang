@@ -1,22 +1,21 @@
-import { Center, Flex, Link, Square, Text } from '@chakra-ui/layout';
+import { Grid, Flex, Link, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { BiStats } from 'react-icons/bi';
 import { FaBook, FaGamepad } from 'react-icons/fa';
 
-import { ACTIVE, MenuTitle, PASSIVE } from '../../constants';
+import { ACTIVE_BUTTON_COLOR, MenuTitle, PASSIVE_BUTTON_COLOR } from '../../constants';
 
 const MENU_ICON_SIZE = 30;
 
 const Menu = () => {
-  const menuItemColor = useColorModeValue(PASSIVE.LIGHT, PASSIVE.DARK);
-  const menuItemHoverColor = useColorModeValue(ACTIVE.LIGHT, ACTIVE.DARK);
+  const menuItemColor = useColorModeValue(PASSIVE_BUTTON_COLOR.LIGHT, PASSIVE_BUTTON_COLOR.DARK);
+  const menuItemHoverColor = useColorModeValue(ACTIVE_BUTTON_COLOR.LIGHT, ACTIVE_BUTTON_COLOR.DARK);
 
   const MenuItem = ({ menuTitle, children }) => (
     <Link>
       <Flex
         h={70}
-        minW={200}
         p={5}
         justify="space-around"
         align="center"
@@ -26,15 +25,16 @@ const Menu = () => {
         style={{ transition: 'all 200ms linear' }}
         borderRadius="xl">
         {children}
-        <Text fontSize="xl" transform={{ rotate: '45deg' }}>
-          {menuTitle}
-        </Text>
+        <Text fontSize="xl">{menuTitle}</Text>
       </Flex>
     </Link>
   );
 
   return (
-    <Flex p={5} wrap="wrap" justify="space-around">
+    <Grid
+      templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
+      gap={6}
+      mx="auto">
       <MenuItem menuTitle={MenuTitle.DICTIONARY}>
         <FaBook fontSize={MENU_ICON_SIZE} />
       </MenuItem>
@@ -47,7 +47,7 @@ const Menu = () => {
       <MenuItem menuTitle={MenuTitle.STATISTICS}>
         <BiStats fontSize={MENU_ICON_SIZE} />
       </MenuItem>
-    </Flex>
+    </Grid>
   );
 };
 

@@ -7,14 +7,16 @@ const MenuTitle = {
   STATISTICS: 'Статистика',
 };
 
-const ACTIVE = {
+const ACTIVE_BUTTON_COLOR = {
   LIGHT: '#FF0088',
   DARK: '#AF004B',
 };
 
-const PASSIVE = {
+const PASSIVE_BUTTON_COLOR = {
   LIGHT: '#59BAB7',
   DARK: '#006B69',
 };
 
-export { ACTIVE, localHost, MenuTitle, PASSIVE };
+const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
+
+export { ACTIVE_BUTTON_COLOR, DEMONSTRATION_VIDEO, localHost, MenuTitle, PASSIVE_BUTTON_COLOR };
