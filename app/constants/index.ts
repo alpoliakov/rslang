@@ -17,4 +17,6 @@ const PASSIVE_BUTTON_COLOR = {
   DARK: '#006B69',
 };
 
-export { ACTIVE_BUTTON_COLOR, localHost, MenuTitle, PASSIVE_BUTTON_COLOR };
+const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
+
+export { ACTIVE_BUTTON_COLOR, DEMONSTRATION_VIDEO, localHost, MenuTitle, PASSIVE_BUTTON_COLOR };
