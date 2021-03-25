@@ -10,6 +10,7 @@ const NewGame = ({ counter, setCounter, isMusicOn }) => {
   const [incorrect] = useSound('/sounds/incorrect.mp3');
 
   const handleAnswer = () => {
+    setCounter(counter + 10);
     if (isMusicOn) {
       correct();
     }
@@ -17,14 +18,14 @@ const NewGame = ({ counter, setCounter, isMusicOn }) => {
   // useHotkeys('enter', handleAnswer, [counter, correctAnswersArr]);
 
   return (
-    <div className="sprint-board-outer">
-      <div className="sprint-board-head">
-        <div key="counter" className="sprint-counter">
+    <div className="newgame-board-outer">
+      <div className="newgame-board-head">
+        <div key="counter" className="newgame-counter">
           {counter ? `+ ${counter}` : counter}
         </div>
       </div>
-      <div className="sprint-board-inner">
-        <div className="audiocall-sound-box">
+      <div className="newgame-board-inner">
+        <div className="newgame-sound-box">
           <Button
             w={32}
             h={32}
@@ -33,7 +34,7 @@ const NewGame = ({ counter, setCounter, isMusicOn }) => {
             _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
             className="audiocall-button-sound">
             <Icon
-              className="audiocall-sound"
+              className="newgame-sound"
               as={GiSpeaker}
               w={20}
               h={20}
@@ -44,10 +45,10 @@ const NewGame = ({ counter, setCounter, isMusicOn }) => {
             />
           </Button>
         </div>
-        <Input pr="4.5rem" placeholder="Введи услышанное слово" />
-        <div className="audiocall-button">
-          <Button colorScheme="whiteAlpha" variant="outline" onClick={handleAnswer}>
-            не знаю
+        <Input width="240px" placeholder="Введи услышанное слово" className="newgame-input" />
+        <div className="newgame-button">
+          <Button colorScheme="green" onClick={handleAnswer}>
+            проверить
           </Button>
         </div>
       </div>

@@ -1,0 +1,77 @@
+.fullscreen-box {
+  width: 100%;
+  height: 100%;
+}
+
+.newgame-container {
+  background-color: rgb(88, 89, 94);
+  background-blend-mode: multiply;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 10% auto 10%;
+  grid-template-rows: 10% 90%;
+  background-image: url('https://images.pexels.com/photos/1045299/pexels-photo-1045299.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+}
+
+.newgame-board-outer {
+  grid-column-start: 2;
+  margin: auto;
+  display: grid;
+  grid-template-rows: 10% 90%;
+  width: 45%;
+  height: 50%;
+  min-width: 360px;
+  max-width: 450px;
+}
+
+.newgame-board-head {
+  text-align: center;
+}
+
+.newgame-counter {
+  margin: auto;
+  color: white;
+  font-size: 25px;
+  transform: translateY(+100px);
+  animation: slide-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.newgame-board-inner {
+  background-color: rgba(92, 125, 158, 0.726);
+  grid-row-start: 2;
+  margin: auto;
+  border: solid rgb(212, 211, 211);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 55% 20% 25%;
+  min-height: 300px;
+}
+
+.newgame-sound-box {
+  grid-row-start: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.newgame-sound {
+  color: white;
+}
+
+.newgame-input {
+  grid-row-start: 2;
+  margin: auto;
+  color: white;
+  width: 50px;
+}
+
+.newgame-button {
+  display: flex;
+  justify-content: center;
+  grid-row-start: 3;
+  margin: auto;
+}
