@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-
 import useSound from 'use-sound';
 
 const Savanna = ({ counter, setCounter, isMusicOn }) => {

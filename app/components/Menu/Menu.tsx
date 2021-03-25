@@ -1,4 +1,4 @@
-import { Grid, Flex, Link, Text } from '@chakra-ui/layout';
+import { Flex, Grid, Link, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { BiStats } from 'react-icons/bi';

@@ -2,13 +2,13 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
+import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
 import { Savanna } from 'components/MiniGames/Savanna/Savanna';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
 
 export default function SavannaGamePage() {
   const [quitGame, setQuitGame] = useState(false);
