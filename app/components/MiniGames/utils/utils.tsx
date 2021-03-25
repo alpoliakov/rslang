@@ -1,9 +1,9 @@
-const egg = 'https://img.icons8.com/color/96/000000/kawaii-egg.png';
-const dinoEgg = 'https://img.icons8.com/color/96/000000/dinosaur-egg.png';
-const dino = 'https://img.icons8.com/color/96/000000/kawaii-dinosaur--v2.png';
-const dragon = 'https://img.icons8.com/color/96/000000/european-dragon.png';
+export const egg = 'https://img.icons8.com/color/96/000000/kawaii-egg.png';
+export const dinoEgg = 'https://img.icons8.com/color/96/000000/dinosaur-egg.png';
+export const dino = 'https://img.icons8.com/color/96/000000/kawaii-dinosaur--v2.png';
+export const dragon = 'https://img.icons8.com/color/96/000000/european-dragon.png';
 
-const changePicture = (num, setPic) => {
+export const changePicture = (num, setPic) => {
   if (num > 4 && num < 9) {
     setPic(dinoEgg);
   } else if (num > 8 && num < 12) {
@@ -13,7 +13,7 @@ const changePicture = (num, setPic) => {
   }
 };
 
-const extraPoints = (pic) => {
+export const extraPoints = (pic) => {
   let points = 10;
   if (pic === dinoEgg) {
     points = 20;
@@ -24,5 +24,3 @@ const extraPoints = (pic) => {
   }
   return points;
 };
-
-export { changePicture, egg, extraPoints };
