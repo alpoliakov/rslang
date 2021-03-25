@@ -7,7 +7,6 @@ const Timer = ({ setTimeOver, timeOver }) => {
   useEffect(() => {
     if (timeLeft === 0) {
       setTimeOver(!timeOver);
-      // setTimer(!showTimer);
       return;
     }
 
@@ -25,7 +24,6 @@ const Timer = ({ setTimeOver, timeOver }) => {
       </CircularProgress>
     </div>
   );
-  // <div className="timer">{`0${timeLeft}`.slice(-2)}</div>;
 };
 
 export { Timer };

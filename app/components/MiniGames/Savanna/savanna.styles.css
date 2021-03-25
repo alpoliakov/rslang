@@ -1,0 +1,72 @@
+.fullscreen-box {
+  width: 100%;
+  height: 100%;
+}
+
+.savanna-container {
+  background-color: rgb(88, 89, 94);
+  background-blend-mode: multiply;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 10% auto 10%;
+  grid-template-rows: 10% 90%;
+  background-image: url('https://images.pexels.com/photos/1293006/pexels-photo-1293006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+}
+
+.savanna-music {
+  grid-column-start: 1;
+  margin-left: 35%;
+  margin-top: 20px;
+  grid-row-start: 1;
+}
+
+.progress-hearts {
+  grid-column-start: 2;
+  grid-row-start: 1;
+  display: flex;
+  justify-content: right;
+  margin: auto;
+}
+.savanna-close-full {
+  grid-row-start: 1;
+  grid-column-start: 3;
+  margin-top: 20px;
+  margin-right: 35%;
+  color: white;
+  font-size: 50px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.savanna-outer {
+  grid-row-start: 2;
+  grid-column-start: 2;
+  margin: auto;
+  width: 60%;
+  min-width: 500px;
+  height: 40%;
+}
+
+.savanna-english {
+  margin: auto;
+  color: white;
+  font-size: 30px;
+  text-align: center;
+}
+
+.savanna-translation {
+  color: rgb(212, 211, 211);
+  font-size: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.savanna-variants {
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.savanna-variants:hover {
+  background-color: rgba(212, 211, 211, 0.253);
+}
