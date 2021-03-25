@@ -1,10 +1,11 @@
-mutation SignUp($input: AuthInput!) {
-  register(input: $input) {
+mutation SignUp($name: String!, $email: String!, $password: String!, $avatar: String!) {
+  register(input: {name:$name, email:$email, password:$password, avatar: $avatar}) {
     user {
       _id
       name
       email
       avatar
+      role
       registrationDate
     }
     token

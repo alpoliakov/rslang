@@ -1,4 +1,3 @@
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Container } from '@chakra-ui/layout';
 import {
   Avatar,
@@ -17,12 +16,11 @@ import {
   useColorModeValue,
   WrapItem,
 } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
 import NextLink from 'next/link';
 import React, { useState } from 'react';
+import { RiLoginCircleLine, RiLogoutCircleLine, RiMoonLine, RiSunLine } from 'react-icons/ri';
 import { BiChevronDown, BiMenu } from 'react-icons/bi';
 import { IoInvertModeOutline, IoInvertModeSharp } from 'react-icons/io5';
-import { RiLoginCircleLine, RiMoonLine } from 'react-icons/ri';
 
 import { MenuTitle } from '../constants';
 import { useAuth } from '../lib/useAuth';
@@ -49,10 +47,7 @@ export default function Header() {
   const hoverColor = useColorModeValue('#223c50', 'red.600');
   const [isOpen, setIsOpen] = useState(false);
 
-  const { user } = useAuth();
-
-  const MotionFlex = motion(Flex);
-  const MotionBox = motion(Box);
+  const { user, signOut } = useAuth();
 
   return (
     <Box boxShadow="md" bg={bg} position="sticky" top="0" p={1} zIndex="10" w="100%">
@@ -68,52 +63,66 @@ export default function Header() {
           <Spacer />
           <Flex alignItems="center" p="1">
             <Button w={0} h={0} onClick={toggleColorMode} mr="5">
-              {colorMode === 'light' ? (
-                <Icon
-                  as={RiMoonLine}
-                  w={7}
-                  h={7}
-                  color="gray.400"
-                  className="shadow__item hover__item"
-                  _hover={{
-                    color: '#223c50',
-                  }}
-                />
-              ) : (
-                <Icon
-                  as={SunIcon}
-                  w={7}
-                  h={7}
-                  color={color}
-                  _hover={{
-                    color: 'red.600',
-                  }}
-                />
-              )}
-            </Button>
+            {colorMode === 'light' ? (
+              <Icon
+                as={RiMoonLine}
+                w={7}
+                h={7}
+                color="gray.400"
+                className="shadow__item hover__item"
+                _hover={{
+                  color: '#223c50',
+                }}
+              />
+            ) : (
+              <Icon
+                as={RiSunLine}
+                w={7}
+                h={7}
+                color={color}
+                _hover={{
+                  color: 'red.600',
+                }}
+              />
+            )}
+          </Button>
             {user && (
-              <WrapItem>
-                <Avatar size="md" name="Prospero" src="/images/hacker.png" />{' '}
-              </WrapItem>
-            )}
+            <WrapItem>
+              <Flex alignItems="center">
+                <Avatar size="md" name="avatar" src={user.avatar} />{' '}
+                <Button mr="5" w={0} h={0} onClick={() => signOut()}>
+                  <Icon
+                    as={RiLogoutCircleLine}
+                    w={7}
+                    h={7}
+                    color={color}
+                    _hover={{
+                      color: colorMode === 'light' ? '#223c50' : 'red.600',
+                    }}
+                    className="shadow__item hover__item"
+                  />
+                </Button>
+              </Flex>
+            </WrapItem>
+          )}
             {!user && (
-              <WrapItem>
-                <NextLink href={'/auth/signin'}>
-                  <Button mr="5" w={0} h={0}>
-                    <Icon
-                      as={RiLoginCircleLine}
-                      w={7}
-                      h={7}
-                      color={color}
-                      _hover={{
-                        color: colorMode === 'light' ? '#223c50' : 'red.600',
-                      }}
-                      className="shadow__item hover__item"
-                    />
-                  </Button>
-                </NextLink>
-              </WrapItem>
-            )}
+            <WrapItem>
+              <NextLink href={'/auth/signin'}>
+                <Button mr="5" w={0} h={0}>
+                  <Icon
+                    as={RiLoginCircleLine}
+                    w={7}
+                    h={7}
+                    color={color}
+                    _hover={{
+                      color: colorMode === 'light' ? '#223c50' : 'red.600',
+                    }}
+                    className="shadow__item hover__item"
+                  />
+                </Button>
+              </NextLink>
+            </WrapItem>
+          )}
             <Menu>
               <MenuButton as={Button} rightIcon={<BiChevronDown />}>
                 <Icon

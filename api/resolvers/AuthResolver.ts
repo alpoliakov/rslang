@@ -1,3 +1,6 @@
+import '../server/env';
+import 'reflect-metadata';
+
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Arg, Mutation, Resolver } from 'type-graphql';

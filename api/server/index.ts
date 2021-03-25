@@ -44,7 +44,6 @@ async function createServer() {
 
     apolloServer.applyMiddleware({ app, cors: corsOptions });
 
-    // start the server
     app.listen({ port }, () => {
       console.log(`🚀 Server ready at http://localhost:${port}${apolloServer.graphqlPath}`);
     });

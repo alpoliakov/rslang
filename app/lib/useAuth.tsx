@@ -9,6 +9,7 @@ import { useSignUpMutation } from './graphql/signup.graphql';
 type AuthProps = {
   user: any;
   error: string;
+  message: string;
   signIn: (email: any, password: any) => Promise<void>;
   signUp: (name: any, email: any, password: any, avatar: any) => Promise<void>;
   signOut: () => void;
@@ -46,11 +47,11 @@ function useProvideAuth() {
       if (data.login.token && data.login.user) {
         sessionStorage.setItem('token', data.login.token);
         client.resetStore().then(() => {
-          setMessage('Success login!');
+          setMessage('Вы успешно вошли в аккаунт!');
           router.push(`/`);
         });
       } else {
-        setError('Invalid Login');
+        setError('Неверный логин или пароль!');
       }
     } catch (err) {
       setError(err.message);
@@ -68,11 +69,11 @@ function useProvideAuth() {
       if (data.register.token && data.register.user) {
         sessionStorage.setItem('token', data.register.token);
         client.resetStore().then(() => {
-          setMessage('Success login!');
+          setMessage('Вы успешно зарегистрировались!');
           router.push(`/`);
         });
       } else {
-        setError('Invalid Login');
+        setError('Неудачная регистрация!');
       }
     } catch (err) {
       setError(err.message);
@@ -88,7 +89,7 @@ function useProvideAuth() {
     sessionStorage.removeItem('token');
 
     client.resetStore().then(() => {
-      setMessage('You have successfully logged out of your account.');
+      setMessage('Вы успешно вышли из аккаунта.');
       router.push('/');
     });
   };
