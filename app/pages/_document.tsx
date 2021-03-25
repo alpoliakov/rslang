@@ -3,9 +3,9 @@ import React from 'react';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
+    const originalRenderPage = ctx.renderPage;
     const initialProps = await Document.getInitialProps(ctx);
-
-    return initialProps;
+    return { ...initialProps };
   }
 
   render() {

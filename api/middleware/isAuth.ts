@@ -1,3 +1,6 @@
+import 'reflect-metadata';
+import '../server/env';
+
 import jwt from 'jsonwebtoken';
 import { MiddlewareFn } from 'type-graphql';
 
