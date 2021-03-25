@@ -23,7 +23,10 @@ const Accordion = ({ i, expanded, setExpanded, content }) => {
   const isOpen = i === expanded;
 
   const menuItemColor = useColorModeValue(ACTIVE_BUTTON_COLOR.LIGHT, ACTIVE_BUTTON_COLOR.DARK);
-  const menuItemHoverColor = useColorModeValue(PASSIVE_BUTTON_COLOR.LIGHT, PASSIVE_BUTTON_COLOR.DARK);
+  const menuItemHoverColor = useColorModeValue(
+    PASSIVE_BUTTON_COLOR.LIGHT,
+    PASSIVE_BUTTON_COLOR.DARK,
+  );
 
   return (
     <>

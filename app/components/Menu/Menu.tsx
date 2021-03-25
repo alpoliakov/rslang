@@ -31,7 +31,10 @@ const Menu = () => {
   );
 
   return (
-    <Grid templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']} gap={6} mx="auto">
+    <Grid
+      templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
+      gap={6}
+      mx="auto">
       <MenuItem menuTitle={MenuTitle.DICTIONARY}>
         <FaBook fontSize={MENU_ICON_SIZE} />
       </MenuItem>

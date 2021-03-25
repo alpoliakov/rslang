@@ -1,3 +1,3 @@
-import Promo from "./Promo";
+import Promo from './Promo';
 
 export default Promo;
