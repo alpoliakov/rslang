@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { ProgressHearts } from 'components/MiniGames/ProgressHearts';
+import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
 
 export default function SavannaGamePage() {
   const [quitGame, setQuitGame] = useState(false);
