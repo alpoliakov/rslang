@@ -1,13 +1,13 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
+import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
+import { Timer } from 'components/MiniGames/Sprint/Timer';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { Timer } from 'components/MiniGames/Sprint/Timer';
-import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import { BiFullscreen, BiExitFullscreen } from 'react-icons/bi';
+import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);

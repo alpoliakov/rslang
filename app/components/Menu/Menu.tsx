@@ -4,7 +4,7 @@ import React from 'react';
 import { BiStats } from 'react-icons/bi';
 import { FaBook, FaGamepad } from 'react-icons/fa';
 
-import { PASSIVE, MenuTitle, ACTIVE } from '../../constants';
+import { ACTIVE, MenuTitle, PASSIVE } from '../../constants';
 
 const MENU_ICON_SIZE = 30;
 

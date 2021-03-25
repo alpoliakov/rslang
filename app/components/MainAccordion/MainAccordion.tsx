@@ -3,7 +3,8 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { GiClick } from 'react-icons/gi';
-import { PASSIVE, ACTIVE } from '../../constants';
+
+import { ACTIVE, PASSIVE } from '../../constants';
 
 const accordionTitleStyle = {
   borderRadius: '10px',

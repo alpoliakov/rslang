@@ -1,7 +1,7 @@
-import { Box, Flex, Heading, Text, Grid } from '@chakra-ui/layout';
+import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
-import { BsFillCursorFill, BsAlarm, BsController, BsExclamationTriangleFill } from 'react-icons/bs';
+import { BsAlarm, BsController, BsExclamationTriangleFill, BsFillCursorFill } from 'react-icons/bs';
 
 import { ACTIVE } from '../../constants';
 
@@ -22,7 +22,9 @@ const FeatureCard = ({ description, children }) => {
       _hover={{ bg: borderColor }}
       borderRadius="xl">
       {children}
-      <Text textAlign="center" fontSize={25}>{ description }</Text>
+      <Text textAlign="center" fontSize={25}>
+        {description}
+      </Text>
     </Flex>
   );
 };

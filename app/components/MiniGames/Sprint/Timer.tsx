@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 
 const Timer = ({ setTimeOver, timeOver }) => {
   const [timeLeft, setTime] = useState(59);

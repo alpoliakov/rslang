@@ -3,12 +3,12 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 
 import AboutTeam from '../components/AboutTeam';
+import Features from '../components/Features';
 import Loading from '../components/Loading';
 import MainAccordion from '../components/MainAccordion/';
+import Menu from '../components/Menu';
 import Player from '../components/Player';
 import Promo from '../components/Promo';
-import Menu from "../components/Menu";
-import Features from '../components/Features';
 
 export default function Home() {
   const [state, setState] = useState(false);
