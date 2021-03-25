@@ -1,4 +1,13 @@
-import { Box, Container, Flex, Heading, Link, Spacer, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Link,
+  Spacer,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -7,14 +16,17 @@ export default function Footer() {
 
   return (
     <Box w="100%" position="sticky" bottom="0" zIndex="10" bg={bg} boxShadow="inner">
-      <Container maxW="container.xl" >
+      <Container maxW="container.xl">
         <Flex
           alignItems="center"
           direction={['column', 'column', 'row']}
           justifyContent="space-between"
           w="100%"
           p={2}>
-          <Link href="https://rs.school/react/" target="_blank" className="shadow__item hover__item">
+          <Link
+            href="https://rs.school/react/"
+            target="_blank"
+            className="shadow__item hover__item">
             <Image src="/images/rs_school_logo.svg" width="100px" height="30px" />
           </Link>
           <Flex size="md" alignItems="center" direction={['column', 'column', 'row']}>
