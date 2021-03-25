@@ -23,6 +23,7 @@ body {
   align-items: center;
   justify-items: center;
   grid-template-rows: 70px 1fr auto;
+  overflow: hidden;
   /*background: linear-gradient(to top, var(--ds-color__indigo) 0, var(--ds-color__indigo) 100%);*/
 }
 
