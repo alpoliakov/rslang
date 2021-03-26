@@ -1,8 +1,8 @@
+import { Button, Icon } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import useSound from 'use-sound';
 import { GiSpeaker } from 'react-icons/gi';
-import { Button, Icon } from '@chakra-ui/react';
+import useSound from 'use-sound';
 
 const Audiocall = ({ counter, setCounter, isMusicOn }) => {
   const [correct] = useSound('/sounds/correct.mp3');

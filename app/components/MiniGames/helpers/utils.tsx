@@ -1,12 +1,10 @@
-export const egg = 'https://img.icons8.com/color/96/000000/kawaii-egg.png';
-export const dinoEgg = 'https://img.icons8.com/color/96/000000/dinosaur-egg.png';
-export const dino = 'https://img.icons8.com/color/96/000000/kawaii-dinosaur--v2.png';
-export const dragon = 'https://img.icons8.com/color/96/000000/european-dragon.png';
+import { dino, dinoEgg, dragon } from './constants';
 
+// ------- SAVANNA -------
 export const changePicture = (num, setPic) => {
   if (num > 4 && num < 9) {
     setPic(dinoEgg);
-  } else if (num > 8 && num < 12) {
+  } else if (num > 8 && num < 13) {
     setPic(dino);
   } else if (num > 12) {
     setPic(dragon);
@@ -23,4 +21,12 @@ export const extraPoints = (pic) => {
     points = 40;
   }
   return points;
+};
+
+// ------- HEARTS -------
+
+export const brokeHearts = (arr, el) => {
+  let position = 0;
+  arr.splice(position, 1, el);
+  position++;
 };

@@ -1,6 +1,7 @@
 import { ArrowBackIcon, ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
-import { changePicture, egg, extraPoints } from 'components/MiniGames/utils/utils';
+import { egg } from 'components/MiniGames/helpers/constants';
+import { changePicture, extraPoints } from 'components/MiniGames/helpers/utils';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';

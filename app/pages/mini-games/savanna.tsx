@@ -1,8 +1,8 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { redHearts } from 'components/MiniGames/helpers/constants';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
 import { Savanna } from 'components/MiniGames/Savanna/Savanna';
 import Head from 'next/head';
 import React, { useState } from 'react';
@@ -46,9 +46,11 @@ export default function SavannaGamePage() {
           icon={<RiMusic2Fill />}
         />
         <Savanna counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
-        <ProgressHearts
-        // isCorrect={isCorrect}
-        />
+        <div className="progress-hearts">
+          {redHearts.map((el) => (
+            <>{el}</>
+          ))}
+        </div>
         <div className="savanna-close-full">
           <IconButton
             colorScheme="whiteAlpha"
