@@ -25,6 +25,7 @@
     "react-full-screen": "^1.0.2",
     "react-hotkeys-hook": "^3.2.1",
     "react-icons": "^4.2.0",
+    "recharts": "^2.0.9",
     "use-sound": "^2.0.1"
   },
   "devDependencies": {
