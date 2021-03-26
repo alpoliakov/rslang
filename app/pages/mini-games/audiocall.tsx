@@ -1,8 +1,8 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';

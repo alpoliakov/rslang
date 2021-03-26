@@ -1,4 +1,4 @@
-import { dinoEgg, dino, dragon } from './constants';
+import { dino, dinoEgg, dragon } from './constants';
 
 // ------- SAVANNA -------
 export const changePicture = (num, setPic) => {

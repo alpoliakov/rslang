@@ -1,8 +1,8 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { redHearts } from 'components/MiniGames/helpers/constants';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { redHearts } from 'components/MiniGames/helpers/constants';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
 import Head from 'next/head';
 import React, { useState } from 'react';

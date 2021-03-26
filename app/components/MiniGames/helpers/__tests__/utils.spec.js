@@ -1,5 +1,5 @@
-import { extraPoints, changePicture } from '../utils';
 import { dino, dinoEgg, dragon } from '../constants';
+import { changePicture, extraPoints } from '../utils';
 
 describe('utils', () => {
   it.each`

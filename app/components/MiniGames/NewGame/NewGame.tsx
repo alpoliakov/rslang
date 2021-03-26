@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
-import { Input } from '@chakra-ui/react';
 
 const NewGame = ({ counter, setCounter, isMusicOn }) => {
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
