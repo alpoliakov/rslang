@@ -2,7 +2,6 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import Head from 'next/head';
 import React, { useState } from 'react';

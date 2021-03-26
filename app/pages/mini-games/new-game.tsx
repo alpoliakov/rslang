@@ -2,7 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
+import { redHearts } from 'components/MiniGames/helpers/constants';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
 import Head from 'next/head';
 import React, { useState } from 'react';
@@ -46,9 +46,11 @@ export default function NewGamePage() {
           icon={<RiMusic2Fill />}
         />
         <NewGame counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
-        <ProgressHearts
-        // isCorrect={isCorrect}
-        />
+        <div className="progress-hearts">
+          {redHearts.map((el) => (
+            <>{el}</>
+          ))}
+        </div>
         <div className="savanna-close-full">
           <IconButton
             colorScheme="whiteAlpha"
