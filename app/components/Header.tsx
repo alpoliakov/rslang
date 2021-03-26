@@ -50,8 +50,8 @@ export default function Header() {
   const { user, signOut } = useAuth();
 
   return (
-    <Box boxShadow="md" bg={bg} position="sticky" top="0" p={1} zIndex="10" w="100%">
-      <Container maxW="container.xl" w="100%">
+    <Box bg={bg} position="sticky" top="0" p={1} height="full" zIndex="10" width="full">
+      <Container maxW="95%" w="100%">
         <Flex alignItems="center" justifyContent="space-between">
           <Link p="1">
             <NextLink href="/">
@@ -136,11 +136,13 @@ export default function Header() {
                   }}
                 />
               </MenuButton>
+              {/*<MenuList>*/}
+              {/*  {Object.values(MenuTitle).map((title, index) => {*/}
+              {/*    return <MenuItem key={index + 1}>{title}</MenuItem>;*/}
+              {/*  })}*/}
+              {/*</MenuList>*/}
               <MenuList>
-                {Object.values(MenuTitle).map((title, index) => {
-                  return <MenuItem key={index + 1}>{title}</MenuItem>;
-                })}
-                <Link href="statistics" as={NextLink}>
+                <Link href="/statistics" as={NextLink}>
                   <MenuItem>{MenuTitle.STATISTICS.title}</MenuItem>
                 </Link>
               </MenuList>

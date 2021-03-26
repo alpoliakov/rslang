@@ -1,4 +1,4 @@
-import { Box, Container, Heading } from '@chakra-ui/layout';
+import { Box, Container, Flex, Heading } from '@chakra-ui/layout';
 import Head from 'next/head';
 import React, { useState } from 'react';
 

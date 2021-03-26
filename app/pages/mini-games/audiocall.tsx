@@ -1,9 +1,9 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { ProgressHearts } from 'components/MiniGames/Savanna/ProgressHearts';
-import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
@@ -29,12 +29,7 @@ export default function AudiocallGamePage() {
   return (
     <>
       <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <title>Audio Call</title>
       </Head>
       <FullScreen handle={fullScreen} className="audiocall-container">
         <IconButton

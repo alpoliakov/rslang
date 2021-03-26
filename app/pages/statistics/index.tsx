@@ -10,9 +10,10 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
-import ShortTermStatistics from '../../components/ShortTermStatistics';
 import Head from 'next/head';
+import React, { useState } from 'react';
+
+import ShortTermStatistics from '../../components/ShortTermStatistics';
 
 export default function Stat() {
   const [isButtonDayActive, setIsButtonDayActive] = useState(true);
