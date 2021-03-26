@@ -1,15 +1,22 @@
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
+import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
 import { Input } from '@chakra-ui/react';
 
 const NewGame = ({ counter, setCounter, isMusicOn }) => {
+  const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
 
   const handleAnswer = () => {
+    const currentAnswers = [...correctAnswersArr, true];
+    const correctInRow =
+      currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
+
+    setCorrectAnswersArr(currentAnswers);
+
     setCounter(counter + 10);
     if (isMusicOn) {
       correct();
