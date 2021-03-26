@@ -15,8 +15,8 @@ export default function Footer() {
   const bg = useColorModeValue('gray.50', '#223c50');
 
   return (
-    <Box w="100%" position="sticky" bottom="0" zIndex="10" bg={bg} boxShadow="inner">
-      <Container maxW="container.xl">
+    <Box w="100%" position="sticky" bottom="0" zIndex="10" bg={bg}>
+      <Container maxW="95%">
         <Flex
           alignItems="center"
           direction={['column', 'column', 'row']}

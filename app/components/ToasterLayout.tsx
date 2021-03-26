@@ -18,5 +18,5 @@ export default function ToasterLayout() {
     }
   }, [error]);
 
-  return <div></div>;
+  return <div style={{ position: 'absolute' }}></div>;
 }

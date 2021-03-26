@@ -43,7 +43,15 @@ export default function Layout({ children }) {
       <Toaster />
       <Header />
       <ToasterLayout />
-      <MotionBox initial="initial" animate="enter" exit="exit" variants={postVariants}>
+      <MotionBox
+        initial="initial"
+        animate="enter"
+        exit="exit"
+        variants={postVariants}
+        display="flex"
+        alignItems="center"
+        width="full"
+        height="full">
         {children}
       </MotionBox>
       <Footer />
