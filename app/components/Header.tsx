@@ -128,9 +128,9 @@ export default function Header() {
                 />
               </MenuButton>
               <MenuList>
-                {Object.values(MenuTitle).map((title) => {
-                  return <MenuItem>{title}</MenuItem>;
-                })}
+                <Link href="statistics" as={NextLink}>
+                  <MenuItem>{MenuTitle.STATISTICS.title}</MenuItem>
+                </Link>
               </MenuList>
             </Menu>
           </Flex>

@@ -1,10 +1,22 @@
 const localHost = 'http://localhost:8000/';
 
 const MenuTitle = {
-  DICTIONARY: 'Словарь',
-  GAME_1: 'Игра 1',
-  GAME_2: 'Игра 2',
-  STATISTICS: 'Статистика',
+  DICTIONARY: {
+    title: 'Словарь',
+    url: 'statistics',
+  },
+  GAME_1: {
+    title: 'Словарь',
+    url: 'statistics',
+  },
+  GAME_2: {
+    title: 'Словарь',
+    url: 'statistics',
+  },
+  STATISTICS: {
+    title: 'Статистика',
+    url: 'statistics',
+  },
 };
 
 const ACTIVE_BUTTON_COLOR = {
