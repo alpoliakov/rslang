@@ -63,3 +63,5 @@ body {
 @import url('components/MiniGames/Savanna/savanna.styles.css');
 
 @import url('components/MiniGames/Audiocall/audiocall.styles.css');
+
+@import url('components/MiniGames/NewGame/newGame.styles.css');
