@@ -1,6 +1,6 @@
-import React from 'react';
-import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLeveloModal';
 import { Button } from '@chakra-ui/react';
+import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLeveloModal';
+import React from 'react';
 
 export const ModalSavanna = ({ setShowGame, showGame }) => {
   const handleClick = () => setShowGame(!showGame);

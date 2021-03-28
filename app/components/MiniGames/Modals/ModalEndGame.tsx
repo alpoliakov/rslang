@@ -1,8 +1,8 @@
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import Link from 'next/link';
 
 const ModalEndGame = ({ timeOver, setTimeOver, counter }) => {
   const [showMod, setModal] = useState(true);

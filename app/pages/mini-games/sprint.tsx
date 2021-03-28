@@ -3,12 +3,12 @@ import { IconButton } from '@chakra-ui/react';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
+import { ModalSprint } from 'components/MiniGames/Sprint/SprintModal';
 import { Timer } from 'components/MiniGames/Sprint/Timer';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
-import { ModalSprint } from 'components/MiniGames/Sprint/SprintModal';
 
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);

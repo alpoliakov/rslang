@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import Link from 'next/link';
 
 const ModalQuit = ({ quitGame, setQuitGame }) => {
   const [showMod, setModal] = useState(true);
