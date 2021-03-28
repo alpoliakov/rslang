@@ -8,11 +8,13 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
+import { ModalSprint } from 'components/MiniGames/Sprint/SprintModal';
 
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [showGame, setShowGame] = useState(false);
 
   const fullScreen = useFullScreenHandle();
 
@@ -24,43 +26,42 @@ export default function SprintGamePage() {
   return (
     <>
       <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <title>Спринт</title>
       </Head>
-      <FullScreen handle={fullScreen} className="sprint-container">
-        <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
-        <Sprint counter={counter} setCounter={setCounter} />
-        <div className="sprint-close-full">
-          <IconButton
-            colorScheme="whiteAlpha"
-            aria-label="Close game"
-            variant="ghost"
-            onClick={onQuitGame}
-            icon={<CloseIcon />}
-          />
-          {fullScreen.active ? (
+      {showGame ? (
+        <FullScreen handle={fullScreen} className="sprint-container">
+          <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
+          <Sprint counter={counter} setCounter={setCounter} />
+          <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"
-              aria-label="Full screen game"
+              aria-label="Close game"
               variant="ghost"
-              onClick={fullScreen.exit}
-              icon={<BiExitFullscreen />}
+              onClick={onQuitGame}
+              icon={<CloseIcon />}
             />
-          ) : (
-            <IconButton
-              colorScheme="whiteAlpha"
-              aria-label="Full screen game"
-              variant="ghost"
-              onClick={fullScreen.enter}
-              icon={<BiFullscreen />}
-            />
-          )}
-        </div>
-      </FullScreen>
+            {fullScreen.active ? (
+              <IconButton
+                colorScheme="whiteAlpha"
+                aria-label="Full screen game"
+                variant="ghost"
+                onClick={fullScreen.exit}
+                icon={<BiExitFullscreen />}
+              />
+            ) : (
+              <IconButton
+                colorScheme="whiteAlpha"
+                aria-label="Full screen game"
+                variant="ghost"
+                onClick={fullScreen.enter}
+                icon={<BiFullscreen />}
+              />
+            )}
+          </div>
+        </FullScreen>
+      ) : (
+        <ModalSprint setShowGame={setShowGame} showGame={showGame} />
+      )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
       {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />}
     </>

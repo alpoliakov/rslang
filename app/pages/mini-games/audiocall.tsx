@@ -1,6 +1,7 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
+import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import Head from 'next/head';
@@ -13,6 +14,7 @@ export default function AudiocallGamePage() {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
+  const [showGame, setShowGame] = useState(false);
 
   const fullScreen = useFullScreenHandle();
 
@@ -28,45 +30,49 @@ export default function AudiocallGamePage() {
   return (
     <>
       <Head>
-        <title>Audio Call</title>
+        <title>Аудиовызов</title>
       </Head>
-      <FullScreen handle={fullScreen} className="audiocall-container">
-        <IconButton
-          className="savanna-music"
-          variant="ghost"
-          colorScheme={isMusicOn ? 'whiteAlpha' : 'red'}
-          aria-label="Switch sound"
-          onClick={onSwitchMusic}
-          icon={<RiMusic2Fill />}
-        />
-        <Audiocall counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
-        <div className="savanna-close-full">
+      {showGame ? (
+        <FullScreen handle={fullScreen} className="audiocall-container">
           <IconButton
-            colorScheme="whiteAlpha"
-            aria-label="Close game"
+            className="savanna-music"
             variant="ghost"
-            onClick={onQuitGame}
-            icon={<CloseIcon />}
+            colorScheme={isMusicOn ? 'whiteAlpha' : 'red'}
+            aria-label="Switch sound"
+            onClick={onSwitchMusic}
+            icon={<RiMusic2Fill />}
           />
-          {fullScreen.active ? (
+          <Audiocall counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
+          <div className="savanna-close-full">
             <IconButton
               colorScheme="whiteAlpha"
-              aria-label="Full screen game"
+              aria-label="Close game"
               variant="ghost"
-              onClick={fullScreen.exit}
-              icon={<BiExitFullscreen />}
+              onClick={onQuitGame}
+              icon={<CloseIcon />}
             />
-          ) : (
-            <IconButton
-              colorScheme="whiteAlpha"
-              aria-label="Full screen game"
-              variant="ghost"
-              onClick={fullScreen.enter}
-              icon={<BiFullscreen />}
-            />
-          )}
-        </div>
-      </FullScreen>
+            {fullScreen.active ? (
+              <IconButton
+                colorScheme="whiteAlpha"
+                aria-label="Full screen game"
+                variant="ghost"
+                onClick={fullScreen.exit}
+                icon={<BiExitFullscreen />}
+              />
+            ) : (
+              <IconButton
+                colorScheme="whiteAlpha"
+                aria-label="Full screen game"
+                variant="ghost"
+                onClick={fullScreen.enter}
+                icon={<BiFullscreen />}
+              />
+            )}
+          </div>
+        </FullScreen>
+      ) : (
+        <ModalAudiocall setShowGame={setShowGame} showGame={showGame} />
+      )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
       {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
     </>
