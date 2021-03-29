@@ -27,3 +27,15 @@
   display: flex;
   justify-content: center;
 }
+
+@media screen and (max-width: 600px) {
+  .audiocall-sound-box {
+    margin-top: -100px;
+  }
+  .audiocall-button {
+    margin: 10px;
+  }
+  .audiocall-sound-box {
+    margin-bottom: 10px;
+  }
+}
