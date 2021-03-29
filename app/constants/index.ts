@@ -7,8 +7,8 @@ const MenuTitle = {
     url: 'statistics',
   },
   GAME_1: {
-    title: 'Словарь',
-    url: 'statistics',
+    title: 'Учебник',
+    url: 'textbook/0/0',
   },
   GAME_2: {
     title: 'Словарь',
