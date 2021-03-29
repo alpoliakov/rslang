@@ -4,6 +4,7 @@ import { redHearts } from 'components/MiniGames/helpers/constants';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
+import { ModalNewGame } from 'components/MiniGames/NewGame/NewGameModal';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
@@ -14,6 +15,7 @@ export default function NewGamePage() {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
+  const [showGame, setShowGame] = useState(false);
 
   const fullScreen = useFullScreenHandle();
 
@@ -29,55 +31,54 @@ export default function NewGamePage() {
   return (
     <>
       <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <title>Написание</title>
       </Head>
-      <FullScreen handle={fullScreen} className="newgame-container">
-        <IconButton
-          className="savanna-music"
-          variant="ghost"
-          colorScheme={isMusicOn ? 'whiteAlpha' : 'red'}
-          aria-label="Switch sound"
-          onClick={onSwitchMusic}
-          icon={<RiMusic2Fill />}
-        />
-        <NewGame counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
-        <div className="progress-hearts">
-          {redHearts.map((el) => (
-            <>{el}</>
-          ))}
-        </div>
-        <div className="savanna-close-full">
+      {showGame ? (
+        <FullScreen handle={fullScreen} className="newgame-container">
           <IconButton
-            colorScheme="whiteAlpha"
-            aria-label="Close game"
+            className="savanna-music"
             variant="ghost"
-            onClick={onQuitGame}
-            icon={<CloseIcon />}
+            colorScheme={isMusicOn ? 'whiteAlpha' : 'red'}
+            aria-label="Switch sound"
+            onClick={onSwitchMusic}
+            icon={<RiMusic2Fill />}
           />
-          {fullScreen.active ? (
+          <NewGame counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
+          <div className="progress-hearts">
+            {redHearts.map((el) => (
+              <>{el}</>
+            ))}
+          </div>
+          <div className="savanna-close-full">
             <IconButton
               colorScheme="whiteAlpha"
-              aria-label="Full screen game"
+              aria-label="Close game"
               variant="ghost"
-              onClick={fullScreen.exit}
-              icon={<BiExitFullscreen />}
+              onClick={onQuitGame}
+              icon={<CloseIcon />}
             />
-          ) : (
-            <IconButton
-              colorScheme="whiteAlpha"
-              aria-label="Full screen game"
-              variant="ghost"
-              onClick={fullScreen.enter}
-              icon={<BiFullscreen />}
-            />
-          )}
-        </div>
-      </FullScreen>
+            {fullScreen.active ? (
+              <IconButton
+                colorScheme="whiteAlpha"
+                aria-label="Full screen game"
+                variant="ghost"
+                onClick={fullScreen.exit}
+                icon={<BiExitFullscreen />}
+              />
+            ) : (
+              <IconButton
+                colorScheme="whiteAlpha"
+                aria-label="Full screen game"
+                variant="ghost"
+                onClick={fullScreen.enter}
+                icon={<BiFullscreen />}
+              />
+            )}
+          </div>
+        </FullScreen>
+      ) : (
+        <ModalNewGame setShowGame={setShowGame} showGame={showGame} />
+      )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
       {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
     </>
