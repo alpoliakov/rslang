@@ -17,13 +17,23 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { BiChevronDown, BiMenu } from 'react-icons/bi';
 import { IoInvertModeOutline, IoInvertModeSharp } from 'react-icons/io5';
-import { RiLoginCircleLine, RiLogoutCircleLine, RiMoonLine, RiSunLine } from 'react-icons/ri';
+import {
+  RiListSettingsLine,
+  RiLoginCircleLine,
+  RiLogoutCircleLine,
+  RiMoonLine,
+  RiProfileLine,
+  RiSettings4Line,
+  RiSunLine,
+} from 'react-icons/ri';
 
 import { MenuTitle } from '../constants';
 import { useAuth } from '../lib/useAuth';
+import Navigation from './Navigation/Navigation';
 
 const transition = {
   duration: 1,
@@ -45,9 +55,22 @@ export default function Header() {
   const color = useColorModeValue('gray.400', 'red.500');
   const bg = useColorModeValue('gray.50', '#223c50');
   const hoverColor = useColorModeValue('#223c50', 'red.600');
-  const [isOpen, setIsOpen] = useState(false);
+  const [showNav, setShowNav] = useState(false);
+  const [group, setGroup] = useState(null);
 
   const { user, signOut } = useAuth();
+
+  const router = useRouter();
+  const { pathname } = router;
+
+  useEffect(() => {
+    if (pathname.match('textbook')) {
+      const { group } = router.query;
+      setGroup(+group);
+      return setShowNav(true);
+    }
+    setShowNav(false);
+  }, [pathname]);
 
   return (
     <Box bg={bg} position="sticky" top="0" p={1} height="full" zIndex="10" width="full">
@@ -87,23 +110,72 @@ export default function Header() {
               )}
             </Button>
             {user && (
-              <WrapItem>
-                <Flex alignItems="center">
-                  <Avatar size="md" name="avatar" src={user.avatar} />{' '}
-                  <Button mr="5" w={0} h={0} onClick={() => signOut()}>
+              <Menu>
+                <MenuButton>
+                  <Flex alignItems="center">
+                    <Avatar size="md" name="avatar" src={user.avatar} mr="10px" />
+                    <Heading size="md">Hi, {user.name}</Heading>
+                  </Flex>
+                </MenuButton>
+                <MenuList>
+                  <MenuItem onClick={() => router.push(`/user/profile/${user._id}`)}>
                     <Icon
-                      as={RiLogoutCircleLine}
-                      w={7}
-                      h={7}
+                      as={RiProfileLine}
+                      w={6}
+                      h={6}
+                      mr={5}
                       color={color}
                       _hover={{
                         color: colorMode === 'light' ? '#223c50' : 'red.600',
                       }}
                       className="shadow__item hover__item"
-                    />
-                  </Button>
-                </Flex>
-              </WrapItem>
+                    />{' '}
+                    Профиль
+                  </MenuItem>
+                  <MenuItem onClick={() => router.push(`/user/statistics/${user._id}`)}>
+                    <Icon
+                      as={RiListSettingsLine}
+                      w={6}
+                      h={6}
+                      mr={5}
+                      color={color}
+                      _hover={{
+                        color: colorMode === 'light' ? '#223c50' : 'red.600',
+                      }}
+                      className="shadow__item hover__item"
+                    />{' '}
+                    Статистика
+                  </MenuItem>
+                  <MenuItem onClick={() => router.push(`/user/settings/${user._id}`)}>
+                    <Icon
+                      as={RiSettings4Line}
+                      w={6}
+                      h={6}
+                      mr={5}
+                      color={color}
+                      _hover={{
+                        color: colorMode === 'light' ? '#223c50' : 'red.600',
+                      }}
+                      className="shadow__item hover__item"
+                    />{' '}
+                    Настройки
+                  </MenuItem>
+                  <MenuItem onClick={() => signOut()}>
+                    <Icon
+                      as={RiLogoutCircleLine}
+                      w={6}
+                      h={6}
+                      mr={5}
+                      color={color}
+                      _hover={{
+                        color: colorMode === 'light' ? '#223c50' : 'red.600',
+                      }}
+                      className="shadow__item hover__item"
+                    />{' '}
+                    Выйти
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             )}
             {!user && (
               <WrapItem>
@@ -149,6 +221,7 @@ export default function Header() {
             </Menu>
           </Flex>
         </Flex>
+        {showNav && <Navigation group={group} />}
       </Container>
     </Box>
   );
