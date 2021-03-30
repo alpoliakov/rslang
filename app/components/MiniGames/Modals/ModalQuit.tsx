@@ -1,4 +1,5 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -6,11 +7,6 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
   const [showMod, setModal] = useState(true);
   useHotkeys('esc', () => setModal(false));
   useHotkeys('enter', () => setModal(false));
-
-  const handleClickClose = () => {
-    setModal(!showMod);
-    setQuitGame(!quitGame);
-  };
 
   const handleClickReturn = () => {
     setModal(!showMod);
@@ -27,9 +23,11 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
               <div className="content">Прогресс будет утерян</div>
               <div className="actions">
                 <ButtonGroup size="md" spacing="12">
-                  <Button colorScheme="green" className="green-button" onClick={handleClickClose}>
-                    Да
-                  </Button>
+                  <Link href="/">
+                    <Button colorScheme="green" className="green-button">
+                      Да
+                    </Button>
+                  </Link>
                   <Button colorScheme="red" onClick={handleClickReturn}>
                     Нет
                   </Button>

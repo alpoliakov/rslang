@@ -1,16 +1,17 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
-import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
+import { redHearts } from 'components/MiniGames/helpers/constants';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
+import { Savanna } from 'components/MiniGames/Savanna/Savanna';
+import { ModalSavanna } from 'components/MiniGames/Savanna/SavannaModal';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function AudiocallGamePage() {
+export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
@@ -30,10 +31,10 @@ export default function AudiocallGamePage() {
   return (
     <>
       <Head>
-        <title>Аудиовызов</title>
+        <title>Саванна</title>
       </Head>
       {showGame ? (
-        <FullScreen handle={fullScreen} className="audiocall-container">
+        <FullScreen handle={fullScreen} className="savanna-container">
           <IconButton
             className="savanna-music"
             variant="ghost"
@@ -42,7 +43,18 @@ export default function AudiocallGamePage() {
             onClick={onSwitchMusic}
             icon={<RiMusic2Fill />}
           />
-          <Audiocall counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
+          <Savanna
+            counter={counter}
+            setCounter={setCounter}
+            isMusicOn={isMusicOn}
+            group={group}
+            page={page}
+          />
+          <div className="progress-hearts">
+            {redHearts.map((el) => (
+              <>{el}</>
+            ))}
+          </div>
           <div className="savanna-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -71,10 +83,22 @@ export default function AudiocallGamePage() {
           </div>
         </FullScreen>
       ) : (
-        <ModalAudiocall setShowGame={setShowGame} showGame={showGame} />
+        <ModalSavanna setShowGame={setShowGame} showGame={showGame} />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
       {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
     </>
   );
 }
+
+SavannaGamePage.getInitialProps = async ({ query }) => {
+  const group = +query.group;
+  const page = +query.page || 0;
+
+  console.log(group);
+
+  return {
+    group,
+    page,
+  };
+};

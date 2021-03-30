@@ -1,5 +1,5 @@
-query Words ($input: WordInput!) {
-  words(input: $input) {
+query Words ($group: Float!, $page: Float!) {
+  words(input: {group: $group, page: $page}) {
     _id
     group
     page

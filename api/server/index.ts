@@ -34,7 +34,6 @@ async function createServer() {
       schema,
       context: ({ req, res }) => ({ req, res }),
       introspection: true,
-      // enable GraphQL Playground with credentials
       playground: {
         settings: {
           'request.credentials': 'include',

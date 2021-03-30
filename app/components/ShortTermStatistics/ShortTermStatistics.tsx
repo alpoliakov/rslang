@@ -1,6 +1,6 @@
-
-import React from 'react';
 import { Flex, Grid, GridItem, Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import React from 'react';
+
 import { ACTIVE_BUTTON_COLOR, PASSIVE_BUTTON_COLOR } from '../../constants';
 
 const StatItem = ({ title, count }) => {
