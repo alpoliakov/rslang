@@ -1,10 +1,12 @@
 import { Select } from '@chakra-ui/react';
 import React from 'react';
 
-const ChooseLevelModal = () => {
+const ChooseLevelModal = ({ level, setLevel }) => {
+  const handleChange = (e) => setLevel(e.target.value);
+  console.log(level);
   return (
     <div className="chooseModal-select">
-      <Select placeholder="Выбери уровень сложности">
+      <Select value={level} placeholder="Выбери уровень сложности" onChange={handleChange}>
         <option value="option1">1 уровень</option>
         <option value="option2">2 уровень</option>
         <option value="option3">3 уровень</option>
