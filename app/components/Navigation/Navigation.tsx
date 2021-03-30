@@ -15,7 +15,7 @@ import NextLink from 'next/link';
 import React from 'react';
 import { RiSettings4Line } from 'react-icons/ri';
 
-export default function Navigation({ group }) {
+export default function Navigation({ group, page }) {
   return (
     <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
       <Tabs defaultIndex={group} borderBottomColor="transparent">
@@ -45,7 +45,7 @@ export default function Navigation({ group }) {
         <Tabs defaultIndex={5} borderBottomColor="transparent">
           <TabList>
             <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-              <NextLink href={'/mini-games/savanna'}>Саванна</NextLink>
+              <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
             </Tab>
             <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
               <NextLink href={'/mini-games/sprint'}>Спринт</NextLink>
