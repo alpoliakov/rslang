@@ -57,20 +57,23 @@ export default function Header() {
   const hoverColor = useColorModeValue('#223c50', 'red.600');
   const [showNav, setShowNav] = useState(false);
   const [group, setGroup] = useState(null);
+  const [page, setPage] = useState(null);
 
   const { user, signOut } = useAuth();
 
   const router = useRouter();
-  const { pathname } = router;
+  const { pathname, query } = router;
 
   useEffect(() => {
+    const { group, page } = query;
+    setGroup(+group);
+    setPage(+page);
+
     if (pathname.match('textbook')) {
-      const { group } = router.query;
-      setGroup(+group);
       return setShowNav(true);
     }
     setShowNav(false);
-  }, [pathname]);
+  }, [pathname, query]);
 
   return (
     <Box bg={bg} position="sticky" top="0" p={1} height="full" zIndex="10" width="full">
@@ -221,7 +224,7 @@ export default function Header() {
             </Menu>
           </Flex>
         </Flex>
-        {showNav && <Navigation group={group} />}
+        {showNav && <Navigation group={group} page={page} />}
       </Container>
     </Box>
   );
