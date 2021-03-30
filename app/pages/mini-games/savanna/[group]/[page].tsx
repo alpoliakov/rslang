@@ -11,7 +11,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function SavannaGamePage() {
+export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
@@ -43,7 +43,13 @@ export default function SavannaGamePage() {
             onClick={onSwitchMusic}
             icon={<RiMusic2Fill />}
           />
-          <Savanna counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
+          <Savanna
+            counter={counter}
+            setCounter={setCounter}
+            isMusicOn={isMusicOn}
+            group={group}
+            page={page}
+          />
           <div className="progress-hearts">
             {redHearts.map((el) => (
               <>{el}</>
@@ -84,3 +90,15 @@ export default function SavannaGamePage() {
     </>
   );
 }
+
+SavannaGamePage.getInitialProps = async ({ query }) => {
+  const group = +query.group;
+  const page = +query.page || 0;
+
+  console.log(group);
+
+  return {
+    group,
+    page,
+  };
+};
