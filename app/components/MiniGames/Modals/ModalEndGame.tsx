@@ -4,10 +4,10 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-const ModalEndGame = ({ timeOver, setTimeOver, counter }) => {
+const ModalEndGame = ({ counter }) => {
   const [showMod, setModal] = useState(true);
-  useHotkeys('esc', () => setTimeOver(!timeOver));
-  useHotkeys('enter', () => setTimeOver(!timeOver));
+  // useHotkeys('esc', () => setTimeOver(!timeOver));
+  // useHotkeys('enter', () => setTimeOver(!timeOver));
 
   // const handleClickClose = () => {
   //   setModal(!showMod);

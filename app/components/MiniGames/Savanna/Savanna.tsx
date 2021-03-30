@@ -1,53 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useSound from 'use-sound';
+import {
+  getNextWordSavanna,
+  mixVariants,
+  checkAnswerSavanna,
+} from 'components/MiniGames/helpers/utils';
 
-import { initializeApollo } from '../../../lib/apollo';
-import { WordsDocument } from '../../../lib/graphql/words.graphql';
-
-const Savanna = ({ counter, setCounter, isMusicOn, group, page }) => {
+const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, endGame }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
-  const [state, setState] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(null);
+  const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
 
-  const handleAnswer = () => {
-    if (isMusicOn) {
-      correct();
+  const handleAnswer = (answer) => {
+    if (!checkAnswerSavanna(combination.mainWord, answer)) {
+      setLives((lives) => [false, ...lives.slice(0, -1)]);
+      isMusicOn && incorrect();
+    } else {
+      setCounter(counter + 10);
+      isMusicOn && correct();
     }
+
+    const seenWords = [...learnedWords, combination.mainWord];
+    setLearnedWord(seenWords);
+    setCombination(getNextWordSavanna(words, seenWords));
   };
 
-  const fetchCurrentWords = async () => {
-    const apollo = initializeApollo();
-    setLoading(true);
-    const { data } = await apollo.query({
-      query: WordsDocument,
-      variables: { group, page },
-    });
+  useHotkeys(
+    '1, 2, 3, 4',
+    (_, handler) => {
+      handleAnswer(combination.translations[Number(handler.key) - 1]);
+    },
+    [learnedWords, setLearnedWord, isMusicOn],
+  );
 
-    setState([...data.words]);
-    setLoading(false);
-    setCurrentPage(page);
-  };
-
-  useEffect(() => {
-    fetchCurrentWords();
-  }, []);
-
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-  // useHotkeys('1, 2, 3, 4', handleAnswer, [counter, correctAnswersArr]);
+  if (!combination.mainWord?.word) {
+    setEndGame(!endGame);
+    return <div />;
+  }
 
   return (
     <div className="savanna-outer">
-      <div className="savanna-english">barbecue</div>
+      <div className="savanna-english">{combination.mainWord.word}</div>
       <div className="savanna-translation">
-        <div className="savanna-variants">1 слово</div>
-        <div className="savanna-variants">2 перевод</div>
-        <div className="savanna-variants">3 слон</div>
-        <div className="savanna-variants">4 барбекю</div>
+        {combination.translations.map((word, key) => (
+          <div key={word._id} className="savanna-variants" onClick={() => handleAnswer(word)}>
+            {key + 1} {word.wordTranslate}
+          </div>
+        ))}
       </div>
     </div>
   );

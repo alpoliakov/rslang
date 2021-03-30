@@ -1,21 +1,29 @@
+import { FaHeart } from 'react-icons/fa';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { redHearts } from 'components/MiniGames/helpers/constants';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Savanna } from 'components/MiniGames/Savanna/Savanna';
 import { ModalSavanna } from 'components/MiniGames/Savanna/SavannaModal';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function SavannaGamePage({ group, page }) {
+export default function SavannaGamePage({ page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
   const [showGame, setShowGame] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [words, setWords] = useState([]);
+  const [lives, setLives] = useState(Array(5).fill(true));
+  const [endGame, setEndGame] = useState(false);
+  const [currentPage, setCurrentPage] = useState(null);
+  const [level, setLevel] = useState('');
+  const [group, setGroup] = useState('');
 
   const fullScreen = useFullScreenHandle();
 
@@ -27,6 +35,12 @@ export default function SavannaGamePage({ group, page }) {
   const onSwitchMusic = () => {
     setMusic(!isMusicOn);
   };
+
+  useEffect(() => {
+    fetchCurrentWords(group, page, setLoading, setWords);
+  }, []);
+
+  useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
 
   return (
     <>
@@ -43,17 +57,23 @@ export default function SavannaGamePage({ group, page }) {
             onClick={onSwitchMusic}
             icon={<RiMusic2Fill />}
           />
-          <Savanna
-            counter={counter}
-            setCounter={setCounter}
-            isMusicOn={isMusicOn}
-            group={group}
-            page={page}
-          />
+          {!loading && (
+            <Savanna
+              counter={counter}
+              setCounter={setCounter}
+              isMusicOn={isMusicOn}
+              words={words}
+              setLives={setLives}
+              setEndGame={setEndGame}
+              endGame={endGame}
+              // group={group}
+              // page={page}
+            />
+          )}
           <div className="progress-hearts">
-            {redHearts.map((el) => (
-              <>{el}</>
-            ))}
+            {lives.map((isAlive, key) =>
+              isAlive ? <FaHeart key={key} color="red" /> : <FaHeart key={key} color="gray" />,
+            )}
           </div>
           <div className="savanna-close-full">
             <IconButton
@@ -83,10 +103,20 @@ export default function SavannaGamePage({ group, page }) {
           </div>
         </FullScreen>
       ) : (
-        <ModalSavanna setShowGame={setShowGame} showGame={showGame} />
+        <ModalSavanna
+          setShowGame={setShowGame}
+          showGame={showGame}
+          group={group}
+          setGroup={setGroup}
+        />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
+      {endGame && (
+        <ModalEndGame
+          // timeOver={timeOver} setTimeOver={setTimeOver}
+          counter={counter}
+        />
+      )}
     </>
   );
 }
