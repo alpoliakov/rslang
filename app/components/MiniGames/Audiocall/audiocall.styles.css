@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 10% auto 10%;
+  grid-template-columns: 10% auto 15%;
   grid-template-rows: 10% 90%;
   background-image: url('https://images.pexels.com/photos/3101527/pexels-photo-3101527.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
   background-position: center;
@@ -29,4 +29,16 @@
   margin: 30px;
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+  .audiocall-sound-box {
+    margin-top: -100px;
+  }
+  .audiocall-button {
+    margin: 10px;
+  }
+  .audiocall-sound-box {
+    margin-bottom: 10px;
+  }
 }
