@@ -12,7 +12,7 @@ const MenuTitle = {
   },
   GAME_2: {
     title: 'Словарь',
-    url: 'statistics',
+    url: 'vocabulary/studied/1',
   },
   STATISTICS: {
     title: 'Статистика',

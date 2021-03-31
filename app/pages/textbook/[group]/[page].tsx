@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +18,7 @@ import useSound from 'use-sound';
 import Loading from '../../../components/Loading';
 import Pagination, { OnPageChangeCallback } from '../../../components/Pagination/Pagination';
 import { LOCAL_HOST } from '../../../constants';
+import { useAppContext } from '../../../context/ContextApp';
 import { initializeApollo } from '../../../lib/apollo';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
 
@@ -25,6 +35,9 @@ export default function Pages({ group, page }) {
   const [pageCount, setPageCount] = useState(30);
   const [startMeaning, setStartMeaning] = useState(false);
   const [startExample, setStartExample] = useState(false);
+
+  const { data } = useAppContext();
+  const { showTranslate, showButtons } = data;
 
   const [playExample, objPlayExample] = useSound(audioExample, {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -113,7 +126,7 @@ export default function Pages({ group, page }) {
         <title>Textbook</title>
       </Head>
       <Flex alignItems="center" justifyContent="center">
-        <Heading size="md" p={1}>
+        <Heading size="lg" p={1}>
           Group: {group + 1}
         </Heading>
       </Flex>
@@ -149,14 +162,16 @@ export default function Pages({ group, page }) {
                   color={useColorModeValue('gray.800', 'white')}
                   fontWeight="bold">
                   <Text color={useColorModeValue('brand.600', 'brand.400')}>
-                    {word.word} - {word.transcription} - {word.wordTranslate}
+                    {word.word} - {word.transcription} {showTranslate && `- ${word.wordTranslate}`}
                   </Text>
                 </Heading>
                 <Box my={2}>
                   <Text
                     color={useColorModeValue('gray.600', 'gray.200')}
                     dangerouslySetInnerHTML={{
-                      __html: `<p>${word.textMeaning} - ${word.textMeaningTranslate}</p>`,
+                      __html: showTranslate
+                        ? `<p>${word.textMeaning} - ${word.textMeaningTranslate}</p>`
+                        : `<p>${word.textMeaning}`,
                     }}
                   />
                 </Box>
@@ -164,11 +179,13 @@ export default function Pages({ group, page }) {
                   <Text
                     color={useColorModeValue('gray.600', 'gray.200')}
                     dangerouslySetInnerHTML={{
-                      __html: `<p>${word.textExample} - ${word.textExampleTranslate}</p>`,
+                      __html: showTranslate
+                        ? `<p>${word.textExample} - ${word.textExampleTranslate}</p>`
+                        : `<p>${word.textExample}</p>`,
                     }}
                   />
                 </Box>
-                <Flex mt={2} w="full" alignItems="center" justifyContent="space-between">
+                <Flex mt={4} w="full" alignItems="center" justifyContent="space-between">
                   <IconButton
                     colorScheme="teal"
                     onMouseDown={() => {
@@ -179,12 +196,17 @@ export default function Pages({ group, page }) {
                     }}
                     onClick={handleSound}
                     aria-label="Listen audio"
-                    icon={<MdHeadset />}
+                    icon={<MdHeadset size="24px" />}
                   />
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <Button mr={3}>Сложные слова</Button>
-                    <Button>Удалённые слова</Button>
-                  </Flex>
+                  <Badge fontSize="0.9em" colorScheme="red">
+                    cложное
+                  </Badge>
+                  {showButtons && (
+                    <Flex alignItems="center" justifyContent="space-between">
+                      <Button mr={3}>Сложные слова</Button>
+                      <Button>Удалённые слова</Button>
+                    </Flex>
+                  )}
                 </Flex>
               </Box>
             </Box>
