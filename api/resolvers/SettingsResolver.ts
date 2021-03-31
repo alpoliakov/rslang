@@ -42,7 +42,7 @@ export class SettingsResolver {
       { runValidators: true, new: true },
     );
     if (!settings) {
-      throw new Error('Settings not found');
+      throw new Error('Context not found');
     }
     return settings;
   }
