@@ -69,7 +69,7 @@ export default function Header() {
     setGroup(+group);
     setPage(+page);
 
-    if (pathname.match('textbook')) {
+    if (pathname.match('textbook') || pathname.match('vocabulary')) {
       return setShowNav(true);
     }
     setShowNav(false);

@@ -4,15 +4,15 @@ const REG_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(
 const MenuTitle = {
   DICTIONARY: {
     title: 'Словарь',
-    url: 'statistics',
+    url: '/vocabulary/studied/1',
   },
   TEXT_BOOK: {
     title: 'Учебник',
-    url: 'textbook/0/0',
+    url: '/textbook/0/0',
   },
   STATISTICS: {
     title: 'Статистика',
-    url: 'statistics',
+    url: '/statistics',
   },
   GAME_SAVANNA: {
     title: 'Саванна',
@@ -28,7 +28,7 @@ const MenuTitle = {
   },
   GAME_NEW_GAME: {
     title: 'Новая игра',
-    url: '/mini-games/newgame',
+    url: '/mini-games/new-game',
   },
 };
 
