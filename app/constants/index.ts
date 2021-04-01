@@ -6,17 +6,29 @@ const MenuTitle = {
     title: 'Словарь',
     url: 'statistics',
   },
-  GAME_1: {
+  TEXT_BOOK: {
     title: 'Учебник',
     url: 'textbook/0/0',
   },
-  GAME_2: {
-    title: 'Словарь',
-    url: 'statistics',
+  GAME_SAVANNA: {
+    title: 'Саванна',
+    url: '/mini-games/savanna',
   },
   STATISTICS: {
     title: 'Статистика',
     url: 'statistics',
+  },
+  GAME_SPRINT: {
+    title: 'Спринт',
+    url: '/mini-games/sprint',
+  },
+  GAME_AUDIO_CALL: {
+    title: 'Аудиовызов',
+    url: '/mini-games/audiocall',
+  },
+  GAME_NEW_GAME: {
+    title: 'Новая игра',
+    url: '/mini-games/newgame',
   },
 };
 
