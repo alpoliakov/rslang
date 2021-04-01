@@ -10,6 +10,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
+import { Progress } from '@chakra-ui/react';
 
 export default function AudiocallGamePage({ page, group }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -42,6 +43,7 @@ export default function AudiocallGamePage({ page, group }) {
       </Head>
       {showGame ? (
         <FullScreen handle={fullScreen} className="audiocall-container">
+          <Progress size="sm" value={100} colorScheme="green" className="audiocall-progress" />
           <IconButton
             className="savanna-music"
             variant="ghost"

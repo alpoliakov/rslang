@@ -12,6 +12,12 @@
   background-size: cover;
 }
 
+.audiocall-progress {
+  width: 100%;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
 .audiocall-sound-box {
   display: flex;
   justify-content: center;
