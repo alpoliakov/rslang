@@ -1,5 +1,4 @@
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
-import { useRouter } from 'next/router';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
@@ -13,7 +12,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function SavannaGamePage({ page, group, passHref }) {
+export default function SavannaGamePage({ page, group }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
@@ -22,11 +21,8 @@ export default function SavannaGamePage({ page, group, passHref }) {
   const [words, setWords] = useState([]);
   const [lives, setLives] = useState(Array(5).fill(true));
   const [endGame, setEndGame] = useState(false);
-  const [currentPage, setCurrentPage] = useState(null);
-  const [level, setLevel] = useState('');
+  // const [currentPage, setCurrentPage] = useState(null);
   // const [group, setGroup] = useState('');
-  // const {events, query} = router;
-  console.log(passHref, 'passHref');
 
   const fullScreen = useFullScreenHandle();
 
