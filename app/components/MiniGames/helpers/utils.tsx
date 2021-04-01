@@ -26,6 +26,22 @@ export const extraPoints = (pic) => {
   return points;
 };
 
+export const getNextWordSprint = (arr, learnedWords) => {
+  const [mainWord] = arr
+    .filter((word) => !learnedWords.includes(word))
+    .sort(() => Math.random() - 0.5);
+  const translation = arr
+    .filter(({ word }) => word !== mainWord?.word)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 1)
+    .concat([mainWord])
+    .sort(() => Math.random() - 0.5)[0];
+
+  return { mainWord, translation };
+};
+
+export const checkAnswerSavanna = () => 
+
 // ------- HEARTS -------
 
 export const brokeHearts = (arr, el, wrongAnswers) => {
