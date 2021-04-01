@@ -77,7 +77,7 @@ export default function Header() {
 
   return (
     <Box bg={bg} position="sticky" top="0" p={1} height="full" zIndex="10" width="full">
-      <Container maxW="95%" w="100%">
+      <Container maxW="container.xl">
         <Flex alignItems="center" justifyContent="space-between">
           <Link p="1">
             <NextLink href="/">
