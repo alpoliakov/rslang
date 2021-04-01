@@ -3,7 +3,14 @@ import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLe
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-export const ModalSavanna = ({ setShowGame, showGame, group, setGroup }) => {
+export const ModalSavanna = ({
+  setShowGame,
+  showGame,
+  // group, setGroup
+}) => {
+  // const showChooseLevel = prevPage==="/textbook";
+  const [group, setGroup] = useState('');
+
   const handleClick = () => setShowGame(!showGame);
   useHotkeys('enter', handleClick);
   return (
@@ -16,7 +23,9 @@ export const ModalSavanna = ({ setShowGame, showGame, group, setGroup }) => {
             очков опыта получишь. <br /> Чтобы дать ответ, кликай по нему мышкой или выбирай из
             клавиш 1, 2, 3, 4
           </div>
+          {/* {showChooseLevel&& */}
           <ChooseLevelModal group={group} setGroup={setGroup} />
+          {/* } */}
         </div>
         <Button
           colorScheme="whiteAlpha"

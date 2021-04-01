@@ -1,4 +1,5 @@
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaHeartBroken } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
@@ -12,7 +13,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function SavannaGamePage({ page }) {
+export default function SavannaGamePage({ page, group, passHref }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
@@ -23,7 +24,9 @@ export default function SavannaGamePage({ page }) {
   const [endGame, setEndGame] = useState(false);
   const [currentPage, setCurrentPage] = useState(null);
   const [level, setLevel] = useState('');
-  const [group, setGroup] = useState('');
+  // const [group, setGroup] = useState('');
+  // const {events, query} = router;
+  console.log(passHref, 'passHref');
 
   const fullScreen = useFullScreenHandle();
 
@@ -72,7 +75,11 @@ export default function SavannaGamePage({ page }) {
           )}
           <div className="progress-hearts">
             {lives.map((isAlive, key) =>
-              isAlive ? <FaHeart key={key} color="red" /> : <FaHeart key={key} color="gray" />,
+              isAlive ? (
+                <FaHeart key={key} color="red" />
+              ) : (
+                <FaHeartBroken key={key} color="gray" />
+              ),
             )}
           </div>
           <div className="savanna-close-full">
@@ -106,8 +113,8 @@ export default function SavannaGamePage({ page }) {
         <ModalSavanna
           setShowGame={setShowGame}
           showGame={showGame}
-          group={group}
-          setGroup={setGroup}
+          // group={group}
+          // setGroup={setGroup}
         />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
