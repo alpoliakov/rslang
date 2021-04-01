@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 export const ModalAudiocall = ({ setShowGame, showGame }) => {
-  const [level, setLevel] = useState('');
+  const [group, setGroup] = useState('');
   const handleClick = () => setShowGame(!showGame);
   useHotkeys('enter', handleClick);
   return (
@@ -16,13 +16,13 @@ export const ModalAudiocall = ({ setShowGame, showGame }) => {
             Тренировка Аудиовызов улучшает восприятие речи на слух.
             <br /> Чтобы дать ответ, кликай по нему мышкой или выбирай из клавиш 1, 2, 3, 4, 5
           </div>
-          <ChooseLevelModal level={level} setLevel={setLevel} />
+          <ChooseLevelModal group={group} setGroup={setGroup} />
         </div>
         <Button
           colorScheme="whiteAlpha"
           variant="outline"
           onClick={handleClick}
-          isDisabled={!level}>
+          isDisabled={!group}>
           начать
         </Button>
       </div>

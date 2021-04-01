@@ -21,8 +21,37 @@
   margin-top: -60px;
 }
 
+.audiocall-answer-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+  margin-bottom: 20px;
+  margin-top: -60px;
+}
+
+.audiocall-answer-box {
+  display: flex;
+  justify-content: center;
+
+  /* align-items: center; */
+}
+
+.audiocall-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
 .audiocall-sound {
   color: white;
+}
+
+.audiocall-answer {
+  margin: auto 20px;
+  color: white;
+  font-size: 30px;
 }
 
 .audiocall-button {

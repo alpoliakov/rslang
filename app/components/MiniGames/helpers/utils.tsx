@@ -75,7 +75,22 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   // return words;
 };
 
-// ------- NewGame -------
+// ------- NEWGAME -------
 export const checkAnswerNewGame = (wordToCheck, answer) => {
-  return wordToCheck.word === answer.word.toLowerCase().trim();
+  return wordToCheck.word === answer.toLowerCase().trim();
+};
+
+// ------- AUDIOCALL -------
+export const getNextWordAudiocall = (arr, learnedWords) => {
+  const [mainWord] = arr
+    .filter((word) => !learnedWords.includes(word))
+    .sort(() => Math.random() - 0.5);
+  const translations = arr
+    .filter(({ word }) => word !== mainWord?.word)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4)
+    .concat([mainWord])
+    .sort(() => Math.random() - 0.5);
+
+  return { mainWord, translations };
 };
