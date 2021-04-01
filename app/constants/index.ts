@@ -20,19 +20,27 @@ const MenuTitle = {
   },
 };
 
+const ACCORDION_TITLES = [
+  'Начните изучать английский язык с помощью RS Lang уже сегодня!',
+  'Начинаем изучать прямо сейчас!',
+  'Демонстрация работы с приложением',
+  'Наша команда',
+];
+
 const ACTIVE_BUTTON_COLOR = {
-  LIGHT: '#FF0088',
-  DARK: '#AF004B',
+  LIGHT: '#F9B9B7',
+  DARK: '#F06C9B',
 };
 
 const PASSIVE_BUTTON_COLOR = {
-  LIGHT: '#59BAB7',
-  DARK: '#006B69',
+  LIGHT: '#96C9DC',
+  DARK: '#61A0AF',
 };
 
 const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
 
 export {
+  ACCORDION_TITLES,
   ACTIVE_BUTTON_COLOR,
   DEMONSTRATION_VIDEO,
   LOCAL_HOST,

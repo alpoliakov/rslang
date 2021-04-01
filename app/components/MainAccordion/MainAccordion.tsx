@@ -1,28 +1,22 @@
-import { Flex } from '@chakra-ui/layout';
-import { useColorModeValue } from '@chakra-ui/react';
+import { Heading, useColorModeValue } from '@chakra-ui/react';
+import { ACCORDION_TITLES } from 'constants/index';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
-import { GiClick } from 'react-icons/gi';
 
 import { ACTIVE_BUTTON_COLOR, PASSIVE_BUTTON_COLOR } from '../../constants';
 
 const accordionTitleStyle = {
   borderRadius: '10px',
-  color: 'white',
   cursor: 'pointer',
   height: '40px',
   marginBottom: '20px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 };
-
-const ClickHint = () => (
-  <Flex justify="center" align="center">
-    <GiClick fontSize={30} />
-  </Flex>
-);
 
 const Accordion = ({ i, expanded, setExpanded, content }) => {
   const isOpen = i === expanded;
-
   const menuItemColor = useColorModeValue(ACTIVE_BUTTON_COLOR.LIGHT, ACTIVE_BUTTON_COLOR.DARK);
   const menuItemHoverColor = useColorModeValue(
     PASSIVE_BUTTON_COLOR.LIGHT,
@@ -35,7 +29,9 @@ const Accordion = ({ i, expanded, setExpanded, content }) => {
         style={accordionTitleStyle}
         animate={{ backgroundColor: isOpen ? menuItemColor : menuItemHoverColor }}
         onClick={() => setExpanded(isOpen ? false : i)}>
-        {!isOpen && ClickHint()}
+        <Heading as="h2" fontSize={20}>
+          {ACCORDION_TITLES[i]}
+        </Heading>
       </motion.div>
       <AnimatePresence initial={false}>
         {isOpen && (
