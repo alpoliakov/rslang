@@ -16,6 +16,7 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [learnedWords, setLearnedWord] = useState([]);
+  const [colorAnswer, setColorAnswer] = useState('');
   const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
 
   const [playWord] = useSound(wordAudioUrl);
@@ -29,13 +30,14 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
 
   const handleAnswer = () => {
     console.log(inputValue, 'inputValue in handleAnswer');
-    // checkAnswerNewGame(combination.mainWord, inputValue);
 
     if (!checkAnswerNewGame(combination.mainWord, inputValue)) {
       setLives((lives) => [false, ...lives.slice(0, -1)]);
+      setColorAnswer('red');
       isMusicOn && incorrect();
     } else {
       setCounter(counter + 10);
+      setColorAnswer('green');
       if (isMusicOn) {
         correct();
       }
@@ -60,39 +62,37 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
         </div>
       </div>
       <div className="newgame-board-inner">
-        {!isAnswered ? (
-          <div className="newgame-sound-box">
-            <Button
-              w={32}
-              h={32}
-              borderRadius="100px"
-              variant="outline"
-              _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
-              className="audiocall-button-sound"
-              onMouseDown={() => {
-                setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
+        {/* {!isAnswered ? ( */}
+        <div className="newgame-sound-box">
+          <Button
+            w={32}
+            h={32}
+            borderRadius="100px"
+            variant="outline"
+            _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
+            className="audiocall-button-sound"
+            onMouseDown={() => {
+              setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
+            }}
+            onClick={handleSound}>
+            <Icon
+              className="newgame-sound"
+              as={GiSpeaker}
+              w={20}
+              h={20}
+              color="whiteAlpha"
+              _hover={{
+                color: 'rgba(212, 211, 211, 0.253)',
               }}
-              onClick={handleSound}>
-              <Icon
-                className="newgame-sound"
-                as={GiSpeaker}
-                w={20}
-                h={20}
-                color="whiteAlpha"
-                _hover={{
-                  color: 'rgba(212, 211, 211, 0.253)',
-                }}
-              />
-            </Button>
-          </div>
-        ) : (
-          <div
-            className="newgame-answer"
-            color={checkAnswerNewGame(combination.mainWord, inputValue) ? 'green' : 'red'}>
-            {combination.mainWord.audio}
-          </div>
-        )}
-        <form onSubmit={handleAnswer} className="newgame-input">
+            />
+          </Button>
+        </div>
+        {/* // ) : (
+        // <div className="newgame-answer" style={{ textShadow: `3px 3px 3px ${colorAnswer}` }}>
+        //   {combination.mainWord.word}
+        // </div> */}
+        {/* )}  */}
+        <form onSubmit={handleAnswer} className="newgame-form">
           <Input
             width="240px"
             placeholder="Введи услышанное слово"
@@ -101,7 +101,7 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
             onChange={(e) => handleOnChange(e)}
           />
           <div className="newgame-button">
-            <Button colorScheme="green" type="submit" isDisabled={!inputValue}>
+            <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
               проверить
             </Button>
           </div>

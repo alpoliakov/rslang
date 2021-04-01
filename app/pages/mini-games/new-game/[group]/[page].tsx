@@ -36,6 +36,7 @@ export default function NewGamePage({ page, group }) {
   useEffect(() => {
     fetchCurrentWords(group, page, setLoading, setWords);
   }, []);
+  useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
 
   return (
     <>

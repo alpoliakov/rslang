@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 export const ModalNewGame = ({ setShowGame, showGame }) => {
-  const [level, setLevel] = useState('');
   const handleClick = () => setShowGame(!showGame);
   useHotkeys('enter', handleClick);
 
