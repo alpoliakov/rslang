@@ -8,6 +8,8 @@ export const ModalNewGame = ({ setShowGame, showGame }) => {
   const handleClick = () => setShowGame(!showGame);
   useHotkeys('enter', handleClick);
 
+  const [group, setGroup] = useState('');
+
   return (
     <div className="modalEntrance">
       <div className="modalEntrance-container">
@@ -17,13 +19,13 @@ export const ModalNewGame = ({ setShowGame, showGame }) => {
             Напиши услышанное слово
             <br /> Чтобы дать ответ, кликни на кнопку "Проверить" или нажми Enter
           </div>
-          <ChooseLevelModal level={level} setLevel={setLevel} />
+          <ChooseLevelModal group={group} setGroup={setGroup} />
         </div>
         <Button
           colorScheme="whiteAlpha"
           variant="outline"
           onClick={handleClick}
-          isDisabled={!level}>
+          isDisabled={!group}>
           начать
         </Button>
       </div>
