@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useSound from 'use-sound';
-import {
-  getNextWordSavanna,
-  mixVariants,
-  checkAnswerSavanna,
-} from 'components/MiniGames/helpers/utils';
+import { getNextWordSavanna, checkAnswerSavanna } from 'components/MiniGames/helpers/utils';
 
 const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, endGame }) => {
   const [correct] = useSound('/sounds/correct.mp3');
@@ -15,6 +11,7 @@ const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
   const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
 
   const handleAnswer = (answer) => {
+    // const timer = setInterval(()=> )
     if (!checkAnswerSavanna(combination.mainWord, answer)) {
       setLives((lives) => [false, ...lives.slice(0, -1)]);
       isMusicOn && incorrect();
