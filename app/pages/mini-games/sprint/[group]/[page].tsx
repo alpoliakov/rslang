@@ -38,7 +38,7 @@ export default function SprintGamePage({ page, group }) {
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
           <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
-          {!loading && (<Sprint counter={counter} setCounter={setCounter} words={words}/>}
+          {!loading && <Sprint counter={counter} setCounter={setCounter} words={words} />}
           <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -70,19 +70,24 @@ export default function SprintGamePage({ page, group }) {
         <ModalSprint setShowGame={setShowGame} showGame={showGame} />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />}
+      {timeOver && (
+        <ModalEndGame
+          // timeOver={timeOver} setTimeOver={setTimeOver}
+          counter={counter}
+        />
+      )}
     </>
   );
 }
 
 SprintGamePage.getInitialProps = async ({ query }) => {
-    const group = +query.group;
-    const page = +query.page || 0;
-  
-    console.log(group);
-  
-    return {
-      group,
-      page,
-    };
+  const group = +query.group;
+  const page = +query.page || 0;
+
+  console.log(group);
+
+  return {
+    group,
+    page,
   };
+};

@@ -40,14 +40,14 @@ export const getNextWordSprint = (arr, learnedWords) => {
   return { mainWord, translation };
 };
 
-export const checkAnswerSavanna = () => 
+export const checkAnswerSprint = (answer, mainWord, translation) => {
+  return answer === (mainWord.word === translation.word);
+};
 
 // ------- HEARTS -------
 
 export const brokeHearts = (arr, el, wrongAnswers) => {
-  // let position = 0;
   arr.splice(wrongAnswers - 1, 1, el);
-  // position++;
 };
 
 // ------- SAVANNA -------

@@ -5,7 +5,7 @@ import {
   changePicture,
   extraPoints,
   getNextWordSprint,
-  checkAnswerSavanna,
+  checkAnswerSprint,
 } from 'components/MiniGames/helpers/utils';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -25,20 +25,29 @@ const Sprint = ({ counter, setCounter, words }) => {
   const [incorrect] = useSound('/sounds/incorrect.mp3');
 
   const handleAnswer = (answer) => {
-    const currentAnswers = [...correctAnswersArr, true];
+    const userAnswer = checkAnswerSprint(answer, combination.mainWord, combination.translation);
+
+    if (!userAnswer) {
+      isMusicOn && incorrect();
+    } else {
+      setCounter(counter + extraPoints(pic));
+      isMusicOn && correct();
+    }
+    const currentAnswers = [...correctAnswersArr, userAnswer];
     const correctInRow =
       currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
 
-    setCounter(counter + extraPoints(pic));
     setCorrectAnswersArr(currentAnswers);
     changePicture(correctInRow, setPic);
     console.log(correctInRow);
 
-    if (isMusicOn) {
-      correct();
-    }
+    const seenWords = [...learnedWords, combination.mainWord];
+    setLearnedWord(seenWords);
+    setCombination(getNextWordSprint(words, seenWords));
   };
-  useHotkeys('left, right', handleAnswer, [counter, correctAnswersArr]);
+
+  useHotkeys('left', () => handleAnswer(false), [counter, correctAnswersArr]);
+  useHotkeys('right', () => handleAnswer(true), [counter, correctAnswersArr]);
 
   const onSwitchSound = () => {
     setSound(!isSoundOn);
@@ -89,11 +98,10 @@ const Sprint = ({ counter, setCounter, words }) => {
           <div className="sprint-translation">{combination.translation.wordTranslate}</div>
           <div className="sprint-buttons">
             <ButtonGroup size="lg" spacing="12">
-              <Button w={80} colorScheme="red" onClick={() => handleAnswer(false)}>
+              <Button colorScheme="red" onClick={() => handleAnswer(false)}>
                 Неверно
               </Button>
               <Button
-                w={80}
                 colorScheme="green"
                 className="green-button"
                 onClick={() => handleAnswer(true)}>
