@@ -10,13 +10,13 @@ const MenuTitle = {
     title: 'Учебник',
     url: 'textbook/0/0',
   },
-  GAME_SAVANNA: {
-    title: 'Саванна',
-    url: '/mini-games/savanna',
-  },
   STATISTICS: {
     title: 'Статистика',
     url: 'statistics',
+  },
+  GAME_SAVANNA: {
+    title: 'Саванна',
+    url: '/mini-games/savanna',
   },
   GAME_SPRINT: {
     title: 'Спринт',
