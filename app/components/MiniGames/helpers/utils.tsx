@@ -36,7 +36,7 @@ export const brokeHearts = (arr, el, wrongAnswers) => {
 
 // ------- SAVANNA -------
 
-export const mixVariants = (arr) => arr.sort(() => Math.random() - 0.5);
+// export const mixVariants = (arr) => arr.sort(() => Math.random() - 0.5);
 
 export const getNextWordSavanna = (arr, learnedWords) => {
   const [mainWord] = arr
@@ -73,4 +73,9 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   // setCurrentPage(page);
   // console.log('const words', words[0].word, words[0].wordTranslate);
   // return words;
+};
+
+// ------- NewGame -------
+export const checkAnswerNewGame = (wordToCheck, answer) => {
+  return wordToCheck.word === answer.word.toLowerCase().trim();
 };
