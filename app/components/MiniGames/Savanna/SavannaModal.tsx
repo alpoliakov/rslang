@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react';
-import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLeveloModal';
+import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLevelModal';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -7,7 +7,7 @@ export const ModalSavanna = ({ setShowGame, showGame, group, setGroup, chooseLev
   const [level, setLevel] = useState(group);
 
   const handleClick = () => {
-    setGroup(group);
+    setGroup(level);
     setShowGame(!showGame);
   };
 
@@ -29,7 +29,7 @@ export const ModalSavanna = ({ setShowGame, showGame, group, setGroup, chooseLev
             colorScheme="whiteAlpha"
             variant="outline"
             onClick={handleClick}
-            isDisabled={!group}>
+            isDisabled={!level}>
             начать
           </Button>
         ) : (

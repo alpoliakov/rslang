@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 const ModalEndGame = ({ counter }) => {
-  const [showMod, setModal] = useState(true);
+  // const [showMod, setModal] = useState(true);
   // useHotkeys('esc', () => setTimeOver(!timeOver));
   // useHotkeys('enter', () => setTimeOver(!timeOver));
 
