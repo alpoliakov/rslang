@@ -1,10 +1,10 @@
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
 import { Input } from '@chakra-ui/react';
+import { checkAnswerNewGame, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
-import { getNextWordSavanna, checkAnswerNewGame } from 'components/MiniGames/helpers/utils';
 
 import { LOCAL_HOST } from '../../../constants/index';
 

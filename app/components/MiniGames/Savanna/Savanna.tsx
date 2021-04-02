@@ -1,7 +1,7 @@
+import { checkAnswerSavanna, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useSound from 'use-sound';
-import { getNextWordSavanna, checkAnswerSavanna } from 'components/MiniGames/helpers/utils';
 
 const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, endGame }) => {
   const [correct] = useSound('/sounds/correct.mp3');

@@ -3,9 +3,9 @@ import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
 import { egg } from 'components/MiniGames/helpers/constants';
 import {
   changePicture,
+  checkAnswerSprint,
   extraPoints,
   getNextWordSprint,
-  checkAnswerSprint,
 } from 'components/MiniGames/helpers/utils';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';

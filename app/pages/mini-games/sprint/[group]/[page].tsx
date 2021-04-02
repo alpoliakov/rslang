@@ -1,5 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
@@ -9,7 +10,6 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
 
 export default function SprintGamePage({ page, group }) {
   const [timeOver, setTimeOver] = useState(false);

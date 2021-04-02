@@ -1,6 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { IconButton } from '@chakra-ui/react';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
@@ -9,8 +9,8 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
+import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
 
 export default function NewGamePage({ page, group }) {
   const [quitGame, setQuitGame] = useState(false);

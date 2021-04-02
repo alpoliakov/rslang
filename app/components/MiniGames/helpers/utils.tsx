@@ -1,7 +1,6 @@
-import { dino, dinoEgg, dragon } from './constants';
 import { initializeApollo } from '../../../lib/apollo';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
-import { GiConsoleController } from 'react-icons/gi';
+import { dino, dinoEgg, dragon } from './constants';
 
 // ------- SPRINT -------
 export const changePicture = (num, setPic) => {
@@ -73,6 +72,7 @@ export const checkAnswerSavanna = (wordToCheck, answer) => {
 };
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
+  console.log('inside fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -86,7 +86,7 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   if (words) {
     setLoading(false);
   }
-  // setCurrentPage(page);
+  // setCurrentPage(page + 1);
   // console.log('const words', words[0].word, words[0].wordTranslate);
   // return words;
 };
@@ -97,6 +97,26 @@ export const checkAnswerNewGame = (wordToCheck, answer) => {
 };
 
 // ------- AUDIOCALL -------
+
+export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWords) => {
+  const apollo = initializeApollo();
+  setLoading(true);
+  const { data } = await apollo.query({
+    query: WordsDocument,
+    variables: { group, page },
+  });
+
+  const words = [...data.words];
+  setWords(words.splice(9, 10));
+  console.log(words);
+  if (words) {
+    setLoading(false);
+  }
+  // setCurrentPage(page);
+  // console.log('const words', words[0].word, words[0].wordTranslate);
+  // return words;
+};
+
 export const getNextWordAudiocall = (arr, learnedWords) => {
   const [mainWord] = arr
     .filter((word) => !learnedWords.includes(word))
