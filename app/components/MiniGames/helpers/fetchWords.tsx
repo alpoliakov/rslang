@@ -11,7 +11,6 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords, setCu
     query: WordsDocument,
     variables: { group: Number(group), page },
   });
-  console.log('here fetchCurrentWords');
 
   const words = [...data.words];
   setWords([...data.words]);
@@ -26,12 +25,21 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords, setCu
   // return words;
 };
 
-export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWords) => {
+export const fetchCurrentWordsAudiocall = async (
+  group,
+  page,
+  setLoading,
+  setWords,
+  setCurrentPage,
+) => {
+  console.log('inside fetchCurrentWordsAudiocall', group === '');
+  if (group === '') return;
+  console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
     query: WordsDocument,
-    variables: { group, page },
+    variables: { group: Number(group), page },
   });
 
   const words = [...data.words];
@@ -40,7 +48,8 @@ export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWor
   if (words) {
     setLoading(false);
   }
-  // setCurrentPage(page);
-  // console.log('const words', words[0].word, words[0].wordTranslate);
+  if (setCurrentPage) {
+    setCurrentPage(page + 1);
+  } // console.log('const words', words[0].word, words[0].wordTranslate);
   // return words;
 };
