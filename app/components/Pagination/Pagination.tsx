@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Paginate, { ReactPaginateProps } from 'react-paginate';
 
 export type OnPageChangeCallback = ReactPaginateProps['onPageChange'];

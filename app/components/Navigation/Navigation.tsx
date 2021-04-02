@@ -37,8 +37,8 @@ export default function Navigation({ group, page }) {
     <>
       <TextbookSettings isOpen={isOpen} onClose={onClose} />
       <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
-        <Tabs defaultIndex={group} borderBottomColor="transparent">
-          {mainTextbook && (
+        {mainTextbook && (
+          <Tabs defaultIndex={group} borderBottomColor="transparent">
             <TabList>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/0/0'}>Group 1</NextLink>
@@ -58,17 +58,19 @@ export default function Navigation({ group, page }) {
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/5/0'}>Group 6</NextLink>
               </Tab>
-            </TabList>
-          )}
-          {!mainTextbook && (
-            <TabList>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/0/0'}>
+                <NextLink href={'/vocabulary/studied/0'}>
                   <Text color="tomato" fontWeight="bold">
-                    Учебник
+                    Словарь
                   </Text>
                 </NextLink>
               </Tab>
+            </TabList>
+          </Tabs>
+        )}
+        {!mainTextbook && (
+          <Tabs defaultIndex={0} borderBottomColor="transparent">
+            <TabList>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/studied/0'}>
                   <Text fontWeight="bold">Изучаемые</Text>
@@ -88,9 +90,16 @@ export default function Navigation({ group, page }) {
                   </NextLink>
                 </NextLink>
               </Tab>
+              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+                <NextLink href={'/textbook/0/0'}>
+                  <Text color="tomato" fontWeight="bold">
+                    Учебник
+                  </Text>
+                </NextLink>
+              </Tab>
             </TabList>
-          )}
-        </Tabs>
+          </Tabs>
+        )}
         <Spacer />
         <HStack spacing={3} alignItems="center">
           <Tabs defaultIndex={5} borderBottomColor="transparent">

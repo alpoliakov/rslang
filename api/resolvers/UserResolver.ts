@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 
+import { AggregatedWordModel } from '../entity/AggregatedWord';
 import { SettingsModel } from '../entity/Settings';
 import { StatisticModel } from '../entity/Statistic';
 import { User, UserModel } from '../entity/User';
@@ -67,6 +68,10 @@ export class UserResolver {
     });
 
     await StatisticModel.findOneAndDelete({
+      user: ctx.res.locals.userId,
+    });
+
+    await AggregatedWordModel.deleteMany({
       user: ctx.res.locals.userId,
     });
 

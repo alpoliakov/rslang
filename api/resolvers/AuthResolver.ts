@@ -5,9 +5,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Arg, Mutation, Resolver } from 'type-graphql';
 
+import { AggregatedWord, AggregatedWordModel } from '../entity/AggregatedWord';
 import { Settings, SettingsModel } from '../entity/Settings';
 import { Statistic, StatisticModel } from '../entity/Statistic';
 import { UserModel } from '../entity/User';
+import { WordModel } from '../entity/Word';
 import { AuthInput } from '../types/AuthInput';
 import { UserResponse } from '../types/UserResponse';
 
@@ -61,8 +63,32 @@ export class AuthResolver {
       },
     } as Statistic);
 
+    const words = await WordModel.find({});
+
     await settings.save();
     await statistic.save();
+
+    const createAggregatedWords = async (word: any) => {
+      const aggregatedWord = await new AggregatedWordModel({
+        user: user.id,
+        word: word._id,
+        page: word.page,
+        group: word.group,
+        complexity: false,
+        deleted: false,
+        studied: false,
+        optional: {
+          repeat: 0,
+          rightAnswers: 0,
+        },
+      } as AggregatedWord);
+
+      await aggregatedWord.save();
+    };
+
+    for (const word of words) {
+      await createAggregatedWords(word);
+    }
 
     return { user, token };
   }

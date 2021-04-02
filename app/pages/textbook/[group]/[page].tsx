@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import {
   Badge,
   Box,
@@ -11,6 +12,7 @@ import {
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { MdHeadset } from 'react-icons/md';
 import { format } from 'url';
 import useSound from 'use-sound';
@@ -19,14 +21,19 @@ import Loading from '../../../components/Loading';
 import Pagination, { OnPageChangeCallback } from '../../../components/Pagination/Pagination';
 import { LOCAL_HOST } from '../../../constants';
 import { useAppContext } from '../../../context/ContextApp';
+import EditLocalStatistics from '../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../context/statistic/operations/queries/getLocalStatistic';
 import { initializeApollo } from '../../../lib/apollo';
+import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.graphql';
+import { useAggregatedWordsQuery } from '../../../lib/graphql/aggregatedWords.graphql';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
+import { useAuth } from '../../../lib/useAuth';
 
 export default function Pages({ group, page }) {
   const router = useRouter();
   const { pathname, query } = router;
   const [state, setState] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingWords, setLoadingWords] = useState(false);
   const [currentPage, setCurrentPage] = useState(null);
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [audioMeaning, setAudioMeaning] = useState('');
@@ -36,8 +43,21 @@ export default function Pages({ group, page }) {
   const [startMeaning, setStartMeaning] = useState(false);
   const [startExample, setStartExample] = useState(false);
 
+  // const { data: gapst } = useAggregatedWordsQuery({
+  //   variables: {
+  //     input: { group, page },
+  //   },
+  // });
+
+  const {
+    data: { localStatistics },
+    loading,
+  } = useQuery(GET_LOCAL_STATISTIC);
+
   const { data } = useAppContext();
   const { showTranslate, showButtons } = data;
+
+  const { user } = useAuth();
 
   const [playExample, objPlayExample] = useSound(audioExample, {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -57,16 +77,38 @@ export default function Pages({ group, page }) {
   const [playWord, objPlayWord] = useSound(wordAudioUrl, { onend: () => setStartMeaning(true) });
 
   const fetchWords = async () => {
+    setLoadingWords(true);
     const apollo = initializeApollo();
-    setLoading(true);
-    const { data } = await apollo.query({
-      query: WordsDocument,
-      variables: { group, page },
-    });
 
-    setState([...data.words]);
-    setLoading(false);
-    setCurrentPage(page);
+    if (user) {
+      const { data } = await apollo.query({
+        query: AggregatedWordsDocument,
+        variables: {
+          input: { group, page },
+        },
+      });
+
+      const arr = [];
+
+      data.aggregatedWords.forEach((word) => {
+        arr.push(word.word);
+      });
+
+      await setState([...arr]);
+    }
+
+    if (!user) {
+      const { data } = await apollo.query({
+        query: WordsDocument,
+        variables: { group, page },
+      });
+
+      await setState([...data.words]);
+    }
+
+    await setCurrentPage(page);
+
+    setLoadingWords(false);
   };
 
   useEffect(() => {
@@ -115,6 +157,22 @@ export default function Pages({ group, page }) {
     setJumpToPage(newPage);
   };
 
+  const handleComplexWordBtn = () => {
+    if (!user) {
+      return toast.error('Данное действие недоступно. Вам необходимо войти или зарегистрироваться');
+    }
+  };
+
+  const handleDeleteWordBtn = () => {
+    if (!user) {
+      return toast.error('Данное действие недоступно. Вам необходимо войти или зарегистрироваться');
+    }
+  };
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
   return (
     <Flex
       width="full"
@@ -131,8 +189,8 @@ export default function Pages({ group, page }) {
         </Heading>
       </Flex>
       <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
-        {loading && <Loading />}
-        {!loading &&
+        {loadingWords && <Loading />}
+        {!loadingWords &&
           state &&
           state.map((word) => (
             <Box
@@ -203,8 +261,10 @@ export default function Pages({ group, page }) {
                   </Badge>
                   {showButtons && (
                     <Flex alignItems="center" justifyContent="space-between">
-                      <Button mr={3}>Сложные слова</Button>
-                      <Button>Удалённые слова</Button>
+                      <Button mr={3} onClick={handleComplexWordBtn}>
+                        Сложное слово
+                      </Button>
+                      <Button onClick={handleDeleteWordBtn}>Удалить слово</Button>
                     </Flex>
                   )}
                 </Flex>

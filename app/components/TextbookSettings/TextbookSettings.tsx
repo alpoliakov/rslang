@@ -28,10 +28,6 @@ export default function TextbookSettings({ onClose, isOpen }) {
     setData({ showTranslate, showButtons });
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />

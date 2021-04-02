@@ -115,9 +115,9 @@ export default function Header() {
             {user && (
               <Menu>
                 <MenuButton>
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" mr={7}>
                     <Avatar size="md" name="avatar" src={user.avatar} mr="10px" />
-                    <Heading size="md">Hi, {user.name}</Heading>
+                    <Heading size="sm">Hi, {user.name}</Heading>
                   </Flex>
                 </MenuButton>
                 <MenuList>

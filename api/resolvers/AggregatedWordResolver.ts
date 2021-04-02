@@ -45,11 +45,52 @@ export class AggregatedWordResolver {
   @Query(() => [AggregatedWord], { nullable: true })
   @UseMiddleware(isAuth)
   async allAggregatedWords(@Ctx() ctx: MyContext) {
-    const result = await AggregatedWordModel.find({ user: ctx.res.locals.userId });
+    const result = await AggregatedWordModel.find({
+      user: ctx.res.locals.userId,
+    });
 
     if (!result) {
       throw new Error('Words not found');
     }
+
+    return result;
+  }
+
+  @Query(() => [AggregatedWord], { nullable: true })
+  @UseMiddleware(isAuth)
+  async aggregatedWords(
+    @Arg('input') aggregatedWordInput: AggregatedWordInput,
+    @Ctx() ctx: MyContext,
+  ) {
+    const { group, page } = aggregatedWordInput;
+
+    const result = await AggregatedWordModel.find({
+      user: ctx.res.locals.userId,
+      group,
+      page,
+    });
+
+    if (!result) {
+      throw new Error('Words not found');
+    }
+
+    return result;
+  }
+
+  @Query(() => [AggregatedWord], { nullable: true })
+  @UseMiddleware(isAuth)
+  async aggregatedWordsSearch(
+    @Arg('input') aggregatedWordInput: AggregatedWordInput,
+    @Ctx() ctx: MyContext,
+  ) {
+    const { group, complexity, studied, deleted } = aggregatedWordInput;
+    const result = await AggregatedWordModel.find({
+      user: ctx.res.locals.userId,
+      group,
+      deleted,
+      complexity,
+      studied,
+    });
 
     return result;
   }
@@ -72,7 +113,7 @@ export class AggregatedWordResolver {
       user: ctx.res.locals.userId,
       optional: {
         repeat: aggregatedWordInput.repeat,
-        title: aggregatedWordInput.title,
+        rightAnswers: aggregatedWordInput.rightAnswers,
       },
     } as AggregatedWord);
 
@@ -87,13 +128,15 @@ export class AggregatedWordResolver {
     @Arg('input') aggregatedWordInput: AggregatedWordInput,
     @Ctx() ctx: MyContext,
   ): Promise<AggregatedWord | null> {
-    const { id, difficulty, title, repeat } = aggregatedWordInput;
-    const optional = { title, repeat } as OptionalAggregatedWord;
+    const { id, complexity, deleted, studied, rightAnswers, repeat } = aggregatedWordInput;
+    const optional = { rightAnswers, repeat } as OptionalAggregatedWord;
 
     const aggregatedWord = AggregatedWordModel.findOneAndUpdate(
       { _id: id, user: ctx.res.locals.userId },
       {
-        difficulty,
+        deleted,
+        complexity,
+        studied,
         optional,
       },
       { runValidators: true, new: true },
