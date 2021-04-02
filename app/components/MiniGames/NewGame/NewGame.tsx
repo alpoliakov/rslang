@@ -1,3 +1,4 @@
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
 import { Input } from '@chakra-ui/react';
 import { checkAnswerNewGame, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
@@ -5,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
-import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 import { LOCAL_HOST } from '../../../constants/index';
 

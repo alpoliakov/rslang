@@ -6,11 +6,11 @@ import { fetchCurrentWordsAudiocall } from 'components/MiniGames/helpers/fetchWo
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { useRouter } from 'next/router';
 
 export default function AudiocallGamePage() {
   const [quitGame, setQuitGame] = useState(false);
@@ -27,6 +27,10 @@ export default function AudiocallGamePage() {
   const { query } = useRouter();
   const chooseLevel = query.textbook;
 
+  useEffect(() => {
+    fetchCurrentWordsAudiocall(group, currentPage, setLoading, setWords, setCurrentPage);
+  }, [group, showGame]);
+
   const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
@@ -37,10 +41,6 @@ export default function AudiocallGamePage() {
   const onSwitchMusic = () => {
     setMusic(!isMusicOn);
   };
-
-  useEffect(() => {
-    fetchCurrentWordsAudiocall(group, currentPage, setLoading, setWords, setCurrentPage);
-  }, [group, showGame]);
 
   return (
     <>

@@ -1,5 +1,4 @@
-
-import {checkAnswerNewGame} from '../utils'
+import { checkAnswerNewGame } from '../utils';
 describe('utils, newGame', () => {
   it('should return true', () => {
     const wordToCheck = { word: 'apple', wordTranslate: 'яблоко' };

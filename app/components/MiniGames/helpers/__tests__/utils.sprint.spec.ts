@@ -1,5 +1,5 @@
 import { dino, dinoEgg, dragon } from '../constants';
-import { changePicture, extraPoints, checkAnswerSprint, getNextWordSprint } from '../utils';
+import { changePicture, checkAnswerSprint, extraPoints, getNextWordSprint } from '../utils';
 
 describe('utils, sprint', () => {
   it.each`
@@ -27,37 +27,36 @@ describe('utils, sprint', () => {
   });
 });
 
-describe('utils, sprint', ()=> {
-  it('should return true', ()=> {
-    const mainWord = {word:'cat', wordTranslate: 'кошка'};
-    const translation = {word:'cat', wordTranslate: 'кошка'};
-    expect(checkAnswerSprint(true, mainWord, translation)).toBe(true)
+describe('utils, sprint', () => {
+  it('should return true', () => {
+    const mainWord = { word: 'cat', wordTranslate: 'кошка' };
+    const translation = { word: 'cat', wordTranslate: 'кошка' };
+    expect(checkAnswerSprint(true, mainWord, translation)).toBe(true);
   });
 
-  it('should return false', ()=> {
-    const mainWord = {word:'cat', wordTranslate: 'кошка'};
-    const translation = {word:'cat', wordTranslate: 'кошка'};
-    expect(checkAnswerSprint(false, mainWord, translation)).toBe(false)
+  it('should return false', () => {
+    const mainWord = { word: 'cat', wordTranslate: 'кошка' };
+    const translation = { word: 'cat', wordTranslate: 'кошка' };
+    expect(checkAnswerSprint(false, mainWord, translation)).toBe(false);
   });
 
-  it('should return false', ()=> {
-    const mainWord = {word:'cat', wordTranslate: 'кошка'};
-    const translation = {word:'car', wordTranslate: 'машина'};
-    expect(checkAnswerSprint(true, mainWord, translation)).toBe(false)
+  it('should return false', () => {
+    const mainWord = { word: 'cat', wordTranslate: 'кошка' };
+    const translation = { word: 'car', wordTranslate: 'машина' };
+    expect(checkAnswerSprint(true, mainWord, translation)).toBe(false);
   });
-})
+});
 
+describe('utils, sprint', () => {
+  it('translations length should be 2', () => {
+    const arr = [1, 2, 3, 4, 5, 6];
+    const learnedWords = [1, 2, 3];
+    expect(getNextWordSprint(arr, learnedWords)).toHaveLength(1);
+  });
 
-  describe('utils, sprint', ()=> {
-      it('translations length should be 2', ()=> {
-          const arr = [1,2,3,4,5,6];
-          const learnedWords = [1,2,3];
-          expect(getNextWordSprint(arr, learnedWords)).toHaveLength(1)
-      });
-
-      it('should not contain elements from learnedWords', ()=> {
-        const arr = [1,2,3,4,5,6];
-        const learnedWords = [1,2,3];
-        expect(getNextWordSprint(arr, learnedWords))
-      });
-  })
+  it('should not contain elements from learnedWords', () => {
+    const arr = [1, 2, 3, 4, 5, 6];
+    const learnedWords = [1, 2, 3];
+    expect(getNextWordSprint(arr, learnedWords));
+  });
+});

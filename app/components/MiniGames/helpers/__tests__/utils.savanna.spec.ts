@@ -1,5 +1,4 @@
-
-import { checkAnswerSavanna, getNextWordSavanna } from '../utils'
+import { checkAnswerSavanna, getNextWordSavanna } from '../utils';
 
 describe('utils, savanna', () => {
   it('should return "true"', () => {

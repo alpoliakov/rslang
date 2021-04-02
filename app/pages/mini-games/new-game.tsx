@@ -6,12 +6,12 @@ import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
 import { ModalNewGame } from 'components/MiniGames/NewGame/NewGameModal';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { useRouter } from 'next/router';
 
 export default function NewGamePage() {
   const [quitGame, setQuitGame] = useState(false);
