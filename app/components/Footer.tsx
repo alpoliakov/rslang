@@ -50,7 +50,7 @@ export default function Footer() {
                   color: 'red.500',
                 }}
                 className="shadow__item hover__item">
-                @ya&#8209;mashnenko
+                @ya-mashnenko
               </Link>
               <Link
                 href="https://github.com/w1r3d7"
