@@ -32,9 +32,6 @@ const FeatureCard = ({ description, children }) => {
 const Features = () => {
   return (
     <Box p={[5, 10]}>
-      <Heading as="h2" textAlign="center" mb={5}>
-        Начинаем изучать прямо сейчас!
-      </Heading>
       <Grid templateColumns="repeat(3, 1fr)" gap={10}>
         <FeatureCard description="Покажем куда расти">
           <BsFillCursorFill fontSize={FEATURE_ICON_SIZE} />

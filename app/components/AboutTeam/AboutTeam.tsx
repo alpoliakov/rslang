@@ -10,6 +10,7 @@ const TeamMember = ({ name, githubName, githubUrl, avatarUrl, children }) => {
         align="center"
         direction="column"
         justify="center"
+        margin={5}
         w="100%"
         h="150"
         border="1px"
@@ -28,9 +29,6 @@ const TeamMember = ({ name, githubName, githubUrl, avatarUrl, children }) => {
 const AboutTeam = () => {
   return (
     <>
-      <Heading as="h2" textAlign="center">
-        Наша команда
-      </Heading>
       <Grid
         templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)']}
         gap={10}

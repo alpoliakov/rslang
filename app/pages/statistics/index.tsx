@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import {
   Box,
+  Container,
   Button,
   Collapse,
   Flex,
@@ -62,7 +63,7 @@ export default function Stat() {
   );
 
   return (
-    <Box w="100%" p={2}>
+    <Container maxW="container.xl" p={2}>
       <Head>
         <title>Статистика</title>
       </Head>
@@ -93,6 +94,6 @@ export default function Stat() {
       <Collapse in={isButtonAllTimeActive} animateOpacity>
         <LongTermStatistics statistics={wordsLearnedByDay} />
       </Collapse>
-    </Box>
+    </Container>
   );
 }

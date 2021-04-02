@@ -4,35 +4,55 @@ const REG_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(
 const MenuTitle = {
   DICTIONARY: {
     title: 'Словарь',
-    url: 'statistics',
+    url: '/vocabulary/studied/1',
   },
-  GAME_1: {
+  TEXT_BOOK: {
     title: 'Учебник',
-    url: 'textbook/0/0',
-  },
-  GAME_2: {
-    title: 'Словарь',
-    url: 'vocabulary/studied/1',
+    url: '/textbook/0/0',
   },
   STATISTICS: {
     title: 'Статистика',
-    url: 'statistics',
+    url: '/statistics',
+  },
+  GAME_SAVANNA: {
+    title: 'Саванна',
+    url: '/mini-games/savanna',
+  },
+  GAME_SPRINT: {
+    title: 'Спринт',
+    url: '/mini-games/sprint',
+  },
+  GAME_AUDIO_CALL: {
+    title: 'Аудиовызов',
+    url: '/mini-games/audiocall',
+  },
+  GAME_NEW_GAME: {
+    title: 'Новая игра',
+    url: '/mini-games/new-game',
   },
 };
 
+const ACCORDION_TITLES = [
+  'Начните изучать английский язык с помощью RS Lang уже сегодня!',
+  'Начинаем изучать прямо сейчас!',
+  'Демонстрация работы с приложением',
+  'Наша команда',
+];
+
 const ACTIVE_BUTTON_COLOR = {
-  LIGHT: '#FF0088',
-  DARK: '#AF004B',
+  LIGHT: '#F9B9B7',
+  DARK: '#F06C9B',
 };
 
 const PASSIVE_BUTTON_COLOR = {
-  LIGHT: '#59BAB7',
-  DARK: '#006B69',
+  LIGHT: '#96C9DC',
+  DARK: '#61A0AF',
 };
 
 const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
 
 export {
+  ACCORDION_TITLES,
   ACTIVE_BUTTON_COLOR,
   DEMONSTRATION_VIDEO,
   LOCAL_HOST,
