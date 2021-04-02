@@ -33,9 +33,14 @@ const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
     [learnedWords, setLearnedWord, isMusicOn],
   );
 
+  useEffect(() => {
+    if (!combination.mainWord?.word) {
+      setEndGame(!endGame);
+    }
+  }, [combination]);
+
   if (!combination.mainWord?.word) {
-    setEndGame(!endGame);
-    return <div />;
+    return null;
   }
 
   return (

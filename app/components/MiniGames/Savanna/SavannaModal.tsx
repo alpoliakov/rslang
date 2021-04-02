@@ -3,15 +3,14 @@ import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLe
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-export const ModalSavanna = ({
-  setShowGame,
-  showGame,
-  // group, setGroup
-}) => {
-  // const showChooseLevel = prevPage==="/textbook";
-  const [group, setGroup] = useState('');
+export const ModalSavanna = ({ setShowGame, showGame, group, setGroup, chooseLevel }) => {
+  const [level, setLevel] = useState(group);
 
-  const handleClick = () => setShowGame(!showGame);
+  const handleClick = () => {
+    setGroup(group);
+    setShowGame(!showGame);
+  };
+
   useHotkeys('enter', handleClick);
   return (
     <div className="modalEntrance">
@@ -23,17 +22,21 @@ export const ModalSavanna = ({
             очков опыта получишь. <br /> Чтобы дать ответ, кликай по нему мышкой или выбирай из
             клавиш 1, 2, 3, 4
           </div>
-          {/* {showChooseLevel&& */}
-          <ChooseLevelModal group={group} setGroup={setGroup} />
-          {/* } */}
+          {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>
-        <Button
-          colorScheme="whiteAlpha"
-          variant="outline"
-          onClick={handleClick}
-          isDisabled={!group}>
-          начать
-        </Button>
+        {chooseLevel ? (
+          <Button
+            colorScheme="whiteAlpha"
+            variant="outline"
+            onClick={handleClick}
+            isDisabled={!group}>
+            начать
+          </Button>
+        ) : (
+          <Button colorScheme="whiteAlpha" variant="outline" onClick={handleClick}>
+            начать
+          </Button>
+        )}
       </div>
     </div>
   );
