@@ -6,15 +6,28 @@ import { Sprint } from 'components/MiniGames/Sprint/Sprint';
 import { ModalSprint } from 'components/MiniGames/Sprint/SprintModal';
 import { Timer } from 'components/MiniGames/Sprint/Timer';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
+import { useRouter } from 'next/router';
 
 export default function SprintGamePage() {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [showGame, setShowGame] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [words, setWords] = useState([]);
+  const [group, setGroup] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const { query } = useRouter();
+  const chooseLevel = query.textbook;
+
+  useEffect(() => {
+    fetchCurrentWords(group, currentPage, setLoading, setWords, setCurrentPage);
+  }, [group, showGame]);
 
   const fullScreen = useFullScreenHandle();
 
@@ -31,7 +44,7 @@ export default function SprintGamePage() {
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
           <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
-          <Sprint counter={counter} setCounter={setCounter} />
+          {!loading && <Sprint counter={counter} setCounter={setCounter} words={words} />}
           <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -60,10 +73,21 @@ export default function SprintGamePage() {
           </div>
         </FullScreen>
       ) : (
-        <ModalSprint setShowGame={setShowGame} showGame={showGame} />
+        <ModalSprint
+          setShowGame={setShowGame}
+          showGame={showGame}
+          chooseLevel={chooseLevel}
+          group={group}
+          setGroup={setGroup}
+        />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />}
+      {timeOver && (
+        <ModalEndGame
+          // timeOver={timeOver} setTimeOver={setTimeOver}
+          counter={counter}
+        />
+      )}
     </>
   );
 }
