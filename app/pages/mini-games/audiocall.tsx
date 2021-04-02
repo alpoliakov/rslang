@@ -2,19 +2,30 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
+import { fetchCurrentWordsAudiocall } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
+import { useRouter } from 'next/router';
 
 export default function AudiocallGamePage() {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
   const [showGame, setShowGame] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [words, setWords] = useState([]);
+  const [endGame, setEndGame] = useState(false);
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [group, setGroup] = useState('');
+
+  const { query } = useRouter();
+  const chooseLevel = query.textbook;
 
   const fullScreen = useFullScreenHandle();
 
@@ -26,6 +37,10 @@ export default function AudiocallGamePage() {
   const onSwitchMusic = () => {
     setMusic(!isMusicOn);
   };
+
+  useEffect(() => {
+    fetchCurrentWordsAudiocall(group, currentPage, setLoading, setWords, setCurrentPage);
+  }, [group, showGame]);
 
   return (
     <>
@@ -42,7 +57,18 @@ export default function AudiocallGamePage() {
             onClick={onSwitchMusic}
             icon={<RiMusic2Fill />}
           />
-          <Audiocall counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
+          {!loading && (
+            <Audiocall
+              counter={counter}
+              setCounter={setCounter}
+              isMusicOn={isMusicOn}
+              words={words}
+              learnedWords={learnedWords}
+              setLearnedWord={setLearnedWord}
+              endGame={endGame}
+              setEndGame={setEndGame}
+            />
+          )}
           <div className="savanna-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -71,10 +97,21 @@ export default function AudiocallGamePage() {
           </div>
         </FullScreen>
       ) : (
-        <ModalAudiocall setShowGame={setShowGame} showGame={showGame} />
+        <ModalAudiocall
+          setShowGame={setShowGame}
+          showGame={showGame}
+          chooseLevel={chooseLevel}
+          group={group}
+          setGroup={setGroup}
+        />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
+      {endGame && (
+        <ModalEndGame
+          // timeOver={timeOver} setTimeOver={setTimeOver}
+          counter={counter}
+        />
+      )}
     </>
   );
 }

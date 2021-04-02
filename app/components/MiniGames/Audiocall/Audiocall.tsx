@@ -1,19 +1,28 @@
+import { ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, Icon } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { checkAnswerSavanna, getNextWordAudiocall } from 'components/MiniGames/helpers/utils';
+import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
-import { getNextWordAudiocall, checkAnswerSavanna } from 'components/MiniGames/helpers/utils';
-import { LOCAL_HOST } from '../../../constants/index';
-import { ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 
-const Audiocall = ({ counter, setCounter, isMusicOn, words }) => {
+import { LOCAL_HOST } from '../../../constants/index';
+
+const Audiocall = ({
+  counter,
+  setCounter,
+  isMusicOn,
+  words,
+  learnedWords,
+  setLearnedWord,
+  endGame,
+  setEndGame,
+}) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [isAnswered, setIsAnswered] = useState(false);
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [wordPicUrl, setWordPicUrl] = useState('');
-  const [learnedWords, setLearnedWord] = useState([]);
   const [combination, setCombination] = useState(getNextWordAudiocall(words, learnedWords));
 
   const [playWord] = useSound(wordAudioUrl);
@@ -23,13 +32,13 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words }) => {
 
   const handleAnswer = (answer) => {
     setIsAnswered(true);
-    // const timer = setInterval(()=> )
     if (!checkAnswerSavanna(combination.mainWord, answer)) {
       isMusicOn && incorrect();
     } else {
       setCounter(counter + 10);
       isMusicOn && correct();
     }
+    setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
 
     // {isAnswered &&
     //   (learnedWords[learnedWords.length - 1] ? (
@@ -42,15 +51,33 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words }) => {
     setLearnedWord(seenWords);
   };
 
-  // setCombination(getNextWordAudiocall(words, seenWords));
+  const callNextWord = () => {
+    setCombination(getNextWordAudiocall(words, learnedWords));
+    setIsAnswered(false);
+  };
+
+  useEffect(() => {
+    if (!combination.mainWord?.word) {
+      setEndGame(!endGame);
+    }
+  }, [combination]);
+
+  if (!combination.mainWord?.word) {
+    return null;
+  }
+  // useEffect(() => playWord(), [isAnswered]);
 
   useHotkeys(
     '1, 2, 3, 4, 5',
     (_, handler) => {
       handleAnswer(combination.translations[Number(handler.key) - 1]);
     },
-    [learnedWords, setLearnedWord, isMusicOn],
+    [learnedWords, setLearnedWord, isMusicOn, combination],
   );
+
+  useHotkeys('enter', () => handleAnswer(''), [learnedWords]);
+  useHotkeys('enter', callNextWord, [learnedWords]);
+  useHotkeys('space', () => playWord());
 
   return (
     <div className="savanna-outer">
@@ -70,7 +97,7 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words }) => {
                 className="audiocall-button-sound"
                 onMouseDown={() => {
                   setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-                  setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
+                  // setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
                 }}
                 onClick={handleSound}>
                 <Icon
@@ -109,7 +136,6 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words }) => {
               w={20}
               h={20}
               color="whiteAlpha"
-              // className="shadow__item hover__item"
               _hover={{
                 color: 'rgba(212, 211, 211, 0.253)',
               }}
@@ -132,14 +158,19 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words }) => {
         ))}
       </div>
       <div className="audiocall-button">
-        <Button
-          w={100}
-          colorScheme="whiteAlpha"
-          variant="outline"
-          // onClick={() => handleAnswer(null)}
-        >
-          {isAnswered ? <ArrowForwardIcon /> : 'не знаю'}
-        </Button>
+        {isAnswered ? (
+          <Button w={100} colorScheme="whiteAlpha" variant="outline" onClick={callNextWord}>
+            <ArrowForwardIcon />
+          </Button>
+        ) : (
+          <Button
+            w={100}
+            colorScheme="whiteAlpha"
+            variant="outline"
+            onClick={() => handleAnswer('')}>
+            не знаю
+          </Button>
+        )}
       </div>
     </div>
   );
