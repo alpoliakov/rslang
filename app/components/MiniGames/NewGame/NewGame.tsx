@@ -1,10 +1,11 @@
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
 import { Input } from '@chakra-ui/react';
 import { checkAnswerNewGame, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 import { LOCAL_HOST } from '../../../constants/index';
 
@@ -23,10 +24,11 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
   const handleSound = () => {
     playWord();
   };
-  const handleOnChange = (e) => {
-    setInputValue(e.target.value);
-    console.log(inputValue);
-  };
+
+  // const handleOnChange = (e) => {
+  //   setInputValue(e.target.value);
+  //   console.log(inputValue);
+  // };
 
   const handleAnswer = () => {
     console.log(inputValue, 'inputValue in handleAnswer');
@@ -44,14 +46,23 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
     }
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
-    setCombination(getNextWordSavanna(words, seenWords));
+  };
+
+  const callNextWord = () => {
+    setCombination(getNextWordSavanna(words, learnedWords));
+    setIsAnswered(false);
   };
 
   useHotkeys('enter', handleAnswer, [learnedWords, setLearnedWord, isMusicOn]);
 
+  useEffect(() => {
+    if (!combination.mainWord?.word) {
+      setEndGame(!endGame);
+    }
+  }, [combination]);
+
   if (!combination.mainWord?.word) {
-    setEndGame(!endGame);
-    return <div />;
+    return null;
   }
 
   return (
@@ -62,36 +73,36 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
         </div>
       </div>
       <div className="newgame-board-inner">
-        {/* {!isAnswered ? ( */}
-        <div className="newgame-sound-box">
-          <Button
-            w={32}
-            h={32}
-            borderRadius="100px"
-            variant="outline"
-            _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
-            className="audiocall-button-sound"
-            onMouseDown={() => {
-              setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-            }}
-            onClick={handleSound}>
-            <Icon
-              className="newgame-sound"
-              as={GiSpeaker}
-              w={20}
-              h={20}
-              color="whiteAlpha"
-              _hover={{
-                color: 'rgba(212, 211, 211, 0.253)',
+        {!isAnswered ? (
+          <div className="newgame-sound-box">
+            <Button
+              w={32}
+              h={32}
+              borderRadius="100px"
+              variant="outline"
+              _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
+              className="audiocall-button-sound"
+              onMouseDown={() => {
+                setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
               }}
-            />
-          </Button>
-        </div>
-        {/* // ) : (
-        // <div className="newgame-answer" style={{ textShadow: `3px 3px 3px ${colorAnswer}` }}>
-        //   {combination.mainWord.word}
-        // </div> */}
-        {/* )}  */}
+              onClick={handleSound}>
+              <Icon
+                className="newgame-sound"
+                as={GiSpeaker}
+                w={20}
+                h={20}
+                color="whiteAlpha"
+                _hover={{
+                  color: 'rgba(212, 211, 211, 0.253)',
+                }}
+              />
+            </Button>
+          </div>
+        ) : (
+          <div className="newgame-answer" style={{ textShadow: `3px 3px 3px ${colorAnswer}` }}>
+            {combination.mainWord.word}
+          </div>
+        )}
         <form onSubmit={handleAnswer} className="newgame-form">
           <Input
             width="240px"
@@ -101,9 +112,15 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
             onChange={(e) => handleOnChange(e)}
           />
           <div className="newgame-button">
-            <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
-              проверить
-            </Button>
+            {isAnswered ? (
+              <Button w={100} colorScheme="whiteAlpha" variant="outline" onClick={callNextWord}>
+                <ArrowForwardIcon />
+              </Button>
+            ) : (
+              <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
+                проверить
+              </Button>
+            )}
           </div>
         </form>
       </div>

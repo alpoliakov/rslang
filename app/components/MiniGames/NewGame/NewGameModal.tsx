@@ -1,13 +1,17 @@
 import { Button } from '@chakra-ui/react';
-import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLeveloModal';
+import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLevelModal';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-export const ModalNewGame = ({ setShowGame, showGame }) => {
-  const handleClick = () => setShowGame(!showGame);
-  useHotkeys('enter', handleClick);
+export const ModalNewGame = ({ setShowGame, showGame, group, setGroup, chooseLevel }) => {
+  const [level, setLevel] = useState(group);
 
-  const [group, setGroup] = useState('');
+  const handleClick = () => {
+    setGroup(level);
+    setShowGame(!showGame);
+  };
+
+  useHotkeys('enter', handleClick);
 
   return (
     <div className="modalEntrance">
@@ -18,15 +22,21 @@ export const ModalNewGame = ({ setShowGame, showGame }) => {
             Напиши услышанное слово
             <br /> Чтобы дать ответ, кликни на кнопку "Проверить" или нажми Enter
           </div>
-          <ChooseLevelModal group={group} setGroup={setGroup} />
+          {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>
-        <Button
-          colorScheme="whiteAlpha"
-          variant="outline"
-          onClick={handleClick}
-          isDisabled={!group}>
-          начать
-        </Button>
+        {chooseLevel ? (
+          <Button
+            colorScheme="whiteAlpha"
+            variant="outline"
+            onClick={handleClick}
+            isDisabled={!level}>
+            начать
+          </Button>
+        ) : (
+          <Button colorScheme="whiteAlpha" variant="outline" onClick={handleClick}>
+            начать
+          </Button>
+        )}
       </div>
     </div>
   );
