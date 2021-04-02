@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import {
   Box,
   Button,
@@ -14,10 +15,14 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 
 import ShortTermStatistics from '../../components/ShortTermStatistics';
+import { GET_LOCAL_STATISTIC } from '../../context/statistic/operations/queries/getLocalStatistic';
 
 export default function Stat() {
   const [isButtonDayActive, setIsButtonDayActive] = useState(true);
   const [isButtonAllTimeActive, setIsButtonAllTimeActive] = useState(false);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  console.log(data.localStatistics);
 
   const wordsLearnedByDay = [
     {

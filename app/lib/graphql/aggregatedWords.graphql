@@ -1,9 +1,11 @@
-mutation CreateAggregatedWord($input: AggregatedWordInput!) {
-  createAggregatedWord(input: $input) {
+query AggregatedWords($input: AggregatedWordInput!) {
+  aggregatedWords(input: $input) {
     _id
     complexity
     deleted
     studied
+    page
+    group
     optional {
       rightAnswers
       repeat

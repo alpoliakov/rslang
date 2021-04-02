@@ -1,10 +1,13 @@
 mutation EditAggregatedWord($input: AggregatedWordInput!) {
   editAggregatedWord(input: $input) {
     _id
-    difficulty
+    complexity
+    deleted
+    studied
     optional {
-      title
+      rightAnswers
       repeat
+      wrongAnswers
     }
     user {
       _id

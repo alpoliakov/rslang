@@ -17,6 +17,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@types/react-paginate": "^6.2.1",
+    "apollo3-cache-persist": "^0.9.1",
     "framer-motion": "3.10.6",
     "graphql": "^15.5.0",
     "next": "^10.0.9",
