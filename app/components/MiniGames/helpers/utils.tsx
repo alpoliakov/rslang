@@ -43,12 +43,6 @@ export const checkAnswerSprint = (answer, mainWord, translation) => {
   return answer === (mainWord.word === translation.word);
 };
 
-// ------- HEARTS -------
-
-export const brokeHearts = (arr, el, wrongAnswers) => {
-  arr.splice(wrongAnswers - 1, 1, el);
-};
-
 // ------- SAVANNA -------
 
 // export const mixVariants = (arr) => arr.sort(() => Math.random() - 0.5);
@@ -71,14 +65,17 @@ export const checkAnswerSavanna = (wordToCheck, answer) => {
   return wordToCheck.word === answer.word;
 };
 
-export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
-  console.log('inside fetchCurrentWords');
+export const fetchCurrentWords = async (group, page, setLoading, setWords, setCurrentPage) => {
+  console.log('inside fetchCurrentWords', group, group === '', typeof group);
+  if (group === '') return;
+  console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
     query: WordsDocument,
-    variables: { group, page },
+    variables: { group: Number(group), page },
   });
+  console.log('here fetchCurrentWords');
 
   const words = [...data.words];
   setWords([...data.words]);
@@ -86,7 +83,9 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   if (words) {
     setLoading(false);
   }
-  // setCurrentPage(page + 1);
+  if (setCurrentPage) {
+    setCurrentPage(page + 1);
+  }
   // console.log('const words', words[0].word, words[0].wordTranslate);
   // return words;
 };
