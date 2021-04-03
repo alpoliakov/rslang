@@ -11,6 +11,10 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { AnswerList } from '../Modals/AnswersList';
+import { List, ListItem, ListIcon } from '@chakra-ui/react';
+import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
+import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 const ModalEndGame = ({ counter }) => {
   // useHotkeys('esc', () => setTimeOver(!timeOver));
@@ -22,12 +26,12 @@ const ModalEndGame = ({ counter }) => {
         <div className="modalEnd-result">
           {counter > 0 ? 'Поздравляю!' : 'Очень жаль.'} Твой результат <br />
           <CircularProgress isIndeterminate value={100} color="pink" thickness="2px" size="200px">
-            <CircularProgressLabel size="40px">{counter}</CircularProgressLabel>
+            <CircularProgressLabel size="30px">{counter}</CircularProgressLabel>
           </CircularProgress>
           <br /> баллов!
           <div className="modal-information">
-            <Accordion>
-              <AccordionItem>
+            <Accordion allowToggle={true}>
+              <AccordionItem className="modal-accordion-button">
                 <h2>
                   <AccordionButton>
                     <Box flex="1" textAlign="left">
@@ -37,9 +41,105 @@ const ModalEndGame = ({ counter }) => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4} className="modal-extended-information">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                  exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  {/* <AnswerList words={words} /> */}
+                  <List spacing={2}>
+                    <ListItem>
+                      <ListIcon as={CheckCircleIcon} color="green.500" />
+                      Lorem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={CheckCircleIcon} color="green.500" />
+                      Assumend
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={NotAllowedIcon} color="red" />
+                      Quidem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={NotAllowedIcon} color="red" />
+                      Quidem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={CheckCircleIcon} color="green.500" />
+                      Lorem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={CheckCircleIcon} color="green.500" />
+                      Assumend
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={NotAllowedIcon} color="red" />
+                      Quidem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={NotAllowedIcon} color="red" />
+                      Quidem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={CheckCircleIcon} color="green.500" />
+                      Lorem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={CheckCircleIcon} color="green.500" />
+                      Assumend
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={NotAllowedIcon} color="red" />
+                      Quidem
+                    </ListItem>
+                    <ListItem>
+                      <ListIcon as={NotAllowedIcon} color="red" />
+                      Quidem
+                    </ListItem>
+                  </List>
+
+                  {/* <Table variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>Выучил</Th>
+                        <Th>Ошибок</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          <ListItem>
+                            <ListIcon as={CheckCircleIcon} color="green.500" />
+                            Lorem
+                          </ListItem>
+                        </Td>
+                        <Td>
+                          <ListItem>
+                            <ListIcon as={NotAllowedIcon} color="red" />
+                            Quidem
+                          </ListItem>
+                        </Td>
+                      </Tr>
+                      <Tr>
+                        <Td>
+                          <ListItem>
+                            <ListIcon as={CheckCircleIcon} color="green.500" />
+                            Lorem
+                          </ListItem>
+                        </Td>
+                        <Td>
+                          <ListItem>
+                            <ListIcon as={NotAllowedIcon} color="red" />
+                            Quidem
+                          </ListItem>
+                        </Td>
+                      </Tr>
+                      <Tr>
+                        <Td></Td>
+                        <Td>
+                          <ListItem>
+                            <ListIcon as={NotAllowedIcon} color="red" />
+                            Quidem
+                          </ListItem>
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table> */}
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>

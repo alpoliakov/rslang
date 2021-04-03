@@ -11,7 +11,7 @@
 
 .modal {
   width: 500px;
-  height: 40%;
+  height: 50%;
   background-color: #9fd8df;
   font-size: 2vw;
   display: flex;
@@ -65,8 +65,15 @@
   }
 }
 
+.modal-accordion-button {
+  color: white;
+}
+
 .modal-extended-information {
   color: white;
   font-size: small;
   font-weight: 300;
+  overflow: auto;
+  height: 80px;
+  text-align: left;
 }
