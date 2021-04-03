@@ -78,16 +78,12 @@ export default function Navigation({ group, page }) {
               </Tab>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/complex/0'}>
-                  <NextLink href={'/vocabulary/studied/0'}>
-                    <Text fontWeight="bold">Сложные</Text>
-                  </NextLink>
+                  <Text fontWeight="bold">Сложные</Text>
                 </NextLink>
               </Tab>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/deleted/0'}>
-                  <NextLink href={'/vocabulary/studied/0'}>
-                    <Text fontWeight="bold">Удалённые</Text>
-                  </NextLink>
+                  <Text fontWeight="bold">Удалённые</Text>
                 </NextLink>
               </Tab>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>

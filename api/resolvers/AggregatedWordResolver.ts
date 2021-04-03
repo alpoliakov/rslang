@@ -66,6 +66,7 @@ export class AggregatedWordResolver {
 
     const result = await AggregatedWordModel.find({
       user: ctx.res.locals.userId,
+      deleted: false,
       group,
       page,
     });
