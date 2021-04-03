@@ -10,8 +10,13 @@ const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
   const [learnedWords, setLearnedWord] = useState([]);
   const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
 
+  useEffect(() => {
+    const timeOutAnswer = setTimeout(() => handleAnswer(''), 5000);
+    console.log('inside timeout useEffect');
+    return () => clearTimeout(timeOutAnswer);
+  }, [learnedWords]);
+
   const handleAnswer = (answer) => {
-    // const timer = setInterval(()=> )
     if (!checkAnswerSavanna(combination.mainWord, answer)) {
       setLives((lives) => [false, ...lives.slice(0, -1)]);
       isMusicOn && incorrect();
