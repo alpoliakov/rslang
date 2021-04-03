@@ -1,23 +1,33 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
 import { ModalSprint } from 'components/MiniGames/Sprint/SprintModal';
 import { Timer } from 'components/MiniGames/Sprint/Timer';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
-export default function SprintGamePage({ page, group }) {
+export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [showGame, setShowGame] = useState(false);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [currentGroup, setGroup] = useState(group);
+
+  const { query } = useRouter();
+  const chooseLevel = query.textbook;
+
+  useEffect(() => {
+    fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+  }, [currentGroup, showGame]);
 
   const fullScreen = useFullScreenHandle();
 
@@ -25,10 +35,6 @@ export default function SprintGamePage({ page, group }) {
     setQuitGame(true);
     fullScreen.exit();
   };
-
-  useEffect(() => {
-    fetchCurrentWords(group, page, setLoading, setWords);
-  }, []);
 
   return (
     <>
@@ -67,7 +73,13 @@ export default function SprintGamePage({ page, group }) {
           </div>
         </FullScreen>
       ) : (
-        <ModalSprint setShowGame={setShowGame} showGame={showGame} />
+        <ModalSprint
+          setShowGame={setShowGame}
+          showGame={showGame}
+          chooseLevel={chooseLevel}
+          group={group}
+          setGroup={setGroup}
+        />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
       {timeOver && (

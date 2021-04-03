@@ -1,18 +1,19 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Savanna } from 'components/MiniGames/Savanna/Savanna';
 import { ModalSavanna } from 'components/MiniGames/Savanna/SavannaModal';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function SavannaGamePage({ page, group }) {
+export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
@@ -21,8 +22,18 @@ export default function SavannaGamePage({ page, group }) {
   const [words, setWords] = useState([]);
   const [lives, setLives] = useState(Array(5).fill(true));
   const [endGame, setEndGame] = useState(false);
-  // const [currentPage, setCurrentPage] = useState(null);
-  // const [group, setGroup] = useState('');
+  const [currentGroup, setGroup] = useState(group);
+  const [currentPage, setCurrentPage] = useState(page);
+
+  const { query } = useRouter();
+  const router = useRouter();
+  const chooseLevel = query.textbook;
+
+  useEffect(() => console.log('query inside group/page', router), []);
+
+  useEffect(() => {
+    fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+  }, [currentGroup, showGame, currentPage]);
 
   const fullScreen = useFullScreenHandle();
 
@@ -34,10 +45,6 @@ export default function SavannaGamePage({ page, group }) {
   const onSwitchMusic = () => {
     setMusic(!isMusicOn);
   };
-
-  useEffect(() => {
-    fetchCurrentWords(group, page, setLoading, setWords);
-  }, []);
 
   useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
 
@@ -65,8 +72,8 @@ export default function SavannaGamePage({ page, group }) {
               setLives={setLives}
               setEndGame={setEndGame}
               endGame={endGame}
-              // group={group}
-              // page={page}
+              // setCurrentPage={setCurrentPage}
+              // currentPage={currentPage}
             />
           )}
           <div className="progress-hearts">
@@ -109,8 +116,9 @@ export default function SavannaGamePage({ page, group }) {
         <ModalSavanna
           setShowGame={setShowGame}
           showGame={showGame}
-          // group={group}
-          // setGroup={setGroup}
+          chooseLevel={chooseLevel}
+          group={group}
+          setGroup={setGroup}
         />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}

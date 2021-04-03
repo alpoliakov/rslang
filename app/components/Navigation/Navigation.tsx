@@ -34,7 +34,7 @@ export default function Navigation({ group, page }) {
           </Tab>
           <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
             <NextLink href={'/textbook/4/0'}>Group 5</NextLink>
-          </Tab>{' '}
+          </Tab>
           <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
             <NextLink href={'/textbook/5/0'}>Group 6</NextLink>
           </Tab>
@@ -45,16 +45,16 @@ export default function Navigation({ group, page }) {
         <Tabs defaultIndex={5} borderBottomColor="transparent">
           <TabList>
             <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-              <NextLink href={`/mini-games/savanna?textbook=true`}>Саванна</NextLink>
+              <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
             </Tab>
             <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-              <NextLink href={`/mini-games/sprint?textbook=true`}>Спринт</NextLink>
+              <NextLink href={`/mini-games/sprint/${group}/${page}`}>Спринт</NextLink>
             </Tab>
             <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-              <NextLink href={`/mini-games/audiocall?textbook=true`}>Аудиовызов</NextLink>
+              <NextLink href={`/mini-games/audiocall/${group}/${page}`}>Аудиовызов</NextLink>
             </Tab>
             <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-              <NextLink href={`/mini-games/new-game?textbook=true`}>Написание</NextLink>
+              <NextLink href={`/mini-games/new-game/${group}/${page}`}>Написание</NextLink>
             </Tab>
           </TabList>
         </Tabs>

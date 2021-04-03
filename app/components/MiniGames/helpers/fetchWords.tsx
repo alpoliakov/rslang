@@ -1,8 +1,9 @@
 import { initializeApollo } from '../../../lib/apollo';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
 
-export const fetchCurrentWords = async (group, page, setLoading, setWords, setCurrentPage) => {
+export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   console.log('inside fetchCurrentWords', group, group === '', typeof group);
+  console.log(`group: ${group}, page: ${page}`);
   if (group === '') return;
   console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
@@ -17,9 +18,6 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords, setCu
   console.log(words);
   if (words) {
     setLoading(false);
-  }
-  if (setCurrentPage) {
-    setCurrentPage(page + 1);
   }
   // console.log('const words', words[0].word, words[0].wordTranslate);
   // return words;

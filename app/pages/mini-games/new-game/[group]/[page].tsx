@@ -1,18 +1,19 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/utils';
+import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
 import { ModalNewGame } from 'components/MiniGames/NewGame/NewGameModal';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function NewGamePage({ page, group }) {
+export default function NewGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
@@ -21,6 +22,15 @@ export default function NewGamePage({ page, group }) {
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
   const [endGame, setEndGame] = useState(false);
+  const [currentGroup, setGroup] = useState(group);
+  const [currentPage, setCurrentPage] = useState(page);
+
+  const { query } = useRouter();
+  const chooseLevel = query.textbook;
+
+  useEffect(() => {
+    fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+  }, [currentGroup, showGame]);
 
   const fullScreen = useFullScreenHandle();
 
@@ -33,9 +43,6 @@ export default function NewGamePage({ page, group }) {
     setMusic(!isMusicOn);
   };
 
-  useEffect(() => {
-    fetchCurrentWords(group, page, setLoading, setWords);
-  }, []);
   useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
 
   return (
@@ -101,10 +108,21 @@ export default function NewGamePage({ page, group }) {
           </div>
         </FullScreen>
       ) : (
-        <ModalNewGame setShowGame={setShowGame} showGame={showGame} />
+        <ModalNewGame
+          setShowGame={setShowGame}
+          showGame={showGame}
+          chooseLevel={chooseLevel}
+          group={group}
+          setGroup={setGroup}
+        />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
+      {endGame && (
+        <ModalEndGame
+          // timeOver={timeOver} setTimeOver={setTimeOver}
+          counter={counter}
+        />
+      )}
     </>
   );
 }
