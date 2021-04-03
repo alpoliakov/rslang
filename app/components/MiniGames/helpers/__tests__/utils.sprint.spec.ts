@@ -48,15 +48,37 @@ describe('utils, sprint', () => {
 });
 
 describe('utils, sprint', () => {
-  it('translations length should be 2', () => {
-    const arr = [1, 2, 3, 4, 5, 6];
-    const learnedWords = [1, 2, 3];
-    expect(getNextWordSprint(arr, learnedWords)).toHaveLength(1);
+  it('translations length should be 1', () => {
+    const words = [
+      { word: 'test1', wordTranslation: 'тест1' },
+      { word: 'test2', wordTranslations: 'тест2' },
+      { word: 'test3', wordTranslations: 'тест3' },
+      { word: 'test4', wordTranslations: 'тест4' },
+      { word: 'test5', wordTranslations: 'тест5' },
+      { word: 'test6', wordTranslations: 'тест6' },
+      { word: 'test7', wordTranslations: 'тест7' },
+      { word: 'test8', wordTranslations: 'тест8' },
+      { word: 'test9', wordTranslations: 'тест9' },
+      { word: 'test10', wordTranslations: 'тест10' },
+    ];
+    const learnedWords = words.slice(0, 3);
+    expect(getNextWordSprint(words, learnedWords).translation).toHaveProperty('word');
   });
 
   it('should not contain elements from learnedWords', () => {
-    const arr = [1, 2, 3, 4, 5, 6];
-    const learnedWords = [1, 2, 3];
-    expect(getNextWordSprint(arr, learnedWords));
+    const words = [
+      { word: 'test1', wordTranslation: 'тест1' },
+      { word: 'test2', wordTranslations: 'тест2' },
+      { word: 'test3', wordTranslations: 'тест3' },
+      { word: 'test4', wordTranslations: 'тест4' },
+      { word: 'test5', wordTranslations: 'тест5' },
+      { word: 'test6', wordTranslations: 'тест6' },
+      { word: 'test7', wordTranslations: 'тест7' },
+      { word: 'test8', wordTranslations: 'тест8' },
+      { word: 'test9', wordTranslations: 'тест9' },
+      { word: 'test10', wordTranslations: 'тест10' },
+    ];
+    const learnedWords = words.slice(0, 3);
+    expect(learnedWords).not.toContain(getNextWordSprint(words, learnedWords).translation);
   });
 });

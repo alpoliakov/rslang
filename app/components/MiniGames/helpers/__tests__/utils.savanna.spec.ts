@@ -14,36 +14,59 @@ describe('utils, savanna', () => {
   });
 });
 
-// export const getNextWordSavanna = (arr, learnedWords) => {
-//     const [mainWord] = arr
-//       .filter((word) => !learnedWords.includes(word))
-//       .sort(() => Math.random() - 0.5);
-//     const translations = arr
-//       .filter(({ word }) => word !== mainWord?.word)
-//       .sort(() => Math.random() - 0.5)
-//       .slice(0, 3)
-//       .concat([mainWord])
-//       .sort(() => Math.random() - 0.5);
-
-//     return { mainWord, translations };
-//   };
-
 describe('utils, savanna', () => {
   it('translations length should be 4', () => {
-    const arr = [1, 2, 3, 4, 5, 6];
-    const learnedWords = [1, 2, 3];
-    expect(getNextWordSavanna(arr, learnedWords)).toHaveLength(4);
+    const words = [
+      { word: 'test1', wordTranslation: 'тест1' },
+      { word: 'test2', wordTranslations: 'тест2' },
+      { word: 'test3', wordTranslations: 'тест3' },
+      { word: 'test4', wordTranslations: 'тест4' },
+      { word: 'test5', wordTranslations: 'тест5' },
+      { word: 'test6', wordTranslations: 'тест6' },
+      { word: 'test7', wordTranslations: 'тест7' },
+      { word: 'test8', wordTranslations: 'тест8' },
+      { word: 'test9', wordTranslations: 'тест9' },
+      { word: 'test10', wordTranslations: 'тест10' },
+    ];
+    const learnedWords = words.slice(0, 3);
+    expect(getNextWordSavanna(words, learnedWords).translations).toHaveLength(4);
   });
 
   it('should not contain elements from learnedWords', () => {
-    const arr = [1, 2, 3, 4, 5, 6];
-    const learnedWords = [1, 2, 3];
-    expect(getNextWordSavanna(arr, learnedWords));
+    const words = [
+      { word: 'test1', wordTranslation: 'тест1' },
+      { word: 'test2', wordTranslations: 'тест2' },
+      { word: 'test3', wordTranslations: 'тест3' },
+      { word: 'test4', wordTranslations: 'тест4' },
+      { word: 'test5', wordTranslations: 'тест5' },
+      { word: 'test6', wordTranslations: 'тест6' },
+      { word: 'test7', wordTranslations: 'тест7' },
+      { word: 'test8', wordTranslations: 'тест8' },
+      { word: 'test9', wordTranslations: 'тест9' },
+      { word: 'test10', wordTranslations: 'тест10' },
+    ];
+    const learnedWords = words.slice(0, 3);
+    expect(learnedWords).toEqual(
+      expect.not.arrayContaining(getNextWordSavanna(words, learnedWords).translations),
+    );
   });
 
   it('translations should contain mainWord', () => {
-    const arr = [1, 2, 3, 4, 5, 6];
-    const learnedWords = [1, 2, 3];
-    expect(getNextWordSavanna(arr, learnedWords));
+    const words = [
+      { word: 'test1', wordTranslation: 'тест1' },
+      { word: 'test2', wordTranslations: 'тест2' },
+      { word: 'test3', wordTranslations: 'тест3' },
+      { word: 'test4', wordTranslations: 'тест4' },
+      { word: 'test5', wordTranslations: 'тест5' },
+      { word: 'test6', wordTranslations: 'тест6' },
+      { word: 'test7', wordTranslations: 'тест7' },
+      { word: 'test8', wordTranslations: 'тест8' },
+      { word: 'test9', wordTranslations: 'тест9' },
+      { word: 'test10', wordTranslations: 'тест10' },
+    ];
+    const learnedWords = words.slice(0, 3);
+    expect(getNextWordSavanna(words, learnedWords).translations).toContain(
+      getNextWordSavanna(words, learnedWords).mainWord,
+    );
   });
 });
