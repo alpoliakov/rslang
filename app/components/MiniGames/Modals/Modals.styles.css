@@ -64,3 +64,9 @@
     font-size: 4vw;
   }
 }
+
+.modal-extended-information {
+  color: white;
+  font-size: small;
+  font-weight: 300;
+}
