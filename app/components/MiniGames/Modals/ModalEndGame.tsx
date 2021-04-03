@@ -1,20 +1,21 @@
+import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
-import Link from 'next/link';
-import React, { useState } from 'react';
 import {
   Accordion,
-  AccordionItem,
   AccordionButton,
-  AccordionPanel,
   AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
 } from '@chakra-ui/react';
+import { List, ListIcon, ListItem } from '@chakra-ui/react';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import Link from 'next/link';
+import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+
 import { AnswerList } from '../Modals/AnswersList';
-import { List, ListItem, ListIcon } from '@chakra-ui/react';
-import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 const ModalEndGame = ({ counter }) => {
   // useHotkeys('esc', () => setTimeOver(!timeOver));
