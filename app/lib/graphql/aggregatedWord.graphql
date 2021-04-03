@@ -1,10 +1,15 @@
 query AggregatedWord($aggregatedWordId: ObjectId!) {
   aggregatedWord(aggregatedWordId: $aggregatedWordId) {
     _id
-    difficulty
+    complexity
+    deleted
+    studied
+    page
+    group
     optional {
-      title
+      rightAnswers
       repeat
+      wrongAnswers
     }
     user {
       _id

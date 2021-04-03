@@ -136,7 +136,7 @@ SavannaGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
 
-  console.log(group);
+  console.log(window.location.pathname);
 
   return {
     group,

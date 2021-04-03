@@ -7,6 +7,7 @@ import type { AppProps } from 'next/app';
 import React, { useEffect } from 'react';
 
 import Layout from '../components/Layout';
+import { AppWrapper } from '../context/ContextApp';
 import { useApollo } from '../lib/apollo';
 import { AuthProvider } from '../lib/useAuth';
 import { Chakra } from '../src/Chakra';
@@ -25,11 +26,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ApolloProvider client={apolloClient}>
       <Chakra cookies={pageProps.cookies}>
         <AuthProvider>
-          <Layout>
-            <AnimatePresence exitBeforeEnter>
-              <Component {...pageProps} />
-            </AnimatePresence>
-          </Layout>
+          <AppWrapper>
+            <Layout>
+              <AnimatePresence exitBeforeEnter>
+                <Component {...pageProps} />
+              </AnimatePresence>
+            </Layout>
+          </AppWrapper>
         </AuthProvider>
       </Chakra>
     </ApolloProvider>

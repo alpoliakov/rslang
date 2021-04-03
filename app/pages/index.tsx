@@ -31,9 +31,6 @@ export default function Home() {
         </Box>
         <Features />
         <Box p={5}>
-          <Heading as="h2" textAlign={'center'}>
-            Демонстрация работы с приложением
-          </Heading>
           <Box h={400}>
             <Player videoUrl={DEMONSTRATION_VIDEO} />
           </Box>

@@ -1,5 +1,7 @@
+import { useQuery } from '@apollo/client';
 import {
   Box,
+  Container,
   Button,
   Collapse,
   Flex,
@@ -14,10 +16,14 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 
 import ShortTermStatistics from '../../components/ShortTermStatistics';
+import { GET_LOCAL_STATISTIC } from '../../context/statistic/operations/queries/getLocalStatistic';
 
 export default function Stat() {
   const [isButtonDayActive, setIsButtonDayActive] = useState(true);
   const [isButtonAllTimeActive, setIsButtonAllTimeActive] = useState(false);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  console.log(data.localStatistics);
 
   const wordsLearnedByDay = [
     {
@@ -57,7 +63,7 @@ export default function Stat() {
   );
 
   return (
-    <Box w="100%" p={2}>
+    <Container maxW="container.xl" p={2}>
       <Head>
         <title>Статистика</title>
       </Head>
@@ -88,6 +94,6 @@ export default function Stat() {
       <Collapse in={isButtonAllTimeActive} animateOpacity>
         <LongTermStatistics statistics={wordsLearnedByDay} />
       </Collapse>
-    </Box>
+    </Container>
   );
 }

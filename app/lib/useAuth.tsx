@@ -86,11 +86,11 @@ function useProvideAuth() {
   };
 
   const signOut = () => {
+    router.push('/');
     sessionStorage.removeItem('token');
 
     client.resetStore().then(() => {
       setMessage('Вы успешно вышли из аккаунта.');
-      router.push('/');
     });
   };
 

@@ -5,9 +5,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Arg, Mutation, Resolver } from 'type-graphql';
 
+import { AggregatedWord, AggregatedWordModel } from '../entity/AggregatedWord';
 import { Settings, SettingsModel } from '../entity/Settings';
 import { Statistic, StatisticModel } from '../entity/Statistic';
 import { UserModel } from '../entity/User';
+import { WordModel } from '../entity/Word';
 import { AuthInput } from '../types/AuthInput';
 import { UserResponse } from '../types/UserResponse';
 
@@ -37,6 +39,8 @@ export class AuthResolver {
     });
     await user.save();
 
+    const words = await WordModel.find({});
+
     const payload = {
       id: user.id,
     };
@@ -63,6 +67,32 @@ export class AuthResolver {
 
     await settings.save();
     await statistic.save();
+
+    function createAggregatedWords(): AggregatedWord[] {
+      const arrWords = [];
+
+      for (const word of words) {
+        arrWords.push({
+          user: user.id,
+          word: word._id,
+          page: word.page,
+          group: word.group,
+          complexity: false,
+          deleted: false,
+          studied: false,
+          optional: {
+            repeat: 0,
+            rightAnswers: 0,
+          },
+        } as AggregatedWord);
+      }
+
+      return arrWords;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await AggregatedWordModel.insertMany(createAggregatedWords());
 
     return { user, token };
   }

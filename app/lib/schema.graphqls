@@ -5,17 +5,25 @@
 
 type AggregatedWord {
   _id: ObjectId!
-  difficulty: String!
+  complexity: Boolean!
+  deleted: Boolean!
+  group: Float!
   optional: OptionalAggregatedWord!
+  page: Float!
+  studied: Boolean!
   user: User!
   word: Word!
 }
 
 input AggregatedWordInput {
-  difficulty: String
+  complexity: Boolean
+  deleted: Boolean
+  group: Float
   id: ObjectId
-  repeat: Boolean
-  title: String
+  page: Float
+  repeat: Float
+  rightAnswers: Float
+  studied: Boolean
   word: ObjectId
 }
 
@@ -58,8 +66,9 @@ type Mutation {
 scalar ObjectId
 
 type OptionalAggregatedWord {
-  repeat: Boolean!
-  title: String!
+  repeat: Float!
+  rightAnswers: Float!
+  wrongAnswers: Float
 }
 
 type OptionalSettings {
@@ -79,6 +88,8 @@ type OptionalUserWord {
 
 type Query {
   aggregatedWord(aggregatedWordId: ObjectId!): AggregatedWord
+  aggregatedWords(input: AggregatedWordInput!): [AggregatedWord!]
+  aggregatedWordsSearch(input: AggregatedWordInput!): [AggregatedWord!]
   allAggregatedWords: [AggregatedWord!]
   allUserWords: [UserWord!]
   allWords: [Word!]

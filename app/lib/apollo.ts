@@ -2,6 +2,8 @@ import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@a
 import { setContext } from '@apollo/client/link/context';
 import { useMemo } from 'react';
 
+import { cache } from '../context/statistic/cache';
+
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 function createApolloClient() {
@@ -22,7 +24,8 @@ function createApolloClient() {
 
   return new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
+    cache: cache,
+    connectToDevTools: true,
   });
 }
 

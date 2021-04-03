@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <Box w="100%" position="sticky" bottom="0" zIndex="10" bg={bg}>
-      <Container maxW="95%">
+      <Container maxW="container.xl">
         <Flex
           alignItems="center"
           direction={['column', 'column', 'row']}

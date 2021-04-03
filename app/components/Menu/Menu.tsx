@@ -2,8 +2,12 @@ import { Flex, Grid, Link, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import { BiStats } from 'react-icons/bi';
-import { FaBook, FaGamepad } from 'react-icons/fa';
+import { BiStats, BiRun } from 'react-icons/bi';
+import { GiPalmTree } from 'react-icons/gi';
+import { FaGamepad } from 'react-icons/fa';
+import { BsBook } from 'react-icons/bs';
+import { GiSoundWaves } from 'react-icons/gi';
+import { RiBook3Line } from 'react-icons/ri';
 
 import { ACTIVE_BUTTON_COLOR, MenuTitle, PASSIVE_BUTTON_COLOR } from '../../constants';
 
@@ -17,19 +21,21 @@ const Menu = () => {
     const { title, url } = menuItem;
     return (
       <Link as={NextLink} href={url}>
-        <Flex
-          h={70}
-          p={5}
-          justify="space-around"
-          align="center"
-          direction="row"
-          bg={menuItemColor}
-          _hover={{ bg: menuItemHoverColor }}
-          style={{ transition: 'all 200ms linear' }}
-          borderRadius="xl">
-          {children}
-          <Text fontSize="xl">{title}</Text>
-        </Flex>
+        <a>
+          <Flex
+            h={70}
+            p={5}
+            justify="space-around"
+            align="center"
+            direction="row"
+            bg={menuItemColor}
+            _hover={{ bg: menuItemHoverColor }}
+            style={{ transition: 'all 200ms linear' }}
+            borderRadius="xl">
+            {children}
+            <Text fontSize="xl">{title}</Text>
+          </Flex>
+        </a>
       </Link>
     );
   };
@@ -39,17 +45,26 @@ const Menu = () => {
       templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
       gap={6}
       mx="auto">
-      <MenuItem menuItem={MenuTitle.GAME_1}>
-        <FaGamepad fontSize={MENU_ICON_SIZE} />
-      </MenuItem>
-      <MenuItem menuItem={MenuTitle.GAME_2}>
-        <FaGamepad fontSize={MENU_ICON_SIZE} />
+      <MenuItem menuItem={MenuTitle.TEXT_BOOK}>
+        <BsBook fontSize={MENU_ICON_SIZE} />
       </MenuItem>
       <MenuItem menuItem={MenuTitle.DICTIONARY}>
-        <BiStats fontSize={MENU_ICON_SIZE} />
+        <RiBook3Line fontSize={MENU_ICON_SIZE} />
       </MenuItem>
       <MenuItem menuItem={MenuTitle.STATISTICS}>
-        <FaBook fontSize={MENU_ICON_SIZE} />
+        <BiStats fontSize={MENU_ICON_SIZE} />
+      </MenuItem>
+      <MenuItem menuItem={MenuTitle.GAME_SAVANNA}>
+        <GiPalmTree fontSize={MENU_ICON_SIZE} />
+      </MenuItem>
+      <MenuItem menuItem={MenuTitle.GAME_SPRINT}>
+        <BiRun fontSize={MENU_ICON_SIZE} />
+      </MenuItem>
+      <MenuItem menuItem={MenuTitle.GAME_AUDIO_CALL}>
+        <GiSoundWaves fontSize={MENU_ICON_SIZE} />
+      </MenuItem>
+      <MenuItem menuItem={MenuTitle.GAME_NEW_GAME}>
+        <FaGamepad fontSize={MENU_ICON_SIZE} />
       </MenuItem>
     </Grid>
   );
