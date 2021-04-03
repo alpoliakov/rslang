@@ -25,13 +25,14 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
     playWord();
   };
 
-  // const handleOnChange = (e) => {
-  //   setInputValue(e.target.value);
-  //   console.log(inputValue);
-  // };
+  const handleOnChange = (e) => {
+    setInputValue(e.target.value);
+    console.log(inputValue);
+  };
 
-  const handleAnswer = () => {
-    console.log(inputValue, 'inputValue in handleAnswer');
+  const handleAnswer = (e) => {
+    e.preventDefault();
+    setIsAnswered(true);
 
     if (!checkAnswerNewGame(combination.mainWord, inputValue)) {
       setLives((lives) => [false, ...lives.slice(0, -1)]);
@@ -40,20 +41,23 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
     } else {
       setCounter(counter + 10);
       setColorAnswer('green');
-      if (isMusicOn) {
-        correct();
-      }
+      isMusicOn && correct();
     }
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
   };
 
   const callNextWord = () => {
+    setInputValue('');
     setCombination(getNextWordSavanna(words, learnedWords));
     setIsAnswered(false);
   };
 
-  useHotkeys('enter', handleAnswer, [learnedWords, setLearnedWord, isMusicOn]);
+  useHotkeys('enter', handleAnswer, [learnedWords, setLearnedWord, isMusicOn, isAnswered]);
+
+  isAnswered
+    ? useHotkeys('enter', handleAnswer, [learnedWords, setLearnedWord, isMusicOn, isAnswered])
+    : useHotkeys('enter', callNextWord, [learnedWords, setLearnedWord, isMusicOn, isAnswered]);
 
   useEffect(() => {
     if (!combination.mainWord?.word) {
@@ -103,13 +107,17 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
             {combination.mainWord.word}
           </div>
         )}
-        <form onSubmit={handleAnswer} className="newgame-form">
+        <form
+          onSubmit={(e) => {
+            handleAnswer(e);
+          }}
+          className="newgame-form">
           <Input
             width="240px"
             placeholder="Введи услышанное слово"
             className="newgame-input"
             value={inputValue}
-            onChange={(e) => handleOnChange(e)}
+            onChange={handleOnChange}
           />
           <div className="newgame-button">
             {isAnswered ? (
