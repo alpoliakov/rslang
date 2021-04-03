@@ -8,16 +8,7 @@ import useSound from 'use-sound';
 
 import { LOCAL_HOST } from '../../../constants/index';
 
-const Audiocall = ({
-  counter,
-  setCounter,
-  isMusicOn,
-  words,
-  learnedWords,
-  setLearnedWord,
-  endGame,
-  setEndGame,
-}) => {
+const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLearnedWord }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [isAnswered, setIsAnswered] = useState(false);
@@ -26,6 +17,7 @@ const Audiocall = ({
   const [combination, setCombination] = useState(getNextWordAudiocall(words, learnedWords));
 
   const [playWord] = useSound(wordAudioUrl);
+
   const handleSound = () => {
     playWord();
   };
@@ -56,27 +48,20 @@ const Audiocall = ({
     setIsAnswered(false);
   };
 
-  useEffect(() => {
-    if (!combination.mainWord?.word) {
-      setEndGame(!endGame);
-    }
-  }, [combination]);
-
-  if (!combination.mainWord?.word) {
-    return null;
-  }
-  // useEffect(() => playWord(), [isAnswered]);
+  // useEffect(() => playWord(), [combination]);
 
   useHotkeys(
     '1, 2, 3, 4, 5',
     (_, handler) => {
       handleAnswer(combination.translations[Number(handler.key) - 1]);
     },
-    [learnedWords, setLearnedWord, isMusicOn, combination],
+    [learnedWords, setLearnedWord, isMusicOn, combination, isAnswered],
   );
 
-  useHotkeys('enter', () => handleAnswer(''), [learnedWords]);
-  useHotkeys('enter', callNextWord, [learnedWords]);
+  isAnswered
+    ? useHotkeys('enter', callNextWord, [learnedWords, isAnswered])
+    : useHotkeys('enter', () => handleAnswer(''), [learnedWords, isAnswered]);
+
   useHotkeys('space', () => playWord());
 
   return (
@@ -97,7 +82,6 @@ const Audiocall = ({
                 className="audiocall-button-sound"
                 onMouseDown={() => {
                   setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-                  // setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
                 }}
                 onClick={handleSound}>
                 <Icon
@@ -121,7 +105,6 @@ const Audiocall = ({
             w={32}
             h={32}
             borderRadius="100px"
-            // mr="5"
             variant="outline"
             _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
             className="audiocall-button-sound"

@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
+import { Progress } from '@chakra-ui/react';
 
 export default function AudiocallGamePage() {
   const [quitGame, setQuitGame] = useState(false);
@@ -42,6 +43,12 @@ export default function AudiocallGamePage() {
     setMusic(!isMusicOn);
   };
 
+  useEffect(() => {
+    if (learnedWords.length === 10) {
+      setEndGame(true);
+    }
+  }, [learnedWords]);
+
   return (
     <>
       <Head>
@@ -49,6 +56,12 @@ export default function AudiocallGamePage() {
       </Head>
       {showGame ? (
         <FullScreen handle={fullScreen} className="audiocall-container">
+          <Progress
+            size="sm"
+            value={learnedWords.length * 10}
+            colorScheme="green"
+            className="audiocall-progress"
+          />
           <IconButton
             className="savanna-music"
             variant="ghost"
@@ -65,8 +78,6 @@ export default function AudiocallGamePage() {
               words={words}
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
-              endGame={endGame}
-              setEndGame={setEndGame}
             />
           )}
           <div className="savanna-close-full">
