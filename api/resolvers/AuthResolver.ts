@@ -39,6 +39,8 @@ export class AuthResolver {
     });
     await user.save();
 
+    const words = await WordModel.find({});
+
     const payload = {
       id: user.id,
     };
@@ -63,32 +65,34 @@ export class AuthResolver {
       },
     } as Statistic);
 
-    const words = await WordModel.find({});
-
     await settings.save();
     await statistic.save();
 
-    const createAggregatedWords = async (word: any) => {
-      const aggregatedWord = await new AggregatedWordModel({
-        user: user.id,
-        word: word._id,
-        page: word.page,
-        group: word.group,
-        complexity: false,
-        deleted: false,
-        studied: false,
-        optional: {
-          repeat: 0,
-          rightAnswers: 0,
-        },
-      } as AggregatedWord);
+    function createAggregatedWords(): AggregatedWord[] {
+      const arrWords = [];
 
-      await aggregatedWord.save();
-    };
+      for (const word of words) {
+        arrWords.push({
+          user: user.id,
+          word: word._id,
+          page: word.page,
+          group: word.group,
+          complexity: false,
+          deleted: false,
+          studied: false,
+          optional: {
+            repeat: 0,
+            rightAnswers: 0,
+          },
+        } as AggregatedWord);
+      }
 
-    for (const word of words) {
-      await createAggregatedWords(word);
+      return arrWords;
     }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await AggregatedWordModel.insertMany(createAggregatedWords());
 
     return { user, token };
   }
