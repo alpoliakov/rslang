@@ -54,6 +54,17 @@
   color: white;
   font-size: 30px;
   text-align: center;
+
+  animation: shimmy 5s infinite;
+}
+
+@keyframes shimmy {
+  0% {
+    transform: translateY(-250px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .savanna-translation {
