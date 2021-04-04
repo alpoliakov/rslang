@@ -1,5 +1,5 @@
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
+import { CircularProgress, CircularProgressLabel, useColorModeValue } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import {
   Accordion,
@@ -17,13 +17,26 @@ import { useHotkeys } from 'react-hotkeys-hook';
 
 import { AnswerList } from '../Modals/AnswersList';
 
+import {
+  white,
+  modalEntranceBackground,
+  modalBoxColor,
+} from 'components/MiniGames/helpers/constants';
+
 const ModalEndGame = ({ counter }) => {
   // useHotkeys('esc', () => setTimeOver(!timeOver));
   // useHotkeys('enter', () => setTimeOver(!timeOver));
 
+  const buttonColor = useColorModeValue(white.LIGHT, white.DARK);
+  const backGroudColor = useColorModeValue(
+    modalEntranceBackground.LIGHT,
+    modalEntranceBackground.DARK,
+  );
+  const boxColor = useColorModeValue(modalBoxColor.LIGHT, modalBoxColor.DARK);
+
   return (
-    <div className="modal-container">
-      <div className="modal">
+    <div className="modal-container" style={{ backgroundColor: `${backGroudColor}` }}>
+      <div className="modal" style={{ backgroundColor: `${boxColor}` }}>
         <div className="modalEnd-result">
           {counter > 0 ? 'Поздравляю!' : 'Очень жаль.'} Твой результат <br />
           <CircularProgress isIndeterminate value={100} color="pink" thickness="2px" size="200px">
