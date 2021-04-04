@@ -1,5 +1,9 @@
 import { initializeApollo } from '../../../lib/apollo';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
+import { AggregatedWordDocument } from '../../../lib/graphql/aggregatedWord.graphql';
+import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
+
+// const [editAggregatedWord] = useEditAggregatedWordMutation();
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   console.log('inside fetchCurrentWords', group, group === '', typeof group);
@@ -50,4 +54,42 @@ export const fetchCurrentWordsAudiocall = async (
     setCurrentPage(page + 1);
   } // console.log('const words', words[0].word, words[0].wordTranslate);
   // return words;
+};
+
+export const fetchCurrentWord = async (id) => {
+  console.log('start of the fetchCurrentWord');
+  const apollo = initializeApollo();
+  try {
+    console.log('inside try fetchCurrentWord');
+    const { data } = await apollo.query({
+      query: AggregatedWordDocument,
+      variables: { aggregatedWordId: id },
+    });
+
+    const words = [...data.word];
+    console.log(words, '[...data.word] inside func');
+    console.log(data.aggregatedWord, 'data.aggregatedWord inside func');
+
+    if (data.aggregatedWord._id) {
+      return data.aggregatedWord;
+    }
+  } catch (err) {
+    console.error(err.message, 'error in fetchWord');
+  }
+};
+
+export const editWord = async ({ id, complexity, deleted, repeat, rightAnswers, studied }) => {
+  const [editAggregatedWord] = useEditAggregatedWordMutation();
+
+  try {
+    const { data } = await editAggregatedWord({
+      variables: { input: { id, complexity, deleted, repeat, rightAnswers, studied } },
+    });
+
+    // if (data.editAggregatedWord._id) {
+    //   fetchWords();
+    // }
+  } catch (err) {
+    console.log(err);
+  }
 };

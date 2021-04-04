@@ -1,7 +1,9 @@
 import { checkAnswerSavanna, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
+import { useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useSound from 'use-sound';
+import { fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 
 const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, endGame }) => {
   const [correct] = useSound('/sounds/correct.mp3');
@@ -16,7 +18,20 @@ const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
     return () => clearTimeout(timeOutAnswer);
   }, [learnedWords]);
 
-  const handleAnswer = (answer) => {
+  const handleAnswer = async (answer) => {
+    const word = fetchCurrentWord(answer);
+    // const { optional, complexity, deleted } = word;
+    console.log('optional, complexity, deleted...', word);
+    // const { repeat, rightAnswers } = optional;
+    // console.log('repeat, rightAnswers from fetchCurrent...', repeat, rightAnswers);
+
+    // const args = {
+    //   id: event.target.dataset.word,
+    //   repeat: repeat + 1,
+    //   rightAnswers: rightAnswers + 1,
+    //   studied: true,
+    // };
+
     if (!checkAnswerSavanna(combination.mainWord, answer)) {
       setLives((lives) => [false, ...lives.slice(0, -1)]);
       isMusicOn && incorrect();
