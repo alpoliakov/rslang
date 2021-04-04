@@ -27,7 +27,7 @@ const MenuTitle = {
     url: '/mini-games/audiocall/0/0$menu=true',
   },
   GAME_NEW_GAME: {
-    title: 'Новая игра',
+    title: 'Написание',
     url: '/mini-games/new-game/0/0$menu=true',
   },
 };
