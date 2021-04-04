@@ -1,9 +1,10 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { fetchCurrentWord, editWord } from 'components/MiniGames/helpers/fetchWords';
+import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import { checkAnswerSavanna, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useSound from 'use-sound';
+
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 
 const Savanna = ({

@@ -1,7 +1,7 @@
 import { initializeApollo } from '../../../lib/apollo';
 import { AggregatedWordDocument } from '../../../lib/graphql/aggregatedWord.graphql';
-import { WordsDocument } from '../../../lib/graphql/words.graphql';
 import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.graphql';
+import { WordsDocument } from '../../../lib/graphql/words.graphql';
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   console.log('inside fetchCurrentWords', group, group === '', typeof group);
