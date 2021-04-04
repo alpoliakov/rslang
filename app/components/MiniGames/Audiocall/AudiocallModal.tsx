@@ -1,10 +1,21 @@
-import { Button } from '@chakra-ui/react';
+import { Button, useColorModeValue } from '@chakra-ui/react';
 import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLevelModal';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import {
+  white,
+  modalEntranceBackground,
+  modalBoxColor,
+} from 'components/MiniGames/helpers/constants';
 
 export const ModalAudiocall = ({ setShowGame, showGame, group, setGroup, chooseLevel }) => {
   const [level, setLevel] = useState(group);
+  const buttonColor = useColorModeValue(white.LIGHT, white.DARK);
+  const backGroudColor = useColorModeValue(
+    modalEntranceBackground.LIGHT,
+    modalEntranceBackground.DARK,
+  );
+  const boxColor = useColorModeValue(modalBoxColor.LIGHT, modalBoxColor.DARK);
 
   const handleClick = () => {
     setGroup(level);
@@ -12,10 +23,10 @@ export const ModalAudiocall = ({ setShowGame, showGame, group, setGroup, chooseL
   };
   useHotkeys('enter', handleClick);
   return (
-    <div className="modalEntrance">
+    <div className="modalEntrance" style={{ backgroundColor: `${backGroudColor}` }}>
       <div className="modalEntrance-container">
         <h1>АУДИОВЫЗОВ</h1>
-        <div className="modalEntrance-box">
+        <div className="modalEntrance-box" style={{ backgroundColor: `${boxColor}` }}>
           <div>
             Тренировка Аудиовызов улучшает восприятие речи на слух.
             <br /> Чтобы дать ответ, кликай по нему мышкой или выбирай из клавиш 1, 2, 3, 4, 5
@@ -24,14 +35,14 @@ export const ModalAudiocall = ({ setShowGame, showGame, group, setGroup, chooseL
         </div>
         {chooseLevel ? (
           <Button
-            colorScheme="whiteAlpha"
+            colorScheme={buttonColor}
             variant="outline"
             onClick={handleClick}
             isDisabled={!level}>
             начать
           </Button>
         ) : (
-          <Button colorScheme="whiteAlpha" variant="outline" onClick={handleClick}>
+          <Button colorScheme={buttonColor} variant="outline" onClick={handleClick}>
             начать
           </Button>
         )}
