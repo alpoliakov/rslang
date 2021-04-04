@@ -1,13 +1,12 @@
 import { Button, useColorModeValue } from '@chakra-ui/react';
 import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLevelModal';
+import {
+  modalBoxColor,
+  modalEntranceBackground,
+  white,
+} from 'components/MiniGames/helpers/constants';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-
-import {
-  white,
-  modalEntranceBackground,
-  modalBoxColor,
-} from 'components/MiniGames/helpers/constants';
 
 export const ModalSavanna = ({ setShowGame, showGame, group, setGroup, chooseLevel }) => {
   const [level, setLevel] = useState(group);

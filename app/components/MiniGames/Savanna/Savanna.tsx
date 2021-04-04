@@ -1,9 +1,9 @@
-import { checkAnswerSavanna, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import { useColorModeValue } from '@chakra-ui/react';
+import { fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
+import { checkAnswerSavanna, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useSound from 'use-sound';
-import { fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 
 const Savanna = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, endGame }) => {
   const [correct] = useSound('/sounds/correct.mp3');

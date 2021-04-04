@@ -1,5 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -12,7 +13,6 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { useColorModeValue } from '@chakra-ui/react';
 
 export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);

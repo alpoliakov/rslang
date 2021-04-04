@@ -1,12 +1,12 @@
 import { Button, ButtonGroup, useColorModeValue } from '@chakra-ui/react';
+import {
+  modalBoxColor,
+  modalEntranceBackground,
+  white,
+} from 'components/MiniGames/helpers/constants';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import {
-  white,
-  modalEntranceBackground,
-  modalBoxColor,
-} from 'components/MiniGames/helpers/constants';
 
 const ModalQuit = ({ quitGame, setQuitGame }) => {
   const buttonColor = useColorModeValue(white.LIGHT, white.DARK);

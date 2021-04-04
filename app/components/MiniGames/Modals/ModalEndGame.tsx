@@ -11,17 +11,16 @@ import {
 } from '@chakra-ui/react';
 import { List, ListIcon, ListItem } from '@chakra-ui/react';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+  modalBoxColor,
+  modalEntranceBackground,
+  white,
+} from 'components/MiniGames/helpers/constants';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { AnswerList } from '../Modals/AnswersList';
-
-import {
-  white,
-  modalEntranceBackground,
-  modalBoxColor,
-} from 'components/MiniGames/helpers/constants';
 
 const ModalEndGame = ({ counter }) => {
   // useHotkeys('esc', () => setTimeOver(!timeOver));

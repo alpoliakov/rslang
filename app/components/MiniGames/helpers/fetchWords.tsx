@@ -1,7 +1,7 @@
 import { initializeApollo } from '../../../lib/apollo';
-import { WordsDocument } from '../../../lib/graphql/words.graphql';
 import { AggregatedWordDocument } from '../../../lib/graphql/aggregatedWord.graphql';
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
+import { WordsDocument } from '../../../lib/graphql/words.graphql';
 
 // const [editAggregatedWord] = useEditAggregatedWordMutation();
 
