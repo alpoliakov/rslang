@@ -16,19 +16,19 @@ const MenuTitle = {
   },
   GAME_SAVANNA: {
     title: 'Саванна',
-    url: '/mini-games/savanna',
+    url: '/mini-games/savanna/0/0$menu=true',
   },
   GAME_SPRINT: {
     title: 'Спринт',
-    url: '/mini-games/sprint',
+    url: '/mini-games/sprint/0/0$menu=true',
   },
   GAME_AUDIO_CALL: {
     title: 'Аудиовызов',
-    url: '/mini-games/audiocall',
+    url: '/mini-games/audiocall/0/0$menu=true',
   },
   GAME_NEW_GAME: {
     title: 'Новая игра',
-    url: '/mini-games/new-game',
+    url: '/mini-games/new-game/0/0$menu=true',
   },
 };
 

@@ -26,10 +26,15 @@ export default function SavannaGamePage({ group, page }) {
   const [currentPage, setCurrentPage] = useState(page);
 
   const { query } = useRouter();
-  const router = useRouter();
-  const chooseLevel = query.textbook;
+  const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(() => console.log('query inside group/page', router), []);
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
+
+  useEffect(() => console.log(chooseLevel, 'query.page inside group/page:', query.page), []);
 
   useEffect(() => {
     fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
@@ -135,8 +140,6 @@ export default function SavannaGamePage({ group, page }) {
 SavannaGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(window.location.pathname);
 
   return {
     group,

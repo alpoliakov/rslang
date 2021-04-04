@@ -26,7 +26,13 @@ export default function AudiocallGamePage({ group, page }) {
   const [currentGroup, setGroup] = useState(group);
 
   const { query } = useRouter();
-  const chooseLevel = query.textbook;
+  const chooseLevel = query.page === '0$menu=true';
+
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
 
   useEffect(() => {
     fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords, setCurrentPage);
