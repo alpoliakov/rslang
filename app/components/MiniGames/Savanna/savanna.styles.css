@@ -55,7 +55,7 @@
   font-size: 30px;
   text-align: center;
 
-  animation: shimmy 5s infinite;
+  animation: shimmy 5s;
 }
 
 @keyframes shimmy {
