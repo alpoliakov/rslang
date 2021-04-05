@@ -213,11 +213,20 @@ export default function Header() {
               </MenuButton>
               <MenuList>
                 {Object.values(MenuTitle).map(({ title, url }) => {
-                  return (
-                    <Link href={url} key={title} as={NextLink}>
-                      <MenuItem>{title}</MenuItem>
-                    </Link>
-                  );
+                  if (user) {
+                    return (
+                      <Link href={url} key={title} as={NextLink}>
+                        <MenuItem>{title}</MenuItem>
+                      </Link>
+                    );
+                  }
+                  if (!user && title !== 'Словарь') {
+                    return (
+                      <Link href={url} key={title} as={NextLink}>
+                        <MenuItem>{title}</MenuItem>
+                      </Link>
+                    );
+                  }
                 })}
               </MenuList>
             </Menu>

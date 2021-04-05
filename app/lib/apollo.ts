@@ -1,6 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { useMemo } from 'react';
+import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist';
+import { useCallback, useMemo } from 'react';
 
 import { cache } from '../context/statistic/cache';
 

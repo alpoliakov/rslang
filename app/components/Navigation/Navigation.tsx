@@ -23,7 +23,20 @@ export default function Navigation({ group, page }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [mainTextbook, setMainTextBook] = useState(null);
+  const [chapter, setChapter] = useState(null);
   const { pathname } = router;
+
+  const setCurrentChapter = () => {
+    if (pathname.match('complex')) {
+      return 1;
+    }
+
+    if (pathname.match('deleted')) {
+      return 2;
+    }
+
+    return 0;
+  };
 
   useEffect(() => {
     if (pathname.match('textbook')) {
@@ -31,6 +44,7 @@ export default function Navigation({ group, page }) {
     }
 
     setMainTextBook(false);
+    console.log(pathname);
   }, [pathname]);
 
   return (
@@ -69,7 +83,7 @@ export default function Navigation({ group, page }) {
           </Tabs>
         )}
         {!mainTextbook && (
-          <Tabs defaultIndex={0} borderBottomColor="transparent">
+          <Tabs defaultIndex={setCurrentChapter()} borderBottomColor="transparent">
             <TabList>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/studied/0'}>

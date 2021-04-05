@@ -2,20 +2,23 @@ import { Flex, Grid, Link, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import { BiStats, BiRun } from 'react-icons/bi';
-import { GiPalmTree } from 'react-icons/gi';
-import { FaGamepad } from 'react-icons/fa';
+import { BiRun, BiStats } from 'react-icons/bi';
 import { BsBook } from 'react-icons/bs';
+import { FaGamepad } from 'react-icons/fa';
+import { GiPalmTree } from 'react-icons/gi';
 import { GiSoundWaves } from 'react-icons/gi';
 import { RiBook3Line } from 'react-icons/ri';
 
 import { ACTIVE_BUTTON_COLOR, MenuTitle, PASSIVE_BUTTON_COLOR } from '../../constants';
+import { useAuth } from '../../lib/useAuth';
 
 const MENU_ICON_SIZE = 30;
 
 const Menu = () => {
   const menuItemColor = useColorModeValue(PASSIVE_BUTTON_COLOR.LIGHT, PASSIVE_BUTTON_COLOR.DARK);
   const menuItemHoverColor = useColorModeValue(ACTIVE_BUTTON_COLOR.LIGHT, ACTIVE_BUTTON_COLOR.DARK);
+
+  const { user } = useAuth();
 
   const MenuItem = ({ menuItem, children }) => {
     const { title, url } = menuItem;
@@ -25,15 +28,18 @@ const Menu = () => {
           <Flex
             h={70}
             p={5}
-            justify="space-around"
+            justify="center"
             align="center"
+            gap="20px"
             direction="row"
             bg={menuItemColor}
             _hover={{ bg: menuItemHoverColor }}
             style={{ transition: 'all 200ms linear' }}
             borderRadius="xl">
             {children}
-            <Text fontSize="xl">{title}</Text>
+            <Text ml={5} fontSize="xl">
+              {title}
+            </Text>
           </Flex>
         </a>
       </Link>
@@ -48,9 +54,11 @@ const Menu = () => {
       <MenuItem menuItem={MenuTitle.TEXT_BOOK}>
         <BsBook fontSize={MENU_ICON_SIZE} />
       </MenuItem>
-      <MenuItem menuItem={MenuTitle.DICTIONARY}>
-        <RiBook3Line fontSize={MENU_ICON_SIZE} />
-      </MenuItem>
+      {user && (
+        <MenuItem menuItem={MenuTitle.DICTIONARY}>
+          <RiBook3Line fontSize={MENU_ICON_SIZE} />
+        </MenuItem>
+      )}
       <MenuItem menuItem={MenuTitle.STATISTICS}>
         <BiStats fontSize={MENU_ICON_SIZE} />
       </MenuItem>
