@@ -4,7 +4,7 @@ const REG_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(
 const MenuTitle = {
   DICTIONARY: {
     title: 'Словарь',
-    url: '/vocabulary/studied/1',
+    url: '/vocabulary/studied/0',
   },
   TEXT_BOOK: {
     title: 'Учебник',
@@ -51,6 +51,17 @@ const PASSIVE_BUTTON_COLOR = {
 
 const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
 
+const VOCABULARY_GROUP_NAV_LINKS = [
+  { link: '/vocabulary/', title: 'Group 1' },
+  { link: '/vocabulary/', title: 'Group 2' },
+  { link: '/vocabulary/', title: 'Group 3' },
+  { link: '/vocabulary/', title: 'Group 4' },
+  { link: '/vocabulary/', title: 'Group 5' },
+  { link: '/vocabulary/', title: 'Group 6' },
+];
+
+const WORDS_IN_PAGE = 20;
+
 export {
   ACCORDION_TITLES,
   ACTIVE_BUTTON_COLOR,
@@ -59,4 +70,6 @@ export {
   MenuTitle,
   PASSIVE_BUTTON_COLOR,
   REG_EMAIL,
+  VOCABULARY_GROUP_NAV_LINKS,
+  WORDS_IN_PAGE,
 };

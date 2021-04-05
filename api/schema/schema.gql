@@ -89,7 +89,9 @@ type OptionalUserWord {
 type Query {
   aggregatedWord(aggregatedWordId: ObjectId!): AggregatedWord
   aggregatedWords(input: AggregatedWordInput!): [AggregatedWord!]
-  aggregatedWordsSearch(input: AggregatedWordInput!): [AggregatedWord!]
+  aggregatedWordsComplexity(input: AggregatedWordInput!): [AggregatedWord!]
+  aggregatedWordsDeleted(input: AggregatedWordInput!): [AggregatedWord!]
+  aggregatedWordsStudied(input: AggregatedWordInput!): [AggregatedWord!]
   allAggregatedWords: [AggregatedWord!]
   allUserWords: [UserWord!]
   allWords: [Word!]
