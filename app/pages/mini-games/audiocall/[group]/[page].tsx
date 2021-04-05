@@ -1,20 +1,42 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
+import { Progress } from '@chakra-ui/react';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
+import { fetchCurrentWordsAudiocall } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-export default function AudiocallGamePage() {
+export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
   const [isMusicOn, setMusic] = useState(true);
   const [showGame, setShowGame] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [words, setWords] = useState([]);
+  const [endGame, setEndGame] = useState(false);
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [currentGroup, setGroup] = useState(group);
+
+  const { query } = useRouter();
+  const chooseLevel = query.page === '0$menu=true';
+
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords, setCurrentPage);
+  }, [currentGroup, showGame]);
 
   const fullScreen = useFullScreenHandle();
 
@@ -27,6 +49,12 @@ export default function AudiocallGamePage() {
     setMusic(!isMusicOn);
   };
 
+  useEffect(() => {
+    if (learnedWords.length === 10) {
+      setEndGame(true);
+    }
+  }, [learnedWords]);
+
   return (
     <>
       <Head>
@@ -34,6 +62,12 @@ export default function AudiocallGamePage() {
       </Head>
       {showGame ? (
         <FullScreen handle={fullScreen} className="audiocall-container">
+          <Progress
+            size="sm"
+            value={learnedWords.length * 10}
+            colorScheme="green"
+            className="audiocall-progress"
+          />
           <IconButton
             className="savanna-music"
             variant="ghost"
@@ -42,7 +76,16 @@ export default function AudiocallGamePage() {
             onClick={onSwitchMusic}
             icon={<RiMusic2Fill />}
           />
-          <Audiocall counter={counter} setCounter={setCounter} isMusicOn={isMusicOn} />
+          {!loading && (
+            <Audiocall
+              counter={counter}
+              setCounter={setCounter}
+              isMusicOn={isMusicOn}
+              words={words}
+              learnedWords={learnedWords}
+              setLearnedWord={setLearnedWord}
+            />
+          )}
           <div className="savanna-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -71,10 +114,33 @@ export default function AudiocallGamePage() {
           </div>
         </FullScreen>
       ) : (
-        <ModalAudiocall setShowGame={setShowGame} showGame={showGame} />
+        <ModalAudiocall
+          setShowGame={setShowGame}
+          showGame={showGame}
+          chooseLevel={chooseLevel}
+          group={group}
+          setGroup={setGroup}
+        />
       )}
       {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {/* {timeOver && <ModalEndGame timeOver={timeOver} setTimeOver={setTimeOver} counter={counter} />} */}
+      {endGame && (
+        <ModalEndGame
+          // timeOver={timeOver} setTimeOver={setTimeOver}
+          counter={counter}
+        />
+      )}
     </>
   );
 }
+
+AudiocallGamePage.getInitialProps = async ({ query }) => {
+  const group = +query.group;
+  const page = +query.page || 0;
+
+  console.log(group);
+
+  return {
+    group,
+    page,
+  };
+};

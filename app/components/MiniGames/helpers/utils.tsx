@@ -1,6 +1,6 @@
 import { dino, dinoEgg, dragon } from './constants';
 
-// ------- SAVANNA -------
+// ------- SPRINT -------
 export const changePicture = (num, setPic) => {
   if (num > 4 && num < 9) {
     setPic(dinoEgg);
@@ -23,10 +23,63 @@ export const extraPoints = (pic) => {
   return points;
 };
 
-// ------- HEARTS -------
+export const getNextWordSprint = (arr, learnedWords) => {
+  const [mainWord] = arr
+    .filter((word) => !learnedWords.includes(word))
+    .sort(() => Math.random() - 0.5);
+  const translation = arr
+    .filter(({ word }) => word !== mainWord?.word)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 1)
+    .concat([mainWord])
+    .sort(() => Math.random() - 0.5)[0];
 
-export const brokeHearts = (arr, el) => {
-  let position = 0;
-  arr.splice(position, 1, el);
-  position++;
+  return { mainWord, translation };
+};
+
+export const checkAnswerSprint = (answer, mainWord, translation) => {
+  return answer === (mainWord.word === translation.word);
+};
+
+// ------- SAVANNA -------
+
+// export const mixVariants = (arr) => arr.sort(() => Math.random() - 0.5);
+
+export const getNextWordSavanna = (arr, learnedWords) => {
+  const [mainWord] = arr
+    .filter((word) => !learnedWords.includes(word))
+    .sort(() => Math.random() - 0.5);
+  const translations = arr
+    .filter(({ word }) => word !== mainWord?.word)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3)
+    .concat([mainWord])
+    .sort(() => Math.random() - 0.5);
+
+  return { mainWord, translations };
+};
+
+export const checkAnswerSavanna = (wordToCheck, answer) => {
+  return wordToCheck.word === answer.word;
+};
+
+// ------- NEWGAME -------
+export const checkAnswerNewGame = (wordToCheck, answer) => {
+  return wordToCheck.word === answer.toLowerCase().trim();
+};
+
+// ------- AUDIOCALL -------
+
+export const getNextWordAudiocall = (arr, learnedWords) => {
+  const [mainWord] = arr
+    .filter((word) => !learnedWords.includes(word))
+    .sort(() => Math.random() - 0.5);
+  const translations = arr
+    .filter(({ word }) => word !== mainWord?.word)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4)
+    .concat([mainWord])
+    .sort(() => Math.random() - 0.5);
+
+  return { mainWord, translations };
 };

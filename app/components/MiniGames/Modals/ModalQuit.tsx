@@ -1,9 +1,21 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Button, ButtonGroup, useColorModeValue } from '@chakra-ui/react';
+import {
+  modalBoxColor,
+  modalEntranceBackground,
+  white,
+} from 'components/MiniGames/helpers/constants';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 const ModalQuit = ({ quitGame, setQuitGame }) => {
+  const buttonColor = useColorModeValue(white.LIGHT, white.DARK);
+  const backGroudColor = useColorModeValue(
+    modalEntranceBackground.LIGHT,
+    modalEntranceBackground.DARK,
+  );
+  const boxColor = useColorModeValue(modalBoxColor.LIGHT, modalBoxColor.DARK);
+
   const [showMod, setModal] = useState(true);
   useHotkeys('esc', () => setModal(false));
   useHotkeys('enter', () => setModal(false));
@@ -16,9 +28,9 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
   return (
     <>
       {showMod && (
-        <div className="modal-container">
+        <div className="modal-container" style={{ backgroundColor: `${backGroudColor}` }}>
           <div className="modal">
-            <div className="modal-box">
+            <div className="modal-box" style={{ backgroundColor: `${boxColor}` }}>
               <div className="modal-ask">Хотите выйти из игры?</div>
               <div className="content">Прогресс будет утерян</div>
               <div className="actions">

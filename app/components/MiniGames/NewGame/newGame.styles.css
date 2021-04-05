@@ -49,8 +49,13 @@
   height: 100%;
   border-radius: 10px;
   display: grid;
-  grid-template-rows: 55% 20% 25%;
+  grid-template-rows: 55% 45%;
   min-height: 300px;
+}
+
+.newgame-form {
+  grid-row-start: 2;
+  margin: auto;
 }
 
 .newgame-sound-box {
@@ -61,20 +66,24 @@
   height: 100%;
 }
 
+.newgame-answer {
+  grid-row-start: 1;
+  margin: auto;
+  color: white;
+  font-size: 30px;
+}
+
 .newgame-sound {
   color: white;
 }
 
 .newgame-input {
-  grid-row-start: 2;
-  margin: auto;
   color: white;
   width: 50px;
 }
 
 .newgame-button {
+  margin: 20px;
   display: flex;
   justify-content: center;
-  grid-row-start: 3;
-  margin: auto;
 }

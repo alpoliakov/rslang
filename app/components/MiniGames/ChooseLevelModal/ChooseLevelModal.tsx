@@ -3,16 +3,15 @@ import React from 'react';
 
 const ChooseLevelModal = ({ level, setLevel }) => {
   const handleChange = (e) => setLevel(e.target.value);
-  console.log(level);
   return (
     <div className="chooseModal-select">
       <Select value={level} placeholder="Выбери уровень сложности" onChange={handleChange}>
-        <option value="option1">1 уровень</option>
-        <option value="option2">2 уровень</option>
-        <option value="option3">3 уровень</option>
-        <option value="option1">4 уровень</option>
-        <option value="option2">5 уровень</option>
-        <option value="option3">6 уровень</option>
+        <option value="0">1 уровень</option>
+        <option value="1">2 уровень</option>
+        <option value="2">3 уровень</option>
+        <option value="3">4 уровень</option>
+        <option value="4">5 уровень</option>
+        <option value="5">6 уровень</option>
       </Select>
     </div>
   );

@@ -2,10 +2,10 @@ import { Flex, Grid, Link, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import { BiStats, BiRun } from 'react-icons/bi';
-import { GiPalmTree } from 'react-icons/gi';
-import { FaGamepad } from 'react-icons/fa';
+import { BiRun, BiStats } from 'react-icons/bi';
 import { BsBook } from 'react-icons/bs';
+import { FaGamepad } from 'react-icons/fa';
+import { GiPalmTree } from 'react-icons/gi';
 import { GiSoundWaves } from 'react-icons/gi';
 import { RiBook3Line } from 'react-icons/ri';
 

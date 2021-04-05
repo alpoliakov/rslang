@@ -104,13 +104,13 @@ export default function Navigation({ group, page }) {
                 <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
               </Tab>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/mini-games/sprint'}>Спринт</NextLink>
+                <NextLink href={`/mini-games/sprint/${group}/${page}`}>Спринт</NextLink>
               </Tab>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/mini-games/audiocall'}>Аудиовызов</NextLink>
+                <NextLink href={`/mini-games/audiocall/${group}/${page}`}>Аудиовызов</NextLink>
               </Tab>
               <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/mini-games/new-game'}>Игра</NextLink>
+                <NextLink href={`/mini-games/new-game/${group}/${page}`}>Написание</NextLink>
               </Tab>
             </TabList>
           </Tabs>

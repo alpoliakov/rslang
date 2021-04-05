@@ -1,37 +1,53 @@
 import { ArrowBackIcon, ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
 import { egg } from 'components/MiniGames/helpers/constants';
-import { changePicture, extraPoints } from 'components/MiniGames/helpers/utils';
+import {
+  changePicture,
+  checkAnswerSprint,
+  extraPoints,
+  getNextWordSprint,
+} from 'components/MiniGames/helpers/utils';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
 
-const Sprint = ({ counter, setCounter }) => {
+const Sprint = ({ counter, setCounter, words }) => {
   const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
+  const [learnedWords, setLearnedWord] = useState([]);
   const [pic, setPic] = useState(egg);
+  const [combination, setCombination] = useState(getNextWordSprint(words, learnedWords));
 
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
 
-  const handleAnswer = () => {
-    const currentAnswers = [...correctAnswersArr, true];
+  const handleAnswer = (answer) => {
+    const userAnswer = checkAnswerSprint(answer, combination.mainWord, combination.translation);
+
+    if (!userAnswer) {
+      isMusicOn && incorrect();
+    } else {
+      setCounter(counter + extraPoints(pic));
+      isMusicOn && correct();
+    }
+    const currentAnswers = [...correctAnswersArr, userAnswer];
     const correctInRow =
       currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
 
-    setCounter(counter + extraPoints(pic));
     setCorrectAnswersArr(currentAnswers);
     changePicture(correctInRow, setPic);
     console.log(correctInRow);
 
-    if (isMusicOn) {
-      correct();
-    }
+    const seenWords = [...learnedWords, combination.mainWord];
+    setLearnedWord(seenWords);
+    setCombination(getNextWordSprint(words, seenWords));
   };
-  useHotkeys('left, right', handleAnswer, [counter, correctAnswersArr]);
+
+  useHotkeys('left', () => handleAnswer(false), [counter, correctAnswersArr]);
+  useHotkeys('right', () => handleAnswer(true), [counter, correctAnswersArr]);
 
   const onSwitchSound = () => {
     setSound(!isSoundOn);
@@ -78,14 +94,17 @@ const Sprint = ({ counter, setCounter }) => {
           <div className="sprint-pics">
             <img src={pic} alt="dino-baby" />
           </div>
-          <div className="sprint-english">daily</div>
-          <div className="sprint-translation">высокомерный</div>
+          <div className="sprint-english">{combination.mainWord.word}</div>
+          <div className="sprint-translation">{combination.translation.wordTranslate}</div>
           <div className="sprint-buttons">
             <ButtonGroup size="lg" spacing="12">
-              <Button colorScheme="red" onClick={handleAnswer}>
+              <Button colorScheme="red" onClick={() => handleAnswer(false)}>
                 Неверно
               </Button>
-              <Button colorScheme="green" className="green-button" onClick={handleAnswer}>
+              <Button
+                colorScheme="green"
+                className="green-button"
+                onClick={() => handleAnswer(true)}>
                 Верно
               </Button>
             </ButtonGroup>
