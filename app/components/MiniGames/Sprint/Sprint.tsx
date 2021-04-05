@@ -1,6 +1,7 @@
 import { ArrowBackIcon, ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
 import { egg } from 'components/MiniGames/helpers/constants';
+import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import {
   changePicture,
   checkAnswerSprint,
@@ -12,7 +13,6 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
-import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 

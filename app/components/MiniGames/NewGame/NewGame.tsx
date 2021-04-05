@@ -1,7 +1,7 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
-import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import { Input } from '@chakra-ui/react';
+import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import { checkAnswerNewGame, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
