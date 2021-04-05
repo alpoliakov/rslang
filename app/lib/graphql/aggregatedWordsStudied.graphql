@@ -1,5 +1,5 @@
-query AggregatedWordsSearch($input: AggregatedWordInput!) {
-  aggregatedWordsSearch(input: $input) {
+query AggregatedWordsStudied($input: AggregatedWordInput!) {
+  aggregatedWordsStudied(input: $input) {
     _id
     complexity
     deleted

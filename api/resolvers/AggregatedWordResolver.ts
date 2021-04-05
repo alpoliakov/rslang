@@ -80,18 +80,60 @@ export class AggregatedWordResolver {
 
   @Query(() => [AggregatedWord], { nullable: true })
   @UseMiddleware(isAuth)
-  async aggregatedWordsSearch(
+  async aggregatedWordsComplexity(
     @Arg('input') aggregatedWordInput: AggregatedWordInput,
     @Ctx() ctx: MyContext,
   ) {
-    const { group, complexity, studied, deleted } = aggregatedWordInput;
+    const { group } = aggregatedWordInput;
     const result = await AggregatedWordModel.find({
       user: ctx.res.locals.userId,
       group,
-      deleted,
-      complexity,
-      studied,
+      complexity: true,
     });
+
+    if (!result) {
+      throw new Error('Words not found');
+    }
+
+    return result;
+  }
+
+  @Query(() => [AggregatedWord], { nullable: true })
+  @UseMiddleware(isAuth)
+  async aggregatedWordsStudied(
+    @Arg('input') aggregatedWordInput: AggregatedWordInput,
+    @Ctx() ctx: MyContext,
+  ) {
+    const { group } = aggregatedWordInput;
+    const result = await AggregatedWordModel.find({
+      user: ctx.res.locals.userId,
+      group,
+      studied: true,
+    });
+
+    if (!result) {
+      throw new Error('Words not found');
+    }
+
+    return result;
+  }
+
+  @Query(() => [AggregatedWord], { nullable: true })
+  @UseMiddleware(isAuth)
+  async aggregatedWordsDeleted(
+    @Arg('input') aggregatedWordInput: AggregatedWordInput,
+    @Ctx() ctx: MyContext,
+  ) {
+    const { group } = aggregatedWordInput;
+    const result = await AggregatedWordModel.find({
+      user: ctx.res.locals.userId,
+      group,
+      deleted: true,
+    });
+
+    if (!result) {
+      throw new Error('Words not found');
+    }
 
     return result;
   }
@@ -132,7 +174,7 @@ export class AggregatedWordResolver {
     const { id, complexity, deleted, studied, rightAnswers, repeat } = aggregatedWordInput;
     const optional = { rightAnswers, repeat } as OptionalAggregatedWord;
 
-    const aggregatedWord = AggregatedWordModel.findOneAndUpdate(
+    const aggregatedWord = await AggregatedWordModel.findOneAndUpdate(
       { _id: id, user: ctx.res.locals.userId },
       {
         deleted,
