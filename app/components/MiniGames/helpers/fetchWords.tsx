@@ -79,6 +79,8 @@ export const editWord = async (
       variables: { input: { id, complexity, deleted, repeat, rightAnswers, studied } },
     });
 
+    console.log(data, 'data in editword');
+
     // if (data.editAggregatedWord._id) {
     //   fetchWords();
     // }
@@ -101,6 +103,25 @@ export const userFetch = async (group, page, setLoading, setWords) => {
   const words = [...data.aggregatedWords];
 
   await setWords([...data.aggregatedWords]);
+
+  if (words) {
+    setLoading(false);
+  }
+};
+
+export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
+  setLoading(true);
+  const apollo = initializeApollo();
+
+  const { data } = await apollo.query({
+    query: AggregatedWordsDocument,
+    variables: {
+      input: { group, page },
+    },
+  });
+
+  const words = [...data.aggregatedWords];
+  await setWords(words.splice(9, 10));
 
   if (words) {
     setLoading(false);
