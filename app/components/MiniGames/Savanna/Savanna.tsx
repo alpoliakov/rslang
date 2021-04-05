@@ -38,7 +38,7 @@ const Savanna = ({
         const { optional, complexity, deleted } = word;
         const { repeat, rightAnswers, wrongAnswers } = optional;
         const args = {
-          id: answer._id,
+          id: combination.mainWord._id,
           repeat: repeat + 1,
           rightAnswers: rightAnswers,
           wrongAnswers: wrongAnswers + 1,
@@ -56,7 +56,7 @@ const Savanna = ({
         const { repeat, rightAnswers, wrongAnswers } = optional;
 
         const args = {
-          id: answer._id,
+          id: combination.mainWord._id,
           repeat: repeat + 1,
           rightAnswers: rightAnswers + 1,
           wrongAnswers: wrongAnswers,
