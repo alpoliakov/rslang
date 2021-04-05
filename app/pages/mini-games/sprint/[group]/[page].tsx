@@ -1,6 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
+import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
@@ -12,6 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
+import { useAuth } from '../../../../lib/useAuth';
+
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
@@ -21,6 +23,7 @@ export default function SprintGamePage({ group, page }) {
   const [words, setWords] = useState([]);
   const [currentPage, setCurrentPage] = useState(page);
   const [currentGroup, setGroup] = useState(group);
+  const { user } = useAuth();
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -31,9 +34,19 @@ export default function SprintGamePage({ group, page }) {
     }
   }, []);
 
+  const fetchWords = async () => {
+    if (user) {
+      userFetch(currentGroup, currentPage, setLoading, setWords);
+    }
+
+    if (!user) {
+      fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+    }
+    // setCurrentPage(page);
+  };
   useEffect(() => {
-    fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
-  }, [currentGroup, showGame]);
+    fetchWords();
+  }, [currentGroup, showGame, currentPage]);
 
   const fullScreen = useFullScreenHandle();
 
@@ -50,7 +63,15 @@ export default function SprintGamePage({ group, page }) {
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
           <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
-          {!loading && <Sprint counter={counter} setCounter={setCounter} words={words} />}
+          {!loading && (
+            <Sprint
+              counter={counter}
+              setCounter={setCounter}
+              words={words}
+              user={user}
+              fetchWords={fetchWords}
+            />
+          )}
           <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"

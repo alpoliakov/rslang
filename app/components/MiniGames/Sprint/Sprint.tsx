@@ -12,8 +12,11 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
+import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 
-const Sprint = ({ counter, setCounter, words }) => {
+import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
+
+const Sprint = ({ counter, setCounter, words, user, fetchWords }) => {
   const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
@@ -21,15 +24,46 @@ const Sprint = ({ counter, setCounter, words }) => {
   const [pic, setPic] = useState(egg);
   const [combination, setCombination] = useState(getNextWordSprint(words, learnedWords));
 
+  const [editAggregatedWord] = useEditAggregatedWordMutation();
+
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
 
-  const handleAnswer = (answer) => {
+  const handleAnswer = async (answer) => {
     const userAnswer = checkAnswerSprint(answer, combination.mainWord, combination.translation);
 
     if (!userAnswer) {
+      if (user) {
+        const word = await fetchCurrentWord(combination.mainWord._id);
+        const { optional, complexity, deleted } = word;
+        const { repeat, rightAnswers, wrongAnswers } = optional;
+        const args = {
+          id: combination.mainWord._id,
+          repeat: repeat + 1,
+          rightAnswers: rightAnswers,
+          wrongAnswers: wrongAnswers + 1,
+          studied: true,
+        };
+        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+      }
+
       isMusicOn && incorrect();
     } else {
+      if (user) {
+        const word = await fetchCurrentWord(combination.mainWord._id);
+        const { optional, complexity, deleted } = word;
+        const { repeat, rightAnswers, wrongAnswers } = optional;
+
+        const args = {
+          id: combination.mainWord._id,
+          repeat: repeat + 1,
+          rightAnswers: rightAnswers + 1,
+          wrongAnswers: wrongAnswers,
+          studied: true,
+        };
+        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+      }
+
       setCounter(counter + extraPoints(pic));
       isMusicOn && correct();
     }
@@ -39,11 +73,12 @@ const Sprint = ({ counter, setCounter, words }) => {
 
     setCorrectAnswersArr(currentAnswers);
     changePicture(correctInRow, setPic);
-    console.log(correctInRow);
+    console.log(correctInRow, 'correctInRow');
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
     setCombination(getNextWordSprint(words, seenWords));
+    console.log(learnedWords, 'learnedWords');
   };
 
   useHotkeys('left', () => handleAnswer(false), [counter, correctAnswersArr]);
@@ -94,8 +129,14 @@ const Sprint = ({ counter, setCounter, words }) => {
           <div className="sprint-pics">
             <img src={pic} alt="dino-baby" />
           </div>
-          <div className="sprint-english">{combination.mainWord.word}</div>
-          <div className="sprint-translation">{combination.translation.wordTranslate}</div>
+          <div className="sprint-english">
+            {user ? combination.mainWord.word.word : combination.mainWord.word}
+          </div>
+          <div className="sprint-translation">
+            {user
+              ? combination.translation.word.wordTranslate
+              : combination.translation.wordTranslate}
+          </div>
           <div className="sprint-buttons">
             <ButtonGroup size="lg" spacing="12">
               <Button colorScheme="red" onClick={() => handleAnswer(false)}>
