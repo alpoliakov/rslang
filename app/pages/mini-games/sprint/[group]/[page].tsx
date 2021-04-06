@@ -46,6 +46,7 @@ export default function SprintGamePage({ group, page }) {
     // setCurrentPage(page);
   };
   useEffect(() => {
+    console.log('call fetchWords with group/page', currentGroup, currentPage);
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
 
@@ -72,6 +73,11 @@ export default function SprintGamePage({ group, page }) {
               words={words}
               user={user}
               fetchWords={fetchWords}
+              timeOver={timeOver}
+              setTimeOver={setTimeOver}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              chooseLevel={chooseLevel}
             />
           )}
           <div className="sprint-close-full">

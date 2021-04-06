@@ -8,7 +8,7 @@ import {
   extraPoints,
   getNextWordSprint,
 } from 'components/MiniGames/helpers/utils';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
@@ -16,7 +16,18 @@ import useSound from 'use-sound';
 
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 
-const Sprint = ({ counter, setCounter, words, user, fetchWords }) => {
+const Sprint = ({
+  counter,
+  setCounter,
+  words,
+  user,
+  fetchWords,
+  timeOver,
+  setTimeOver,
+  setCurrentPage,
+  currentPage,
+  chooseLevel,
+}) => {
   const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
@@ -47,6 +58,7 @@ const Sprint = ({ counter, setCounter, words, user, fetchWords }) => {
         await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
       }
 
+      setCorrectAnswersArr([]);
       isMusicOn && incorrect();
     } else {
       if (user) {
@@ -64,22 +76,26 @@ const Sprint = ({ counter, setCounter, words, user, fetchWords }) => {
         editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
       }
 
+      setCorrectAnswersArr([...correctAnswersArr, userAnswer]);
       setCounter(counter + extraPoints(pic));
       isMusicOn && correct();
     }
-    const currentAnswers = [...correctAnswersArr, userAnswer];
-    const correctInRow =
-      currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
+    // const currentAnswers = [...correctAnswersArr, userAnswer];
+    // const correctInRow =
+    //   currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
 
-    setCorrectAnswersArr(currentAnswers);
-    changePicture(correctInRow, setPic);
-    console.log(correctInRow, 'correctInRow');
+    // setCorrectAnswersArr(currentAnswers);
+
+    // changePicture(correctAnswersArr.length, setPic);
+    console.log(correctAnswersArr, 'correctInRow');
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
     setCombination(getNextWordSprint(words, seenWords));
     console.log(learnedWords, 'learnedWords');
   };
+
+  useEffect(() => changePicture(correctAnswersArr.length, setPic), [correctAnswersArr]);
 
   useHotkeys('left', () => handleAnswer(false), [counter, correctAnswersArr]);
   useHotkeys('right', () => handleAnswer(true), [counter, correctAnswersArr]);
@@ -91,6 +107,20 @@ const Sprint = ({ counter, setCounter, words, user, fetchWords }) => {
   const onSwitchMusic = () => {
     setMusic(!isMusicOn);
   };
+
+  useEffect(() => {
+    if (!combination.mainWord?.word) {
+      chooseLevel ? setCurrentPage(currentPage + 1) : setTimeOver(!timeOver);
+    }
+
+    // if (!combination.mainWord?.word) {
+    //   setTimeOver(!timeOver);
+    // }
+  }, [combination]);
+
+  if (!combination.mainWord?.word) {
+    return null;
+  }
 
   return (
     <>
