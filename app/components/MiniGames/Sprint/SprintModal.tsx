@@ -35,19 +35,9 @@ export const ModalSprint = ({ setShowGame, showGame, group, setGroup, chooseLeve
           <div>Чтобы дать ответ, кликай по нему мышкой или нажимай клавиши-стрелки</div>
           {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>
-        {chooseLevel ? (
-          <Button
-            colorScheme={buttonColor}
-            variant="outline"
-            onClick={handleClick}
-            isDisabled={!level}>
-            начать
-          </Button>
-        ) : (
-          <Button colorScheme={buttonColor} variant="outline" onClick={handleClick}>
-            начать
-          </Button>
-        )}
+        <Button colorScheme={buttonColor} variant="outline" onClick={handleClick}>
+          начать
+        </Button>
       </div>
     </div>
   );
