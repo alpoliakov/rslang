@@ -27,6 +27,7 @@ export default function SavannaGamePage({ group, page }) {
   const [endGame, setEndGame] = useState(false);
   const [currentGroup, setGroup] = useState(group);
   const [currentPage, setCurrentPage] = useState(page);
+  const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
 
   const fetchWords = async () => {
@@ -39,11 +40,6 @@ export default function SavannaGamePage({ group, page }) {
     }
     // setCurrentPage(page);
   };
-
-  useEffect(() => {
-    fetchWords();
-  }, [currentGroup, showGame, currentPage]);
-
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
@@ -53,12 +49,15 @@ export default function SavannaGamePage({ group, page }) {
     }
   }, []);
 
-  useEffect(() => console.log(chooseLevel, 'query.page inside group/page:', query.page), []);
+  useEffect(() => {
+    fetchWords();
+  }, [currentGroup, showGame, currentPage, setGroup]);
 
   const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
+    setPause(true);
     fullScreen.exit();
   };
 
@@ -94,6 +93,7 @@ export default function SavannaGamePage({ group, page }) {
               endGame={endGame}
               user={user}
               fetchWords={fetchWords}
+              isPaused={isPaused}
             />
           )}
           <div className="progress-hearts">
@@ -141,7 +141,14 @@ export default function SavannaGamePage({ group, page }) {
           setGroup={setGroup}
         />
       )}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
+      {quitGame && (
+        <ModalQuit
+          setQuitGame={setQuitGame}
+          quitGame={quitGame}
+          isPaused={isPaused}
+          setPause={setPause}
+        />
+      )}
       {endGame && (
         <ModalEndGame
           // timeOver={timeOver} setTimeOver={setTimeOver}

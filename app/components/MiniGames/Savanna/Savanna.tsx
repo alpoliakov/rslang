@@ -17,6 +17,7 @@ const Savanna = ({
   endGame,
   user,
   fetchWords,
+  isPaused,
 }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
@@ -28,8 +29,11 @@ const Savanna = ({
 
   useEffect(() => {
     const timeOutAnswer = setTimeout(() => handleAnswer(''), 5000);
+    if (isPaused) {
+      clearInterval(timeOutAnswer);
+    }
     return () => clearTimeout(timeOutAnswer);
-  }, [learnedWords]);
+  }, [learnedWords, isPaused]);
 
   const handleAnswer = async (answer) => {
     if (!checkAnswerSavanna(combination.mainWord, answer)) {
