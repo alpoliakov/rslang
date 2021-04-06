@@ -10,10 +10,11 @@ import {
 } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
+import { GiSpeaker } from 'react-icons/gi';
 import { RiMusic2Fill } from 'react-icons/ri';
 import useSound from 'use-sound';
 
+import { LOCAL_HOST } from '../../../constants/index';
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 
 const Sprint = ({
@@ -28,17 +29,18 @@ const Sprint = ({
   currentPage,
   chooseLevel,
 }) => {
-  const [isSoundOn, setSound] = useState(true);
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
   const [learnedWords, setLearnedWord] = useState([]);
   const [pic, setPic] = useState(egg);
+  const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [combination, setCombination] = useState(getNextWordSprint(words, learnedWords));
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
 
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
+  const [playWord] = useSound(wordAudioUrl);
 
   const handleAnswer = async (answer) => {
     const userAnswer = checkAnswerSprint(answer, combination.mainWord, combination.translation);
@@ -100,8 +102,8 @@ const Sprint = ({
   useHotkeys('left', () => handleAnswer(false), [counter, correctAnswersArr]);
   useHotkeys('right', () => handleAnswer(true), [counter, correctAnswersArr]);
 
-  const onSwitchSound = () => {
-    setSound(!isSoundOn);
+  const handleSound = () => {
+    playWord();
   };
 
   const onSwitchMusic = () => {
@@ -152,8 +154,14 @@ const Sprint = ({
               variant="ghost"
               colorScheme="whiteAlpha"
               aria-label="Switch sound"
-              onClick={onSwitchSound}
-              icon={isSoundOn ? <GiSpeaker /> : <GiSpeakerOff />}
+              onMouseDown={() => {
+                setWordAudioUrl(
+                  LOCAL_HOST +
+                    `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
+                );
+              }}
+              onClick={handleSound}
+              icon={<GiSpeaker />}
             />
           </div>
           <div className="sprint-pics">
