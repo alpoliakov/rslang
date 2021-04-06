@@ -24,6 +24,7 @@ export default function SprintGamePage({ group, page }) {
   const [currentPage, setCurrentPage] = useState(page);
   const [currentGroup, setGroup] = useState(group);
   const { user } = useAuth();
+  const [isPaused, setPause] = useState(false);
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -52,6 +53,7 @@ export default function SprintGamePage({ group, page }) {
 
   const onQuitGame = () => {
     setQuitGame(true);
+    setPause(true);
     fullScreen.exit();
   };
 
@@ -62,7 +64,7 @@ export default function SprintGamePage({ group, page }) {
       </Head>
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
-          <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
+          <Timer setTimeOver={setTimeOver} timeOver={timeOver} isPaused={isPaused} />
           {!loading && (
             <Sprint
               counter={counter}
@@ -108,7 +110,14 @@ export default function SprintGamePage({ group, page }) {
           setGroup={setGroup}
         />
       )}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
+      {quitGame && (
+        <ModalQuit
+          setQuitGame={setQuitGame}
+          quitGame={quitGame}
+          isPaused={isPaused}
+          setPause={setPause}
+        />
+      )}
       {timeOver && (
         <ModalEndGame
           // timeOver={timeOver} setTimeOver={setTimeOver}

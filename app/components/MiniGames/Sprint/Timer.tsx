@@ -1,21 +1,24 @@
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
-const Timer = ({ setTimeOver, timeOver }) => {
+const Timer = ({ setTimeOver, timeOver, isPaused }) => {
   const [timeLeft, setTime] = useState(59);
 
   useEffect(() => {
+    let timer;
     if (timeLeft === 0) {
       setTimeOver(!timeOver);
       return;
     }
-
-    const timer = setInterval(() => {
-      setTime(timeLeft - 1);
-    }, 1000);
-
+    if (!isPaused) {
+      timer = setInterval(() => {
+        setTime(timeLeft - 1);
+      }, 1000);
+    } else if (isPaused) {
+      clearInterval(timer);
+    }
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [timeLeft, isPaused]);
 
   return (
     <div className="timer">

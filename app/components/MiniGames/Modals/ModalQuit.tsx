@@ -8,7 +8,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-const ModalQuit = ({ quitGame, setQuitGame }) => {
+const ModalQuit = ({ quitGame, setQuitGame, isPaused, setPause }) => {
   const buttonColor = useColorModeValue(white.LIGHT, white.DARK);
   const backGroudColor = useColorModeValue(
     modalEntranceBackground.LIGHT,
@@ -23,6 +23,7 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
   const handleClickReturn = () => {
     setModal(!showMod);
     setQuitGame(!quitGame);
+    setPause(!isPaused);
   };
 
   return (
@@ -32,7 +33,7 @@ const ModalQuit = ({ quitGame, setQuitGame }) => {
           <div className="modal">
             <div className="modal-box" style={{ backgroundColor: `${boxColor}` }}>
               <div className="modal-ask">Хотите выйти из игры?</div>
-              <div className="content">Прогресс будет утерян</div>
+              {/* <div className="content">Прогресс будет утерян</div> */}
               <div className="actions">
                 <ButtonGroup size="md" spacing="12">
                   <Link href="/">
