@@ -26,6 +26,7 @@ export default function NewGamePage({ group, page }) {
   const [endGame, setEndGame] = useState(false);
   const [currentGroup, setGroup] = useState(group);
   const [currentPage, setCurrentPage] = useState(page);
+  const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
 
   const fetchWords = async () => {
@@ -36,7 +37,6 @@ export default function NewGamePage({ group, page }) {
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
     }
-    // setCurrentPage(page);
   };
 
   const { query } = useRouter();
@@ -56,6 +56,7 @@ export default function NewGamePage({ group, page }) {
 
   const onQuitGame = () => {
     setQuitGame(true);
+    setPause(true);
     fullScreen.exit();
   };
 
@@ -138,7 +139,14 @@ export default function NewGamePage({ group, page }) {
           setGroup={setGroup}
         />
       )}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
+      {quitGame && (
+        <ModalQuit
+          setQuitGame={setQuitGame}
+          quitGame={quitGame}
+          isPaused={isPaused}
+          setPause={setPause}
+        />
+      )}
       {endGame && (
         <ModalEndGame
           // timeOver={timeOver} setTimeOver={setTimeOver}

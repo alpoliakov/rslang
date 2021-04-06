@@ -29,6 +29,7 @@ export default function AudiocallGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [currentPage, setCurrentPage] = useState(page);
   const [currentGroup, setGroup] = useState(group);
+  const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
 
   const fetchWords = async () => {
@@ -39,7 +40,6 @@ export default function AudiocallGamePage({ group, page }) {
     if (!user) {
       fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords, setCurrentPage);
     }
-    // setCurrentPage(page);
   };
 
   useEffect(() => {
@@ -59,6 +59,7 @@ export default function AudiocallGamePage({ group, page }) {
 
   const onQuitGame = () => {
     setQuitGame(true);
+    setPause(true);
     fullScreen.exit();
   };
 
@@ -141,7 +142,14 @@ export default function AudiocallGamePage({ group, page }) {
           setGroup={setGroup}
         />
       )}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
+      {quitGame && (
+        <ModalQuit
+          setQuitGame={setQuitGame}
+          quitGame={quitGame}
+          isPaused={isPaused}
+          setPause={setPause}
+        />
+      )}
       {endGame && (
         <ModalEndGame
           // timeOver={timeOver} setTimeOver={setTimeOver}
