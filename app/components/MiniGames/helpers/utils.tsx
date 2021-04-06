@@ -1,4 +1,4 @@
-import { egg, dino, dinoEgg, dragon } from './constants';
+import { dino, dinoEgg, dragon, egg } from './constants';
 
 // ------- SPRINT -------
 export const changePicture = (num, setPic) => {
