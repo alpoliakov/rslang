@@ -96,10 +96,9 @@ export const userFetch = async (group, page, setLoading, setWords) => {
   const { data } = await apollo.query({
     query: AggregatedWordsDocument,
     variables: {
-      input: { group, page },
+      input: { group: Number(group), page },
     },
   });
-
   const words = [...data.aggregatedWords];
 
   await setWords([...data.aggregatedWords]);
@@ -116,7 +115,7 @@ export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
   const { data } = await apollo.query({
     query: AggregatedWordsDocument,
     variables: {
-      input: { group, page },
+      input: { group: Number(group), page },
     },
   });
 
