@@ -41,14 +41,14 @@ const NewGame = ({
 
   const handleOnChange = (e) => {
     setInputValue(e.target.value);
-    console.log(inputValue);
   };
 
   const handleAnswer = async (e) => {
     e.preventDefault();
     setIsAnswered(true);
+    const isUserAnswerCorrect = checkAnswerNewGame(combination.mainWord, inputValue, user);
 
-    if (!checkAnswerNewGame(combination.mainWord, inputValue, user)) {
+    if (!isUserAnswerCorrect) {
       if (user) {
         const word = await fetchCurrentWord(combination.mainWord._id);
         const { optional, complexity, deleted } = word;
@@ -86,8 +86,15 @@ const NewGame = ({
       setColorAnswer('green');
       isMusicOn && correct();
     }
+    const currentAnswers = [...correctAnswersArr, isUserAnswerCorrect];
+    const correctInRow =
+      currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
+    console.log(correctInRow, 'correctInRow');
+
+    setCorrectAnswersArr(currentAnswers);
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
+    console.log('currentAnswers:', currentAnswers, 'seenWords:', seenWords);
   };
 
   const callNextWord = () => {
@@ -165,16 +172,25 @@ const NewGame = ({
             value={inputValue}
             onChange={handleOnChange}
           />
-          <div className="newgame-button">
-            {isAnswered ? (
-              <Button w={100} colorScheme="whiteAlpha" variant="outline" onClick={callNextWord}>
-                <ArrowForwardIcon />
+          <div className="newgame-buttons">
+            <ButtonGroup size="md" spacing="8">
+              <Button
+                colorScheme="whiteAlpha"
+                type="submit"
+                variant="outline"
+                isDisabled={isAnswered}>
+                не знаю
               </Button>
-            ) : (
-              <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
-                проверить
-              </Button>
-            )}
+              {isAnswered ? (
+                <Button w={100} colorScheme="whiteAlpha" variant="outline" onClick={callNextWord}>
+                  <ArrowForwardIcon />
+                </Button>
+              ) : (
+                <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
+                  проверить
+                </Button>
+              )}
+            </ButtonGroup>
           </div>
         </form>
       </div>

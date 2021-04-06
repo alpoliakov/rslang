@@ -79,10 +79,10 @@
 
 .newgame-input {
   color: white;
-  width: 50px;
+  margin-left: 20px;
 }
 
-.newgame-button {
+.newgame-buttons {
   margin: 20px;
   display: flex;
   justify-content: center;
