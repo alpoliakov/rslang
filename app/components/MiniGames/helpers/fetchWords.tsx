@@ -23,13 +23,7 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   }
 };
 
-export const fetchCurrentWordsAudiocall = async (
-  group,
-  page,
-  setLoading,
-  setWords,
-  setCurrentPage,
-) => {
+export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWords) => {
   console.log('inside fetchCurrentWordsAudiocall', group === '');
   if (group === '') return;
   console.log('here fetchCurrentWords');
@@ -45,9 +39,6 @@ export const fetchCurrentWordsAudiocall = async (
   console.log(words);
   if (words) {
     setLoading(false);
-  }
-  if (setCurrentPage) {
-    setCurrentPage(page + 1);
   }
 };
 
