@@ -2,9 +2,9 @@ import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Box } from '@chakra-ui/layout';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/router';
 
 import Footer from './Footer';
 import Header from './Header';

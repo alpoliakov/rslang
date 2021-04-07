@@ -1,6 +1,5 @@
 import { Button } from '@chakra-ui/react';
 import { ChooseLevelModal } from 'components/MiniGames/ChooseLevelModal/ChooseLevelModal';
-
 import React, { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
