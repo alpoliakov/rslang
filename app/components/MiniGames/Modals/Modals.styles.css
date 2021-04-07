@@ -74,3 +74,43 @@
   height: 80px;
   text-align: left;
 }
+
+.answerlist {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 15% 85%;
+}
+
+.answers-container {
+  width: 100%;
+  display: grid;
+  grid-row-start: 2;
+  grid-template-columns: 20% 20% 40% 20%;
+}
+
+.total-results {
+  grid-row-start: 1;
+  font-weight: 500;
+  color: cadetblue;
+  text-align: center;
+}
+
+.answers-icons-column {
+  grid-column-start: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.answers-icons-column > * {
+  margin: 5px;
+}
+
+.answers-words-column {
+  grid-column-start: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.answers-words-column > * {
+  padding: 2px;
+}
