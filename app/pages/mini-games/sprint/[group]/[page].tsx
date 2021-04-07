@@ -124,12 +124,7 @@ export default function SprintGamePage({ group, page }) {
           setPause={setPause}
         />
       )}
-      {timeOver && (
-        <ModalEndGame
-          // timeOver={timeOver} setTimeOver={setTimeOver}
-          counter={counter}
-        />
-      )}
+      {timeOver && <ModalEndGame counter={counter} />}
     </>
   );
 }

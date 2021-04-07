@@ -1,5 +1,5 @@
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { CircularProgress, CircularProgressLabel, useColorModeValue } from '@chakra-ui/react';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import {
   Accordion,
@@ -11,31 +11,15 @@ import {
 } from '@chakra-ui/react';
 import { List, ListIcon, ListItem } from '@chakra-ui/react';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
-import {
-  modalBoxColor,
-  modalEntranceBackground,
-  white,
-} from 'components/MiniGames/helpers/constants';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import React from 'react';
 
 import { AnswerList } from '../Modals/AnswersList';
 
 const ModalEndGame = ({ counter }) => {
-  // useHotkeys('esc', () => setTimeOver(!timeOver));
-  // useHotkeys('enter', () => setTimeOver(!timeOver));
-
-  const buttonColor = useColorModeValue(white.LIGHT, white.DARK);
-  const backGroudColor = useColorModeValue(
-    modalEntranceBackground.LIGHT,
-    modalEntranceBackground.DARK,
-  );
-  const boxColor = useColorModeValue(modalBoxColor.LIGHT, modalBoxColor.DARK);
-
   return (
-    <div className="modal-container" style={{ backgroundColor: `${backGroudColor}` }}>
-      <div className="modal" style={{ backgroundColor: `${boxColor}` }}>
+    <div className="modal-container">
+      <div className="modal">
         <div className="modalEnd-result">
           {counter > 0 ? 'Поздравляю!' : 'Очень жаль.'} Твой результат <br />
           <CircularProgress isIndeterminate value={100} color="pink" thickness="2px" size="200px">

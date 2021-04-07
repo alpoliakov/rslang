@@ -71,10 +71,6 @@ export const editWord = async (
     });
 
     console.log(data, 'data in editword');
-
-    // if (data.editAggregatedWord._id) {
-    //   fetchWords();
-    // }
   } catch (err) {
     console.log(err);
   }

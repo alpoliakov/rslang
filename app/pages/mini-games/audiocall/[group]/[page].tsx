@@ -38,7 +38,7 @@ export default function AudiocallGamePage({ group, page }) {
     }
 
     if (!user) {
-      fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords, setCurrentPage);
+      fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords);
     }
   };
 
@@ -150,12 +150,7 @@ export default function AudiocallGamePage({ group, page }) {
           setPause={setPause}
         />
       )}
-      {endGame && (
-        <ModalEndGame
-          // timeOver={timeOver} setTimeOver={setTimeOver}
-          counter={counter}
-        />
-      )}
+      {endGame && <ModalEndGame counter={counter} />}
     </>
   );
 }

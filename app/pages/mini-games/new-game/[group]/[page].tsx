@@ -147,12 +147,7 @@ export default function NewGamePage({ group, page }) {
           setPause={setPause}
         />
       )}
-      {endGame && (
-        <ModalEndGame
-          // timeOver={timeOver} setTimeOver={setTimeOver}
-          counter={counter}
-        />
-      )}
+      {endGame && <ModalEndGame counter={counter} />}
     </>
   );
 }
