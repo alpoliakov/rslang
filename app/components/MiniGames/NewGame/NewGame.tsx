@@ -21,8 +21,8 @@ const NewGame = ({
   endGame,
   user,
   fetchWords,
-  correctAnswersArr,
-  setCorrectAnswersArr,
+  answersArr,
+  setAnswersArr,
   learnedWords,
   setLearnedWord,
 }) => {
@@ -94,12 +94,12 @@ const NewGame = ({
       setColorAnswer('green');
       isMusicOn && correct();
     }
-    const currentAnswers = [...correctAnswersArr, isUserAnswerCorrect];
+    const currentAnswers = [...answersArr, isUserAnswerCorrect];
     const correctInRow =
       currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
     console.log(correctInRow, 'correctInRow');
 
-    setCorrectAnswersArr(currentAnswers);
+    setAnswersArr(currentAnswers);
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
     inputRef.current?.blur();

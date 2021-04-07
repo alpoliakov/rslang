@@ -10,11 +10,11 @@ import {
 } from '@chakra-ui/react';
 
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { AnswerList } from '../Modals/AnswersList';
 
-const ModalEndGame = ({ counter, learnedWords, correctAnswersArr }) => {
+const ModalEndGame = ({ counter, learnedWords, answersArr }) => {
   return (
     <div className="modal-container">
       <div className="modal">
@@ -36,7 +36,7 @@ const ModalEndGame = ({ counter, learnedWords, correctAnswersArr }) => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4} className="modal-extended-information">
-                  <AnswerList learnedWords={learnedWords} correctAnswersArr={correctAnswersArr} />
+                  <AnswerList learnedWords={learnedWords} answersArr={answersArr} />
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
