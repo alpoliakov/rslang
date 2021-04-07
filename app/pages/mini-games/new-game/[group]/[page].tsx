@@ -29,7 +29,7 @@ export default function NewGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
   const [learnedWords, setLearnedWord] = useState([]);
-  const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
+  const [answersArr, setAnswersArr] = useState([]);
 
   const fetchWords = async () => {
     if (user) {
@@ -94,8 +94,8 @@ export default function NewGamePage({ group, page }) {
               endGame={endGame}
               user={user}
               fetchWords={fetchWords}
-              correctAnswersArr={correctAnswersArr}
-              setCorrectAnswersArr={setCorrectAnswersArr}
+              answersArr={answersArr}
+              setAnswersArr={setAnswersArr}
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
             />
@@ -154,11 +154,7 @@ export default function NewGamePage({ group, page }) {
         />
       )}
       {endGame && (
-        <ModalEndGame
-          counter={counter}
-          learnedWords={learnedWords}
-          correctAnswersArr={correctAnswersArr}
-        />
+        <ModalEndGame counter={counter} learnedWords={learnedWords} answersArr={answersArr} />
       )}
     </>
   );

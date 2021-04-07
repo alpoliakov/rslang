@@ -101,8 +101,6 @@ const Audiocall = ({
     setIsAnswered(false);
   };
 
-  // useEffect(() => playWord(), [combination]);
-
   useHotkeys(
     '1, 2, 3, 4, 5',
     (_, handler) => {

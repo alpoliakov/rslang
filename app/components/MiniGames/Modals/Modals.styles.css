@@ -78,7 +78,7 @@
 .answerlist {
   width: 100%;
   display: grid;
-  grid-template-rows: 15% 85%;
+  grid-template-rows: 10% 90%;
 }
 
 .answers-container {
@@ -91,7 +91,7 @@
 .total-results {
   grid-row-start: 1;
   font-weight: 500;
-  color: cadetblue;
+  color: rgb(59, 58, 58);
   text-align: center;
 }
 
