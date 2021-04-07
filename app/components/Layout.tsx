@@ -2,8 +2,9 @@ import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Box } from '@chakra-ui/layout';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 import Footer from './Footer';
 import Header from './Header';
@@ -11,6 +12,7 @@ import ToasterLayout from './ToasterLayout';
 
 export default function Layout({ children }) {
   const bg = useColorModeValue('gray.50', '#223c50');
+  const [showFooter, setShowFooter] = useState(true);
 
   const postVariants = {
     initial: { scale: 0.96, y: 30, opacity: 0 },
@@ -29,6 +31,15 @@ export default function Layout({ children }) {
   };
 
   const MotionBox = motion(Box);
+  const router = useRouter();
+  const { pathname, query } = router;
+
+  useEffect(() => {
+    if (pathname.match('mini-games')) {
+      return setShowFooter(false);
+    }
+    setShowFooter(true);
+  }, [pathname]);
 
   return (
     <Box className="main_container" bg={bg}>
@@ -54,7 +65,7 @@ export default function Layout({ children }) {
         height="full">
         {children}
       </MotionBox>
-      <Footer />
+      {showFooter && <Footer />}
     </Box>
   );
 }
