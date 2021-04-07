@@ -18,11 +18,13 @@ const Savanna = ({
   user,
   fetchWords,
   isPaused,
+  answersArr,
+  setAnswersArr,
+  learnedWords,
+  setLearnedWord,
 }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
-  const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
-  const [learnedWords, setLearnedWord] = useState([]);
   const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
@@ -36,7 +38,9 @@ const Savanna = ({
   }, [learnedWords, isPaused]);
 
   const handleAnswer = async (answer) => {
-    if (!checkAnswerSavanna(combination.mainWord, answer)) {
+    const isUserAnswerCorrect = checkAnswerSavanna(combination.mainWord, answer);
+
+    if (!isUserAnswerCorrect) {
       if (user) {
         const word = await fetchCurrentWord(combination.mainWord._id);
         const { optional, complexity, deleted } = word;
@@ -73,10 +77,11 @@ const Savanna = ({
       isMusicOn && correct();
     }
 
+    setAnswersArr([...answersArr, isUserAnswerCorrect]);
+
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
     setCombination(getNextWordSavanna(words, seenWords));
-    console.log('learnedWords:', learnedWords);
   };
 
   useHotkeys(

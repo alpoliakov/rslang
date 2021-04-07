@@ -29,6 +29,8 @@ export default function SavannaGamePage({ group, page }) {
   const [currentPage, setCurrentPage] = useState(page);
   const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [answersArr, setAnswersArr] = useState([]);
 
   const fetchWords = async () => {
     if (user) {
@@ -94,6 +96,10 @@ export default function SavannaGamePage({ group, page }) {
               user={user}
               fetchWords={fetchWords}
               isPaused={isPaused}
+              answersArr={answersArr}
+              setAnswersArr={setAnswersArr}
+              learnedWords={learnedWords}
+              setLearnedWord={setLearnedWord}
             />
           )}
           <div className="progress-hearts">
@@ -149,7 +155,9 @@ export default function SavannaGamePage({ group, page }) {
           setPause={setPause}
         />
       )}
-      {endGame && <ModalEndGame counter={counter} />}
+      {endGame && (
+        <ModalEndGame counter={counter} learnedWords={learnedWords} answersArr={answersArr} />
+      )}
     </>
   );
 }
