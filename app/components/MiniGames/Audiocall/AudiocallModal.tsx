@@ -33,19 +33,9 @@ export const ModalAudiocall = ({ setShowGame, showGame, group, setGroup, chooseL
           </div>
           {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>
-        {chooseLevel ? (
-          <Button
-            colorScheme={buttonColor}
-            variant="outline"
-            onClick={handleClick}
-            isDisabled={!level}>
-            начать
-          </Button>
-        ) : (
-          <Button colorScheme={buttonColor} variant="outline" onClick={handleClick}>
-            начать
-          </Button>
-        )}
+        <Button colorScheme={buttonColor} variant="outline" onClick={handleClick}>
+          начать
+        </Button>
       </div>
     </div>
   );

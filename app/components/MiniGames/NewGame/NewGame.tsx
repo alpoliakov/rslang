@@ -1,6 +1,7 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, Icon } from '@chakra-ui/react';
 import { Input } from '@chakra-ui/react';
+import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import { checkAnswerNewGame, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -8,8 +9,19 @@ import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
 
 import { LOCAL_HOST } from '../../../constants/index';
+import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 
-const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, endGame }) => {
+const NewGame = ({
+  counter,
+  setCounter,
+  isMusicOn,
+  words,
+  setLives,
+  setEndGame,
+  endGame,
+  user,
+  fetchWords,
+}) => {
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -20,6 +32,8 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
   const [colorAnswer, setColorAnswer] = useState('');
   const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
 
+  const [editAggregatedWord] = useEditAggregatedWordMutation();
+
   const [playWord] = useSound(wordAudioUrl);
   const handleSound = () => {
     playWord();
@@ -27,24 +41,60 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
 
   const handleOnChange = (e) => {
     setInputValue(e.target.value);
-    console.log(inputValue);
   };
 
-  const handleAnswer = (e) => {
+  const handleAnswer = async (e) => {
     e.preventDefault();
     setIsAnswered(true);
+    const isUserAnswerCorrect = checkAnswerNewGame(combination.mainWord, inputValue, user);
 
-    if (!checkAnswerNewGame(combination.mainWord, inputValue)) {
+    if (!isUserAnswerCorrect) {
+      if (user) {
+        const word = await fetchCurrentWord(combination.mainWord._id);
+        const { optional, complexity, deleted } = word;
+        const { repeat, rightAnswers, wrongAnswers } = optional;
+        const args = {
+          id: combination.mainWord._id,
+          repeat: repeat + 1,
+          rightAnswers: rightAnswers,
+          wrongAnswers: wrongAnswers + 1,
+          studied: true,
+        };
+        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+      }
+
       setLives((lives) => [false, ...lives.slice(0, -1)]);
       setColorAnswer('red');
       isMusicOn && incorrect();
     } else {
+      if (user) {
+        const word = await fetchCurrentWord(combination.mainWord._id);
+        const { optional, complexity, deleted } = word;
+        const { repeat, rightAnswers, wrongAnswers } = optional;
+
+        const args = {
+          id: combination.mainWord._id,
+          repeat: repeat + 1,
+          rightAnswers: rightAnswers + 1,
+          wrongAnswers: wrongAnswers,
+          studied: true,
+        };
+        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+      }
+
       setCounter(counter + 10);
       setColorAnswer('green');
       isMusicOn && correct();
     }
+    const currentAnswers = [...correctAnswersArr, isUserAnswerCorrect];
+    const correctInRow =
+      currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
+    console.log(correctInRow, 'correctInRow');
+
+    setCorrectAnswersArr(currentAnswers);
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
+    console.log('currentAnswers:', currentAnswers, 'seenWords:', seenWords);
   };
 
   const callNextWord = () => {
@@ -87,7 +137,10 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
               _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
               className="audiocall-button-sound"
               onMouseDown={() => {
-                setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
+                setWordAudioUrl(
+                  LOCAL_HOST +
+                    `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
+                );
               }}
               onClick={handleSound}>
               <Icon
@@ -104,7 +157,7 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
           </div>
         ) : (
           <div className="newgame-answer" style={{ textShadow: `3px 3px 3px ${colorAnswer}` }}>
-            {combination.mainWord.word}
+            {user ? combination.mainWord.word.word : combination.mainWord.word}
           </div>
         )}
         <form
@@ -119,16 +172,25 @@ const NewGame = ({ counter, setCounter, isMusicOn, words, setLives, setEndGame, 
             value={inputValue}
             onChange={handleOnChange}
           />
-          <div className="newgame-button">
-            {isAnswered ? (
-              <Button w={100} colorScheme="whiteAlpha" variant="outline" onClick={callNextWord}>
-                <ArrowForwardIcon />
+          <div className="newgame-buttons">
+            <ButtonGroup size="md" spacing="8">
+              <Button
+                colorScheme="whiteAlpha"
+                type="submit"
+                variant="outline"
+                isDisabled={isAnswered}>
+                не знаю
               </Button>
-            ) : (
-              <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
-                проверить
-              </Button>
-            )}
+              {isAnswered ? (
+                <Button w={100} colorScheme="whiteAlpha" variant="outline" onClick={callNextWord}>
+                  <ArrowForwardIcon />
+                </Button>
+              ) : (
+                <Button colorScheme="green" type="submit" isDisabled={!inputValue || isAnswered}>
+                  проверить
+                </Button>
+              )}
+            </ButtonGroup>
           </div>
         </form>
       </div>

@@ -1,13 +1,15 @@
-import { dino, dinoEgg, dragon } from './constants';
+import { dino, dinoEgg, dragon, egg } from './constants';
 
 // ------- SPRINT -------
 export const changePicture = (num, setPic) => {
-  if (num > 4 && num < 9) {
+  if (num >= 5 && num < 9) {
     setPic(dinoEgg);
   } else if (num > 8 && num < 13) {
     setPic(dino);
   } else if (num > 12) {
     setPic(dragon);
+  } else if (num < 5) {
+    setPic(egg);
   }
 };
 
@@ -64,8 +66,8 @@ export const checkAnswerSavanna = (wordToCheck, answer) => {
 };
 
 // ------- NEWGAME -------
-export const checkAnswerNewGame = (wordToCheck, answer) => {
-  return wordToCheck.word === answer.toLowerCase().trim();
+export const checkAnswerNewGame = (wordToCheck, answer, user) => {
+  return (user ? wordToCheck.word.word : wordToCheck.word) === answer.toLowerCase().trim();
 };
 
 // ------- AUDIOCALL -------
