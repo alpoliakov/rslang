@@ -58,6 +58,7 @@ export default function Header() {
   const [showNav, setShowNav] = useState(false);
   const [group, setGroup] = useState(null);
   const [page, setPage] = useState(null);
+  const [showColorModeButton, setShowColorModeButton] = useState(true);
 
   const { user, signOut } = useAuth();
 
@@ -75,6 +76,13 @@ export default function Header() {
     setShowNav(false);
   }, [pathname, query]);
 
+  useEffect(() => {
+    if (pathname.match('mini-games')) {
+      return setShowColorModeButton(false);
+    }
+    setShowColorModeButton(true);
+  }, [pathname]);
+
   return (
     <Box bg={bg} position="sticky" top="0" p={1} height="full" zIndex="10" width="full">
       <Container maxW="container.xl">
@@ -88,30 +96,32 @@ export default function Header() {
           </Link>
           <Spacer />
           <Flex alignItems="center" p="1">
-            <Button w={0} h={0} onClick={toggleColorMode} mr="5">
-              {colorMode === 'light' ? (
-                <Icon
-                  as={RiMoonLine}
-                  w={7}
-                  h={7}
-                  color="gray.400"
-                  className="shadow__item hover__item"
-                  _hover={{
-                    color: '#223c50',
-                  }}
-                />
-              ) : (
-                <Icon
-                  as={RiSunLine}
-                  w={7}
-                  h={7}
-                  color={color}
-                  _hover={{
-                    color: 'red.600',
-                  }}
-                />
-              )}
-            </Button>
+            {showColorModeButton && (
+              <Button w={0} h={0} onClick={toggleColorMode} mr="5">
+                {colorMode === 'light' ? (
+                  <Icon
+                    as={RiMoonLine}
+                    w={7}
+                    h={7}
+                    color="gray.400"
+                    className="shadow__item hover__item"
+                    _hover={{
+                      color: '#223c50',
+                    }}
+                  />
+                ) : (
+                  <Icon
+                    as={RiSunLine}
+                    w={7}
+                    h={7}
+                    color={color}
+                    _hover={{
+                      color: 'red.600',
+                    }}
+                  />
+                )}
+              </Button>
+            )}
             {user && (
               <Menu>
                 <MenuButton>
