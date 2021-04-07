@@ -25,6 +25,8 @@ export default function SprintGamePage({ group, page }) {
   const [currentGroup, setGroup] = useState(group);
   const { user } = useAuth();
   const [isPaused, setPause] = useState(false);
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [answersArr, setAnswersArr] = useState([]);
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -78,6 +80,10 @@ export default function SprintGamePage({ group, page }) {
               setCurrentPage={setCurrentPage}
               currentPage={currentPage}
               chooseLevel={chooseLevel}
+              answersArr={answersArr}
+              setAnswersArr={setAnswersArr}
+              learnedWords={learnedWords}
+              setLearnedWord={setLearnedWord}
             />
           )}
           <div className="sprint-close-full">
@@ -124,7 +130,9 @@ export default function SprintGamePage({ group, page }) {
           setPause={setPause}
         />
       )}
-      {timeOver && <ModalEndGame counter={counter} />}
+      {timeOver && (
+        <ModalEndGame counter={counter} learnedWords={learnedWords} answersArr={answersArr} />
+      )}
     </>
   );
 }
