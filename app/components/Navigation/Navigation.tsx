@@ -50,29 +50,33 @@ export default function Navigation({ group, page }) {
   return (
     <>
       <TextbookSettings isOpen={isOpen} onClose={onClose} />
-      <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
+      <Flex
+        alignItems="center"
+        direction={{ base: 'column', lg: 'row' }}
+        justifyContent="space-between"
+        borderWidth={0}>
         {mainTextbook && (
           <Tabs defaultIndex={group} borderBottomColor="transparent">
-            <TabList>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+            <TabList flexWrap="wrap">
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/0/0'}>Group 1</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/1/0'}>Group 2</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/2/0'}>Group 3</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/3/0'}>Group 4</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/4/0'}>Group 5</NextLink>
-              </Tab>{' '}
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              </Tab>
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/5/0'}>Group 6</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/studied/0'}>
                   <Text color="tomato" fontWeight="bold">
                     Словарь
@@ -85,22 +89,22 @@ export default function Navigation({ group, page }) {
         {!mainTextbook && (
           <Tabs defaultIndex={setCurrentChapter()} borderBottomColor="transparent">
             <TabList>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, lg: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/studied/0'}>
                   <Text fontWeight="bold">Изучаемые</Text>
                 </NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, lg: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/complex/0'}>
                   <Text fontWeight="bold">Сложные</Text>
                 </NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, lg: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/vocabulary/deleted/0'}>
                   <Text fontWeight="bold">Удалённые</Text>
                 </NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, lg: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/0/0'}>
                   <Text color="tomato" fontWeight="bold">
                     Учебник
@@ -113,17 +117,17 @@ export default function Navigation({ group, page }) {
         <Spacer />
         <HStack spacing={3} alignItems="center">
           <Tabs defaultIndex={5} borderBottomColor="transparent">
-            <TabList>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+            <TabList flexWrap="wrap">
+              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={`/mini-games/sprint/${group}/${page}`}>Спринт</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={`/mini-games/audiocall/${group}/${page}`}>Аудиовызов</NextLink>
               </Tab>
-              <Tab py={4} m={0} _focus={{ boxShadow: 'none' }}>
+              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={`/mini-games/new-game/${group}/${page}`}>Написание</NextLink>
               </Tab>
             </TabList>

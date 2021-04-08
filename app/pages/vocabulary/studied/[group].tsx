@@ -101,7 +101,7 @@ export default function StudiedWords({ group }) {
           bg={bg}
           zIndex="10"
           width="full">
-          <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
+          <Flex alignItems="center" justifyContent="center" borderWidth={0}>
             <Tabs defaultIndex={group} borderBottomColor="transparent">
               <TabList>
                 {VOCABULARY_GROUP_NAV_LINKS.map((item, index) => (

@@ -4,6 +4,8 @@ import {
   Box,
   Button,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   IconButton,
   Text,
@@ -262,7 +264,7 @@ export default function Pages({ group, page }) {
           Group: {group + 1}
         </Heading>
       </Flex>
-      <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
+      <Flex p={1} px={2} w="full" alignItems="center" justifyContent="center" flexDirection="column">
         {!loadingWords &&
           state &&
           state.map((word) => {
@@ -289,7 +291,7 @@ export default function Pages({ group, page }) {
                       }}
                     />
                   </Box>
-                  <Box py={12} px={6} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
+                  <Box py={12} px={6} maxW={{ base: '2xl', lg: '5xl' }} w={{ lg: '60%' }}>
                     <Heading
                       fontSize={{ base: 'xl', md: '2xl' }}
                       color={useColorModeValue('gray.800', 'white')}
@@ -325,30 +327,43 @@ export default function Pages({ group, page }) {
                         }}
                       />
                     </Box>
-                    <Flex mt={4} w="full" alignItems="center" justifyContent="space-between">
-                      <IconButton
-                        colorScheme="teal"
-                        onMouseDown={() => {
-                          setInterrupt(true);
-                          setWordAudioUrl(LOCAL_HOST + `${user ? word.word.audio : word.audio}`);
-                          setAudioMeaning(
-                            LOCAL_HOST + `${user ? word.word.audioMeaning : word.audioMeaning}`,
-                          );
-                          setAudioExample(
-                            LOCAL_HOST + `${user ? word.word.audioExample : word.audioExample}`,
-                          );
-                        }}
-                        onClick={handleSound}
-                        aria-label="Listen audio"
-                        icon={<MdHeadset size="24px" />}
-                      />
-                      <Badge fontSize="0.9em" colorScheme="red">
-                        {user ? (word.complexity ? 'cложное' : '') : ''}
-                      </Badge>
+                    <Grid mt={4} w="100%" templateColumns="repeat(2, 1fr)" gap={5}>
+                      <GridItem colSpan={word.complexity ? 1 : 2}>
+                        <IconButton
+                          colorScheme="teal"
+                          w="100%"
+                          onMouseDown={() => {
+                            setInterrupt(true);
+                            setWordAudioUrl(LOCAL_HOST + `${user ? word.word.audio : word.audio}`);
+                            setAudioMeaning(
+                              LOCAL_HOST + `${user ? word.word.audioMeaning : word.audioMeaning}`,
+                            );
+                            setAudioExample(
+                              LOCAL_HOST + `${user ? word.word.audioExample : word.audioExample}`,
+                            );
+                          }}
+                          onClick={handleSound}
+                          aria-label="Listen audio"
+                          icon={<MdHeadset size="24px" />}
+                        />
+                      </GridItem>
+                      {user ? (
+                        word.complexity ? (
+                          <Flex align="center" justify="center" bg="red.100" borderRadius={5}>
+                            <Badge size="2xl" colorScheme="red">
+                              cложное
+                            </Badge>
+                          </Flex>
+                        ) : (
+                          ''
+                        )
+                      ) : (
+                        ''
+                      )}
+
                       {showButtons && (
-                        <Flex alignItems="center" justifyContent="space-between">
+                        <>
                           <Button
-                            mr={3}
                             disabled={user ? word.complexity : ''}
                             data-word={user ? word._id : ''}
                             data-name="complex"
@@ -361,9 +376,9 @@ export default function Pages({ group, page }) {
                             onClick={handleButtons}>
                             Удалить слово
                           </Button>
-                        </Flex>
+                        </>
                       )}
-                    </Flex>
+                    </Grid>
                   </Box>
                 </Box>
               )
