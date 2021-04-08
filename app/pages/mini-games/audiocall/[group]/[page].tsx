@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
@@ -7,6 +8,7 @@ import {
   fetchCurrentWordsAudiocall,
   userFetchAudiocall,
 } from 'components/MiniGames/helpers/fetchWords';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import Head from 'next/head';
@@ -15,12 +17,10 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { getStrike } from 'components/MiniGames/helpers/utils';
 
-import { useAuth } from '../../../../lib/useAuth';
-import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
-import { useQuery } from '@apollo/client';
 import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useAuth } from '../../../../lib/useAuth';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);

@@ -1,6 +1,8 @@
+import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
@@ -12,13 +14,10 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { getStrike } from 'components/MiniGames/helpers/utils';
-
-import { useAuth } from '../../../../lib/useAuth';
-import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
-import { useQuery } from '@apollo/client';
 
 import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useAuth } from '../../../../lib/useAuth';
 
 export default function NewGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);

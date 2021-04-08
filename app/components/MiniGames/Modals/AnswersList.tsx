@@ -1,5 +1,6 @@
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import React from 'react';
+
 import { useAuth } from '../../../lib/useAuth';
 
 export const AnswerList = ({ learnedWords, answersArr }) => {
