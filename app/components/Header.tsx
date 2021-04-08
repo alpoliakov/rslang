@@ -117,7 +117,15 @@ export default function Header() {
                 <MenuButton>
                   <Flex alignItems="center" mr={7}>
                     <Avatar size="md" name="avatar" src={user.avatar} mr="10px" />
-                    <Heading size="sm">Hi, {user.name}</Heading>
+                    <Heading
+                      size="sm"
+                      style={{
+                        maxWidth: '200px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                      }}>
+                      Hi, {user.name}
+                    </Heading>
                   </Flex>
                 </MenuButton>
                 <MenuList>
