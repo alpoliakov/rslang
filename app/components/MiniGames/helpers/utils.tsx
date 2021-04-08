@@ -88,3 +88,21 @@ export const getNextWordAudiocall = (arr, learnedWords) => {
 
   return { mainWord, translations };
 };
+
+export const getStrike = (arr) => {
+  let streak = 0;
+  let maxStreak = 0;
+
+  for (let i = 0; i <= arr.length; i++) {
+    if (arr[i] === true) {
+      streak += 1;
+    } else {
+      if (streak > maxStreak) {
+        maxStreak = streak;
+        streak = 0;
+      }
+      streak = 0;
+    }
+  }
+  return maxStreak;
+};
