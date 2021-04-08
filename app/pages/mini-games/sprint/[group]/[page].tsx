@@ -37,7 +37,7 @@ export default function SprintGamePage({ group, page }) {
 
   useEffect(() => {
     if (timeOver) {
-      const { wordsCount, rightAnswers } = data.localStatistics;
+      const { wordsCount, rightAnswers, sprint } = data.localStatistics;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
@@ -46,9 +46,9 @@ export default function SprintGamePage({ group, page }) {
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
         sprint: {
-          wordsCount: learnedWords.length,
-          rightAnswers: totalTrue,
-          series: strike,
+          wordsCount: sprint.wordsCount + learnedWords.length,
+          rightAnswers: sprint.rightAnswers + totalTrue,
+          series: sprint.series + strike,
         },
       };
       EditLocalStatistics(args);

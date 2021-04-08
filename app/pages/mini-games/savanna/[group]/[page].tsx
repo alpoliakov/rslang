@@ -1,6 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { useColorModeValue } from '@chakra-ui/react';
 import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -40,7 +39,7 @@ export default function SavannaGamePage({ group, page }) {
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers } = data.localStatistics;
+      const { wordsCount, rightAnswers, savanna } = data.localStatistics;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
@@ -49,9 +48,9 @@ export default function SavannaGamePage({ group, page }) {
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
         savanna: {
-          wordsCount: learnedWords.length,
-          rightAnswers: totalTrue,
-          series: strike,
+          wordsCount: savanna.wordsCount + learnedWords.length,
+          rightAnswers: savanna.rightAnswers + totalTrue,
+          series: savanna.series + strike,
         },
       };
       EditLocalStatistics(args);

@@ -40,7 +40,7 @@ export default function NewGamePage({ group, page }) {
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers } = data.localStatistics;
+      const { wordsCount, rightAnswers, newGame } = data.localStatistics;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
@@ -49,9 +49,9 @@ export default function NewGamePage({ group, page }) {
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
         newGame: {
-          wordsCount: learnedWords.length,
-          rightAnswers: totalTrue,
-          series: strike,
+          wordsCount: newGame.wordsCount + learnedWords.length,
+          rightAnswers: newGame.rightAnswers + totalTrue,
+          series: newGame.series + strike,
         },
       };
       EditLocalStatistics(args);

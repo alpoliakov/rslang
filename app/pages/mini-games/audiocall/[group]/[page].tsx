@@ -41,7 +41,7 @@ export default function AudiocallGamePage({ group, page }) {
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers } = data.localStatistics;
+      const { wordsCount, rightAnswers, audioCall } = data.localStatistics;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
@@ -50,9 +50,9 @@ export default function AudiocallGamePage({ group, page }) {
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
         audioCall: {
-          wordsCount: learnedWords.length,
-          rightAnswers: totalTrue,
-          series: strike,
+          wordsCount: audioCall.wordsCount + learnedWords.length,
+          rightAnswers: audioCall.rightAnswers + totalTrue,
+          series: audioCall.series + strike,
         },
       };
       EditLocalStatistics(args);
