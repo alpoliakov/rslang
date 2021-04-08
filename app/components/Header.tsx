@@ -120,9 +120,10 @@ export default function Header() {
                     <Heading
                       size="sm"
                       style={{
-                        maxWidth: '200px',
+                        maxWidth: '100px',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}>
                       Hi, {user.name}
                     </Heading>
