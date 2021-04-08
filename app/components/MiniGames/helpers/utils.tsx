@@ -67,7 +67,10 @@ export const checkAnswerSavanna = (wordToCheck, answer) => {
 
 // ------- NEWGAME -------
 export const checkAnswerNewGame = (wordToCheck, answer, user) => {
-  return (user ? wordToCheck.word.word : wordToCheck.word) === answer.toLowerCase().trim();
+  return (
+    (user ? wordToCheck.word.word : wordToCheck.word).toLowerCase().trim() ===
+    answer.toLowerCase().trim()
+  );
 };
 
 // ------- AUDIOCALL -------

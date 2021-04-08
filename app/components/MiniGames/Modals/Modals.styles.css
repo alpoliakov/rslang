@@ -1,10 +1,8 @@
 .modal-container {
-  /* top: 0; */
   position: fixed;
   width: 100%;
   height: 100%;
-  /* background-color: #f5c0c0; */
-  /* z-index: 3; */
+  background-color: #f5c0c0;
   display: flex;
   align-items: center;
 }
@@ -12,11 +10,10 @@
 .modal {
   width: 500px;
   height: 50%;
-  /* background-color: #9fd8df; */
+  background-color: #9fd8df;
   font-size: 2vw;
   display: flex;
   align-items: center;
-  /* text-align: center; */
   justify-content: center;
   color: white;
   border-radius: 5px;
@@ -76,4 +73,44 @@
   overflow: auto;
   height: 80px;
   text-align: left;
+}
+
+.answerlist {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 10% 90%;
+}
+
+.answers-container {
+  width: 100%;
+  display: grid;
+  grid-row-start: 2;
+  grid-template-columns: 20% 20% 40% 20%;
+}
+
+.total-results {
+  grid-row-start: 1;
+  font-weight: 500;
+  color: rgb(59, 58, 58);
+  text-align: center;
+}
+
+.answers-icons-column {
+  grid-column-start: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.answers-icons-column > * {
+  margin: 5px;
+}
+
+.answers-words-column {
+  grid-column-start: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.answers-words-column > * {
+  padding: 2px;
 }

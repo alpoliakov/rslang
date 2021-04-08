@@ -3,6 +3,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  background-color: #f5c0c0;
 }
 
 .modalEntrance-container {
@@ -27,6 +28,7 @@
   text-align: center;
   line-height: 25px;
   margin: 20px;
+  background-color: #9fd8df;
 }
 
 .modalEntrance-box:first-child {
@@ -41,4 +43,10 @@
 
 .mini-timer {
   color: gray;
+}
+
+@media screen and (max-width: 649px) {
+  .modalEntrance-box {
+    width: 90%;
+  }
 }

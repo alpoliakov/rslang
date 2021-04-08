@@ -28,10 +28,14 @@ const Sprint = ({
   setCurrentPage,
   currentPage,
   chooseLevel,
+  answersArr,
+  setAnswersArr,
+  learnedWords,
+  setLearnedWord,
 }) => {
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
-  const [learnedWords, setLearnedWord] = useState([]);
+
   const [pic, setPic] = useState(egg);
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [combination, setCombination] = useState(getNextWordSprint(words, learnedWords));
@@ -43,9 +47,13 @@ const Sprint = ({
   const [playWord] = useSound(wordAudioUrl);
 
   const handleAnswer = async (answer) => {
-    const userAnswer = checkAnswerSprint(answer, combination.mainWord, combination.translation);
+    const isUserAnswerCorrect = checkAnswerSprint(
+      answer,
+      combination.mainWord,
+      combination.translation,
+    );
 
-    if (!userAnswer) {
+    if (!isUserAnswerCorrect) {
       if (user) {
         const word = await fetchCurrentWord(combination.mainWord._id);
         const { optional, complexity, deleted } = word;
@@ -78,7 +86,7 @@ const Sprint = ({
         editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
       }
 
-      setCorrectAnswersArr([...correctAnswersArr, userAnswer]);
+      setCorrectAnswersArr([...correctAnswersArr, isUserAnswerCorrect]);
       setCounter(counter + extraPoints(pic));
       isMusicOn && correct();
     }
@@ -86,7 +94,7 @@ const Sprint = ({
     // const correctInRow =
     //   currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
 
-    // setCorrectAnswersArr(currentAnswers);
+    setAnswersArr([...answersArr, isUserAnswerCorrect]);
 
     // changePicture(correctAnswersArr.length, setPic);
     console.log(correctAnswersArr, 'correctInRow');
@@ -94,7 +102,6 @@ const Sprint = ({
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
     setCombination(getNextWordSprint(words, seenWords));
-    console.log(learnedWords, 'learnedWords');
   };
 
   useEffect(() => changePicture(correctAnswersArr.length, setPic), [correctAnswersArr]);

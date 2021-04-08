@@ -31,6 +31,7 @@ export default function AudiocallGamePage({ group, page }) {
   const [currentGroup, setGroup] = useState(group);
   const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
+  const [answersArr, setAnswersArr] = useState([]);
 
   const fetchWords = async () => {
     if (user) {
@@ -38,7 +39,7 @@ export default function AudiocallGamePage({ group, page }) {
     }
 
     if (!user) {
-      fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords, setCurrentPage);
+      fetchCurrentWordsAudiocall(currentGroup, currentPage, setLoading, setWords);
     }
   };
 
@@ -104,6 +105,8 @@ export default function AudiocallGamePage({ group, page }) {
               setLearnedWord={setLearnedWord}
               user={user}
               fetchWords={fetchWords}
+              answersArr={answersArr}
+              setAnswersArr={setAnswersArr}
             />
           )}
           <div className="savanna-close-full">
@@ -151,10 +154,7 @@ export default function AudiocallGamePage({ group, page }) {
         />
       )}
       {endGame && (
-        <ModalEndGame
-          // timeOver={timeOver} setTimeOver={setTimeOver}
-          counter={counter}
-        />
+        <ModalEndGame counter={counter} learnedWords={learnedWords} answersArr={answersArr} />
       )}
     </>
   );

@@ -19,6 +19,8 @@ const Audiocall = ({
   setLearnedWord,
   user,
   fetchWords,
+  answersArr,
+  setAnswersArr,
 }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
@@ -42,7 +44,8 @@ const Audiocall = ({
 
   const handleAnswer = async (answer) => {
     setIsAnswered(true);
-    if (!checkAnswerSavanna(combination.mainWord, answer)) {
+    const isUserAnswerCorrect = checkAnswerSavanna(combination.mainWord, answer);
+    if (!isUserAnswerCorrect) {
       if (user) {
         const word = await fetchCurrentWord(combination.mainWord._id);
         const { optional, complexity, deleted } = word;
@@ -90,14 +93,13 @@ const Audiocall = ({
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
+    setAnswersArr([...answersArr, isUserAnswerCorrect]);
   };
 
   const callNextWord = () => {
     setCombination(getNextWordAudiocall(words, learnedWords));
     setIsAnswered(false);
   };
-
-  // useEffect(() => playWord(), [combination]);
 
   useHotkeys(
     '1, 2, 3, 4, 5',

@@ -33,6 +33,12 @@
   align-items: flex-start;
 }
 
+@media screen and (max-width: 560px) {
+  .sprint-close-full {
+    flex-direction: column;
+  }
+}
+
 .sprint-board-outer {
   grid-column-start: 2;
   margin: auto;
