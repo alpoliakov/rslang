@@ -65,7 +65,7 @@ describe('utils, savanna', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
-    expect(getNextWordSavanna(words, learnedWords).translations).toContain(
+    expect(getNextWordSavanna(words, learnedWords).translations).toContainEqual(
       getNextWordSavanna(words, learnedWords).mainWord,
     );
   });

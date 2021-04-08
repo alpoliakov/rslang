@@ -1,5 +1,6 @@
 import { ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, Icon } from '@chakra-ui/react';
+import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import { checkAnswerSavanna, getNextWordAudiocall } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -7,8 +8,20 @@ import { GiSpeaker } from 'react-icons/gi';
 import useSound from 'use-sound';
 
 import { LOCAL_HOST } from '../../../constants/index';
+import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 
-const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLearnedWord }) => {
+const Audiocall = ({
+  counter,
+  setCounter,
+  isMusicOn,
+  words,
+  learnedWords,
+  setLearnedWord,
+  user,
+  fetchWords,
+  answersArr,
+  setAnswersArr,
+}) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [isAnswered, setIsAnswered] = useState(false);
@@ -16,21 +29,60 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLea
   const [wordPicUrl, setWordPicUrl] = useState('');
   const [combination, setCombination] = useState(getNextWordAudiocall(words, learnedWords));
 
+  const [editAggregatedWord] = useEditAggregatedWordMutation();
+
   const [playWord] = useSound(wordAudioUrl);
 
   const handleSound = () => {
     playWord();
   };
 
-  const handleAnswer = (answer) => {
+  // useEffect(() => {
+  //   setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
+  //   playWord();
+  // }, [combination]);
+
+  const handleAnswer = async (answer) => {
     setIsAnswered(true);
-    if (!checkAnswerSavanna(combination.mainWord, answer)) {
+    const isUserAnswerCorrect = checkAnswerSavanna(combination.mainWord, answer);
+    if (!isUserAnswerCorrect) {
+      if (user) {
+        const word = await fetchCurrentWord(combination.mainWord._id);
+        const { optional, complexity, deleted } = word;
+        const { repeat, rightAnswers, wrongAnswers } = optional;
+        const args = {
+          id: combination.mainWord._id,
+          repeat: repeat + 1,
+          rightAnswers: rightAnswers,
+          wrongAnswers: wrongAnswers + 1,
+          studied: true,
+        };
+        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+      }
+
       isMusicOn && incorrect();
     } else {
+      if (user) {
+        const word = await fetchCurrentWord(combination.mainWord._id);
+        const { optional, complexity, deleted } = word;
+        const { repeat, rightAnswers, wrongAnswers } = optional;
+
+        const args = {
+          id: combination.mainWord._id,
+          repeat: repeat + 1,
+          rightAnswers: rightAnswers + 1,
+          wrongAnswers: wrongAnswers,
+          studied: true,
+        };
+        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+      }
+
       setCounter(counter + 10);
       isMusicOn && correct();
     }
-    setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
+    setWordPicUrl(
+      LOCAL_HOST + (user ? combination.mainWord.word.image : combination.mainWord.image),
+    );
 
     // {isAnswered &&
     //   (learnedWords[learnedWords.length - 1] ? (
@@ -41,14 +93,13 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLea
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
+    setAnswersArr([...answersArr, isUserAnswerCorrect]);
   };
 
   const callNextWord = () => {
     setCombination(getNextWordAudiocall(words, learnedWords));
     setIsAnswered(false);
   };
-
-  // useEffect(() => playWord(), [combination]);
 
   useHotkeys(
     '1, 2, 3, 4, 5',
@@ -81,7 +132,10 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLea
                 _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
                 className="audiocall-button-sound"
                 onMouseDown={() => {
-                  setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
+                  setWordAudioUrl(
+                    LOCAL_HOST +
+                      `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
+                  );
                 }}
                 onClick={handleSound}>
                 <Icon
@@ -96,7 +150,9 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLea
                 />
               </Button>
             </div>
-            <div className="audiocall-answer">{combination.mainWord.word}</div>
+            <div className="audiocall-answer">
+              {user ? combination.mainWord.word.word : combination.mainWord.word}
+            </div>
           </div>
         </div>
       ) : (
@@ -109,8 +165,14 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLea
             _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
             className="audiocall-button-sound"
             onMouseDown={() => {
-              setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-              setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
+              setWordAudioUrl(
+                LOCAL_HOST +
+                  `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
+              );
+              setWordPicUrl(
+                LOCAL_HOST +
+                  `${user ? combination.mainWord.word.image : combination.mainWord.image}`,
+              );
             }}
             onClick={handleSound}>
             <Icon
@@ -132,11 +194,17 @@ const Audiocall = ({ counter, setCounter, isMusicOn, words, learnedWords, setLea
             key={word._id}
             className="savanna-variants"
             onMouseDown={() => {
-              setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-              setWordPicUrl(LOCAL_HOST + combination.mainWord.image);
+              setWordAudioUrl(
+                LOCAL_HOST +
+                  `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
+              );
+              setWordPicUrl(
+                LOCAL_HOST +
+                  `${user ? combination.mainWord.word.image : combination.mainWord.image}`,
+              );
             }}
             onClick={() => handleAnswer(word)}>
-            {key + 1} {word.wordTranslate}
+            {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}
       </div>

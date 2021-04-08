@@ -1,6 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
+import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
@@ -13,6 +13,8 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import { useAuth } from '../../../../lib/useAuth';
+
 export default function NewGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
   const [counter, setCounter] = useState(0);
@@ -24,6 +26,20 @@ export default function NewGamePage({ group, page }) {
   const [endGame, setEndGame] = useState(false);
   const [currentGroup, setGroup] = useState(group);
   const [currentPage, setCurrentPage] = useState(page);
+  const [isPaused, setPause] = useState(false);
+  const { user } = useAuth();
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [answersArr, setAnswersArr] = useState([]);
+
+  const fetchWords = async () => {
+    if (user) {
+      userFetch(currentGroup, currentPage, setLoading, setWords);
+    }
+
+    if (!user) {
+      fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+    }
+  };
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -35,13 +51,14 @@ export default function NewGamePage({ group, page }) {
   }, []);
 
   useEffect(() => {
-    fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
-  }, [currentGroup, showGame]);
+    fetchWords();
+  }, [currentGroup, showGame, currentPage]);
 
   const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
+    setPause(true);
     fullScreen.exit();
   };
 
@@ -75,6 +92,12 @@ export default function NewGamePage({ group, page }) {
               setLives={setLives}
               setEndGame={setEndGame}
               endGame={endGame}
+              user={user}
+              fetchWords={fetchWords}
+              answersArr={answersArr}
+              setAnswersArr={setAnswersArr}
+              learnedWords={learnedWords}
+              setLearnedWord={setLearnedWord}
             />
           )}
           <div className="progress-hearts">
@@ -122,12 +145,16 @@ export default function NewGamePage({ group, page }) {
           setGroup={setGroup}
         />
       )}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {endGame && (
-        <ModalEndGame
-          // timeOver={timeOver} setTimeOver={setTimeOver}
-          counter={counter}
+      {quitGame && (
+        <ModalQuit
+          setQuitGame={setQuitGame}
+          quitGame={quitGame}
+          isPaused={isPaused}
+          setPause={setPause}
         />
+      )}
+      {endGame && (
+        <ModalEndGame counter={counter} learnedWords={learnedWords} answersArr={answersArr} />
       )}
     </>
   );

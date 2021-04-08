@@ -1,6 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords } from 'components/MiniGames/helpers/fetchWords';
+import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
@@ -12,6 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
+import { useAuth } from '../../../../lib/useAuth';
+
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
   const [quitGame, setQuitGame] = useState(false);
@@ -21,6 +23,10 @@ export default function SprintGamePage({ group, page }) {
   const [words, setWords] = useState([]);
   const [currentPage, setCurrentPage] = useState(page);
   const [currentGroup, setGroup] = useState(group);
+  const { user } = useAuth();
+  const [isPaused, setPause] = useState(false);
+  const [learnedWords, setLearnedWord] = useState([]);
+  const [answersArr, setAnswersArr] = useState([]);
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -31,14 +37,26 @@ export default function SprintGamePage({ group, page }) {
     }
   }, []);
 
+  const fetchWords = async () => {
+    if (user) {
+      userFetch(currentGroup, currentPage, setLoading, setWords);
+    }
+
+    if (!user) {
+      fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+    }
+    // setCurrentPage(page);
+  };
   useEffect(() => {
-    fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
-  }, [currentGroup, showGame]);
+    console.log('call fetchWords with group/page', currentGroup, currentPage);
+    fetchWords();
+  }, [currentGroup, showGame, currentPage]);
 
   const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
+    setPause(true);
     fullScreen.exit();
   };
 
@@ -49,8 +67,25 @@ export default function SprintGamePage({ group, page }) {
       </Head>
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
-          <Timer setTimeOver={setTimeOver} timeOver={timeOver} />
-          {!loading && <Sprint counter={counter} setCounter={setCounter} words={words} />}
+          <Timer setTimeOver={setTimeOver} timeOver={timeOver} isPaused={isPaused} />
+          {!loading && (
+            <Sprint
+              counter={counter}
+              setCounter={setCounter}
+              words={words}
+              user={user}
+              fetchWords={fetchWords}
+              timeOver={timeOver}
+              setTimeOver={setTimeOver}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              chooseLevel={chooseLevel}
+              answersArr={answersArr}
+              setAnswersArr={setAnswersArr}
+              learnedWords={learnedWords}
+              setLearnedWord={setLearnedWord}
+            />
+          )}
           <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -87,12 +122,16 @@ export default function SprintGamePage({ group, page }) {
           setGroup={setGroup}
         />
       )}
-      {quitGame && <ModalQuit setQuitGame={setQuitGame} quitGame={quitGame} />}
-      {timeOver && (
-        <ModalEndGame
-          // timeOver={timeOver} setTimeOver={setTimeOver}
-          counter={counter}
+      {quitGame && (
+        <ModalQuit
+          setQuitGame={setQuitGame}
+          quitGame={quitGame}
+          isPaused={isPaused}
+          setPause={setPause}
         />
+      )}
+      {timeOver && (
+        <ModalEndGame counter={counter} learnedWords={learnedWords} answersArr={answersArr} />
       )}
     </>
   );

@@ -82,7 +82,7 @@ describe('utils, audiocall', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
-    expect(getNextWordAudiocall(words, learnedWords).translations).toContain(
+    expect(getNextWordAudiocall(words, learnedWords).translations).toContainEqual(
       getNextWordAudiocall(words, learnedWords).mainWord,
     );
   });

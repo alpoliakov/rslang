@@ -79,6 +79,6 @@ describe('utils, sprint', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
-    expect(learnedWords).not.toContain(getNextWordSprint(words, learnedWords).translation);
+    expect(learnedWords).not.toContainEqual(getNextWordSprint(words, learnedWords).translation);
   });
 });

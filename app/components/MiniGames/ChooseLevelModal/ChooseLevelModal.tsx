@@ -5,7 +5,8 @@ const ChooseLevelModal = ({ level, setLevel }) => {
   const handleChange = (e) => setLevel(e.target.value);
   return (
     <div className="chooseModal-select">
-      <Select value={level} placeholder="Выбери уровень сложности" onChange={handleChange}>
+      Выбери уровень сложности:
+      <Select value={level} onChange={handleChange}>
         <option value="0">1 уровень</option>
         <option value="1">2 уровень</option>
         <option value="2">3 уровень</option>
