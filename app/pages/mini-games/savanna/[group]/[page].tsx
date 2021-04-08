@@ -15,6 +15,10 @@ import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
 import { useAuth } from '../../../../lib/useAuth';
+import { getStrike } from 'components/MiniGames/helpers/utils';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { useQuery } from '@apollo/client';
 
 export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -31,6 +35,29 @@ export default function SavannaGamePage({ group, page }) {
   const { user } = useAuth();
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+
+  useEffect(() => {
+    if (endGame) {
+      const { wordsCount, rightAnswers } = data.localStatistics;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...data?.localStatistics,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        savanna: {
+          wordsCount: learnedWords.length,
+          rightAnswers: totalTrue,
+          series: strike,
+        },
+      };
+      EditLocalStatistics(args);
+      console.log(data?.localStatistics);
+    }
+  }, [endGame]);
 
   const fetchWords = async () => {
     if (user) {

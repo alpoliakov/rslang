@@ -11,8 +11,13 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 
 import { useAuth } from '../../../../lib/useAuth';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useQuery } from '@apollo/client';
+
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
@@ -27,6 +32,29 @@ export default function SprintGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+
+  useEffect(() => {
+    if (timeOver) {
+      const { wordsCount, rightAnswers } = data.localStatistics;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...data?.localStatistics,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        sprint: {
+          wordsCount: learnedWords.length,
+          rightAnswers: totalTrue,
+          series: strike,
+        },
+      };
+      EditLocalStatistics(args);
+      console.log(data?.localStatistics);
+    }
+  }, [timeOver]);
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';

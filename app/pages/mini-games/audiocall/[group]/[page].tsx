@@ -15,8 +15,12 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 
 import { useAuth } from '../../../../lib/useAuth';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useQuery } from '@apollo/client';
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -32,6 +36,29 @@ export default function AudiocallGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
   const [answersArr, setAnswersArr] = useState([]);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+
+  useEffect(() => {
+    if (endGame) {
+      const { wordsCount, rightAnswers } = data.localStatistics;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...data?.localStatistics,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        audioCall: {
+          wordsCount: learnedWords.length,
+          rightAnswers: totalTrue,
+          series: strike,
+        },
+      };
+      EditLocalStatistics(args);
+      console.log(data?.localStatistics);
+    }
+  }, [endGame]);
 
   const fetchWords = async () => {
     if (user) {
