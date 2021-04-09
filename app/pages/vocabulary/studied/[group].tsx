@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import Loading from '../../../components/Loading';
+import Pagination, { OnPageChangeCallback } from '../../../components/Pagination/Pagination';
 import VocabularyNav from '../../../components/VocabularyNav/VocabularyNav';
 import WordCard from '../../../components/WordCard/WordCard';
 import { VOCABULARY_GROUP_NAV_LINKS, WORDS_IN_PAGE } from '../../../constants';
@@ -30,6 +31,8 @@ export default function StudiedWords({ group }) {
   const [words, setWords] = useState(null);
   const [chapter, setChapter] = useState(null);
   const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [dimArray, setDimArray] = useState(null);
 
   const router = useRouter();
   const { pathname } = router;
@@ -54,6 +57,13 @@ export default function StudiedWords({ group }) {
     return setChapter('studied');
   };
 
+  const toMatrix = (arr, width) =>
+    arr.reduce(
+      (rows, key, index) =>
+        (index % width == 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) && rows,
+      [],
+    );
+
   const calcNumberPages = async (arr) => {
     const length = await arr.length;
     console.log('Array length - ', length);
@@ -72,14 +82,27 @@ export default function StudiedWords({ group }) {
 
   useEffect(() => {
     if (data) {
-      setWords(data.aggregatedWordsStudied);
+      setWords(toMatrix(data.aggregatedWordsStudied, 20)[currentPage]);
       calcNumberPages(data.aggregatedWordsStudied);
     }
   }, [data]);
 
+  useEffect(() => {
+    if (words) {
+      setWords(dimArray[currentPage]);
+    }
+  }, [currentPage]);
+
+  const onPageChanged: OnPageChangeCallback = (selectedItem) => {
+    const newPage = selectedItem.selected;
+    setCurrentPage(newPage);
+  };
+
   if (loading) {
     return <Loading />;
   }
+
+  console.log(dimArray);
 
   return (
     <Flex
@@ -131,9 +154,13 @@ export default function StudiedWords({ group }) {
               words &&
               words.length > 0 &&
               words.map((word) => <WordCard word={word} chapter={chapter} key={word._id} />)}
-            {!loading && words && words.length > 0 && (
+            {!loading && words && words.length > 1 && (
               <Box>
-                <Heading size="lg">Pagination pages: {pageCount}</Heading>
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  onPageChange={onPageChanged}
+                />
               </Box>
             )}
           </Flex>
