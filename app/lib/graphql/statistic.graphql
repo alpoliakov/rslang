@@ -1,7 +1,7 @@
 query Statistic {
   statistic {
     _id
-    learnedWords
+    globalRate
     statisticPerDay {
       countWords
       date
@@ -15,6 +15,7 @@ query Statistic {
       wordsCount
       rightAnswers
       percentsRight
+      localRate
       createDate
       savanna {
         wordsCountSavanna

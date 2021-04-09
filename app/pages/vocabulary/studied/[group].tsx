@@ -23,6 +23,7 @@ import Pagination, { OnPageChangeCallback } from '../../../components/Pagination
 import VocabularyNav from '../../../components/VocabularyNav/VocabularyNav';
 import WordCard from '../../../components/WordCard/WordCard';
 import { VOCABULARY_GROUP_NAV_LINKS, WORDS_IN_PAGE } from '../../../constants';
+import { useAppContext } from '../../../context/ContextApp';
 import { useAggregatedWordsStudiedQuery } from '../../../lib/graphql/aggregatedWordsStudied.graphql';
 import { useAuth } from '../../../lib/useAuth';
 
@@ -37,11 +38,11 @@ export default function StudiedWords({ group }) {
   const router = useRouter();
   const { pathname } = router;
 
+  const { setShowLink } = useAppContext();
+
   const { data, loading, refetch } = useAggregatedWordsStudiedQuery({
     variables: { input: { group } },
   });
-
-  console.log(data);
 
   const searchChapter = () => {
     if (pathname.match('complex')) {
@@ -66,13 +67,8 @@ export default function StudiedWords({ group }) {
 
   const calcNumberPages = async (arr) => {
     const length = await arr.length;
-    console.log('Array length - ', length);
 
-    if (length <= WORDS_IN_PAGE) {
-      return;
-    }
-
-    return setPageCount(Math.ceil(arr.length / 20));
+    return setPageCount(Math.ceil(length / WORDS_IN_PAGE));
   };
 
   useEffect(() => {
@@ -82,14 +78,19 @@ export default function StudiedWords({ group }) {
 
   useEffect(() => {
     if (data) {
-      setWords(toMatrix(data.aggregatedWordsStudied, 20)[currentPage]);
+      setWords(toMatrix(data.aggregatedWordsStudied, WORDS_IN_PAGE)[currentPage]);
       calcNumberPages(data.aggregatedWordsStudied);
     }
   }, [data]);
 
   useEffect(() => {
+    setShowLink(!!words);
+  }, [words]);
+
+  useEffect(() => {
     if (words) {
-      setWords(dimArray[currentPage]);
+      console.log(words);
+      setWords(toMatrix(data.aggregatedWordsStudied, WORDS_IN_PAGE)[currentPage]);
     }
   }, [currentPage]);
 
@@ -101,8 +102,6 @@ export default function StudiedWords({ group }) {
   if (loading) {
     return <Loading />;
   }
-
-  console.log(dimArray);
 
   return (
     <Flex
@@ -147,14 +146,14 @@ export default function StudiedWords({ group }) {
             </Heading>
           </Flex>
           <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
-            {!loading && words && words.length === 0 && (
-              <Heading size="lg">В данной группе слова отсутствуют.</Heading>
-            )}
+            {!loading && !words && <Heading size="lg">В данной группе слова отсутствуют.</Heading>}
             {!loading &&
               words &&
               words.length > 0 &&
-              words.map((word) => <WordCard word={word} chapter={chapter} key={word._id} />)}
-            {!loading && words && words.length > 1 && (
+              words.map((word) => (
+                <WordCard word={word} refetch={refetch} chapter={chapter} key={word._id} />
+              ))}
+            {!loading && words && words.length && (
               <Box>
                 <Pagination
                   currentPage={currentPage}

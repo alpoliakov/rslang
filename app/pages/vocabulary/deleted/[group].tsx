@@ -19,17 +19,21 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import Loading from '../../../components/Loading';
+import Pagination, { OnPageChangeCallback } from '../../../components/Pagination/Pagination';
 import VocabularyNav from '../../../components/VocabularyNav/VocabularyNav';
 import WordCard from '../../../components/WordCard/WordCard';
 import { VOCABULARY_GROUP_NAV_LINKS, WORDS_IN_PAGE } from '../../../constants';
+import { useAppContext } from '../../../context/ContextApp';
 import { useAggregatedWordsDeletedQuery } from '../../../lib/graphql/aggregatedWordsDeleted.graphql';
 
 export default function DeletedWords({ group }) {
   const bg = useColorModeValue('gray.50', '#223c50');
   const [words, setWords] = useState(null);
-  const [loadingData, setLoadingData] = useState(false);
   const [chapter, setChapter] = useState(null);
   const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const { setShowLink } = useAppContext();
 
   const router = useRouter();
   const { pathname } = router;
@@ -52,18 +56,18 @@ export default function DeletedWords({ group }) {
     return setChapter('studied');
   };
 
+  const toMatrix = (arr, width) =>
+    arr.reduce(
+      (rows, key, index) =>
+        (index % width == 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) && rows,
+      [],
+    );
+
   const calcNumberPages = async (arr) => {
     const length = await arr.length;
-    console.log('Array length - ', length);
 
-    if (length <= WORDS_IN_PAGE) {
-      return;
-    }
-
-    return setPageCount(Math.ceil(arr.length / 20));
+    return setPageCount(Math.ceil(length / WORDS_IN_PAGE));
   };
-
-  console.log(group);
 
   useEffect(() => {
     refetch();
@@ -72,10 +76,26 @@ export default function DeletedWords({ group }) {
 
   useEffect(() => {
     if (data) {
-      setWords(data.aggregatedWordsDeleted);
+      setWords(toMatrix(data.aggregatedWordsDeleted, WORDS_IN_PAGE)[currentPage]);
       calcNumberPages(data.aggregatedWordsDeleted);
     }
   }, [data]);
+
+  useEffect(() => {
+    setShowLink(!!words);
+  }, [words]);
+
+  useEffect(() => {
+    if (words) {
+      console.log(words);
+      setWords(toMatrix(data.aggregatedWordsDeleted, WORDS_IN_PAGE)[currentPage]);
+    }
+  }, [currentPage]);
+
+  const onPageChanged: OnPageChangeCallback = (selectedItem) => {
+    const newPage = selectedItem.selected;
+    setCurrentPage(newPage);
+  };
 
   if (loading) {
     return <Loading />;
@@ -124,13 +144,22 @@ export default function DeletedWords({ group }) {
             </Heading>
           </Flex>
           <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
-            {!loadingData && words && words.length === 0 && (
-              <Heading size="lg">В данной группе слов нет.</Heading>
-            )}
-            {!loadingData &&
+            {!loading && !words && <Heading size="lg">В данной группе слов нет.</Heading>}
+            {!loading &&
               words &&
               words.length > 0 &&
-              words.map((word) => <WordCard word={word} chapter={chapter} key={word._id} />)}
+              words.map((word) => (
+                <WordCard word={word} refetch={refetch} chapter={chapter} key={word._id} />
+              ))}
+            {!loading && words && words.length && (
+              <Box>
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  onPageChange={onPageChanged}
+                />
+              </Box>
+            )}
           </Flex>
         </Container>
       </Grid>
