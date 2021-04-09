@@ -403,7 +403,6 @@ export default function Pages({ group, page }) {
                     {showButtons && (
                       <>
                         <Button
-                          mr={3}
                           disabled={user ? word.complexity : ''}
                           data-word={user ? word._id : ''}
                           data-name="complex"
