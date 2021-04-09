@@ -117,14 +117,14 @@ export default function StudiedWords({ group }) {
         <Container
           maxW="container.xl"
           position="sticky"
-          top="123px"
+          top={{ base: 170, lg: 120 }}
           p={1}
           height="full"
           bg={bg}
           zIndex="10"
           width="full">
-          <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
-            <Tabs defaultIndex={group} borderBottomColor="transparent">
+          <Flex alignItems="center" justifyContent="center" borderWidth={0}>
+            <Tabs defaultIndex={group} borderBottomColor="transparent" mx="auto">
               <TabList>
                 {VOCABULARY_GROUP_NAV_LINKS.map((item, index) => (
                   <VocabularyNav

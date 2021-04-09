@@ -85,7 +85,7 @@ export default function Header() {
 
   return (
     <Box bg={bg} position="sticky" top="0" p={1} height="full" zIndex="10" width="full">
-      <Container maxW="container.xl">
+      <Container maxW="container.xl" px={0}>
         <Flex alignItems="center" justifyContent="space-between">
           <Link p="1">
             <NextLink href="/">
@@ -127,7 +127,16 @@ export default function Header() {
                 <MenuButton>
                   <Flex alignItems="center" mr={7}>
                     <Avatar size="md" name="avatar" src={user.avatar} mr="10px" />
-                    <Heading size="sm">Hi, {user.name}</Heading>
+                    <Heading
+                      size="sm"
+                      style={{
+                        maxWidth: '100px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}>
+                      Hi, {user.name}
+                    </Heading>
                   </Flex>
                 </MenuButton>
                 <MenuList>

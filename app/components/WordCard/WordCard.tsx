@@ -10,6 +10,7 @@ import {
   Tab,
   TabList,
   Tabs,
+  GridItem,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -167,7 +168,7 @@ export default function WordCard({ word, chapter, refetch }) {
           }}
         />
       </Box>
-      <Box py={12} px={6} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
+      <Box py={12} px={{base: 2, lg: 6}} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
         <Heading
           fontSize={{ base: 'xl', md: '2xl' }}
           color={useColorModeValue('gray.800', 'white')}
@@ -196,30 +197,37 @@ export default function WordCard({ word, chapter, refetch }) {
             }}
           />
         </Box>
-        <Flex mt={4} w="full" alignItems="center" justifyContent="space-between">
-          <IconButton
-            colorScheme="teal"
-            onMouseDown={() => {
-              setInterrupt(true);
-              setWordAudioUrl(LOCAL_HOST + `${wordObj.audio}`);
-              setAudioMeaning(LOCAL_HOST + `${wordObj.audioMeaning}`);
-              setAudioExample(LOCAL_HOST + `${wordObj.audioExample}`);
-            }}
-            onClick={handleSound}
-            aria-label="Listen audio"
-            icon={<MdHeadset size="24px" />}
-          />
-          <Badge fontSize="0.9em" colorScheme="red">
-            {word.complexity ? 'cложное' : ''}
-          </Badge>
-          {showButtons && chapter !== 'studied' && (
-            <Flex alignItems="center" justifyContent="space-between">
-              <Button mr={3} data-word={word._id} data-name={chapter} onClick={handleButtons}>
-                Восстановить
-              </Button>
+        <Grid mt={4} w="100%" templateColumns={{base: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}} gap={{base: 2, lg: 5}}>
+          <GridItem colSpan={word.complexity ? 2 : 1}>
+            <IconButton
+              w="100%"
+              colorScheme="teal"
+              onMouseDown={() => {
+                setInterrupt(true);
+                setWordAudioUrl(LOCAL_HOST + `${wordObj.audio}`);
+                setAudioMeaning(LOCAL_HOST + `${wordObj.audioMeaning}`);
+                setAudioExample(LOCAL_HOST + `${wordObj.audioExample}`);
+              }}
+              onClick={handleSound}
+              aria-label="Listen audio"
+              icon={<MdHeadset size="24px" />}
+            />
+          </GridItem>
+          {word.complexity ? (
+            <Flex align="center" justify="center" bg="red.100" borderRadius={5}>
+              <Text style={{ textTransform: 'uppercase' }} color="red.500">
+                cложное
+              </Text>
             </Flex>
+          ) : (
+            ''
           )}
-        </Flex>
+          {showButtons && (
+            <Button mr={3} data-word={word._id} data-name={chapter} onClick={handleButtons}>
+              Восстановить
+            </Button>
+          )}
+        </Grid>
       </Box>
     </Box>
   );
