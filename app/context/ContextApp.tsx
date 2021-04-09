@@ -7,11 +7,16 @@ export function AppWrapper({ children }) {
     showTranslate: true,
     showButtons: true,
   });
+  const [show, setShow] = useState(true);
 
   const sharedState = {
     data: settings,
     setData: (value) => {
       setSettings(value);
+    },
+    showLink: show,
+    setShowLink: (value) => {
+      setShow(value);
     },
   };
 

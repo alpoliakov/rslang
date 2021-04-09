@@ -20,15 +20,19 @@ import useSound from 'use-sound';
 
 import { LOCAL_HOST } from '../../constants';
 import { useAppContext } from '../../context/ContextApp';
+import { initializeApollo } from '../../lib/apollo';
+import { AggregatedWordDocument } from '../../lib/graphql/aggregatedWord.graphql';
+import { useEditAggregatedWordMutation } from '../../lib/graphql/editAggregatedWord.graphql';
 
-export default function WordCard({ word, chapter }) {
+export default function WordCard({ word, chapter, refetch }) {
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [audioMeaning, setAudioMeaning] = useState('');
   const [audioExample, setAudioExample] = useState('');
   const [interrupt, setInterrupt] = useState(false);
-  const [pageCount, setPageCount] = useState(30);
   const [startMeaning, setStartMeaning] = useState(false);
   const [startExample, setStartExample] = useState(false);
+
+  const [editAggregatedWord] = useEditAggregatedWordMutation();
 
   const { _id, word: wordObj } = word;
   const { data } = useAppContext();
@@ -77,9 +81,69 @@ export default function WordCard({ word, chapter }) {
     }, 100);
   };
 
+  const editWord = async (dataWord) => {
+    try {
+      const { data } = await editAggregatedWord({
+        variables: { input: { ...dataWord } },
+      });
+
+      if (data.editAggregatedWord._id) {
+        refetch();
+        console.log(data.editAggregatedWord);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const fetchCurrentWord = async (id) => {
+    const apollo = initializeApollo();
+    try {
+      const { data } = await apollo.query({
+        query: AggregatedWordDocument,
+        variables: { aggregatedWordId: id },
+      });
+
+      if (data.aggregatedWord._id) {
+        return data.aggregatedWord;
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   const handleButtons = async (event) => {
     event.preventDefault();
-    console.log(event.target.dataset.name);
+    const word = await fetchCurrentWord(event.target.dataset.word);
+    const { optional, deleted, studied, complexity } = word;
+    const { repeat, rightAnswers } = optional;
+    console.log(word);
+
+    const args = {
+      id: event.target.dataset.word,
+    };
+
+    if (event.target.dataset.name === 'complex') {
+      await editWord({
+        ...args,
+        complexity: false,
+        repeat,
+        rightAnswers,
+        deleted,
+        studied,
+      });
+    }
+
+    if (event.target.dataset.name === 'deleted') {
+      await editWord({
+        ...args,
+        deleted: false,
+        repeat,
+        rightAnswers,
+        complexity,
+        studied,
+      });
+    }
   };
 
   return (

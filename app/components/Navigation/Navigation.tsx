@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { RiSettings4Line } from 'react-icons/ri';
 
+import { useAppContext } from '../../context/ContextApp';
 import TextbookSettings from '../TextbookSettings/TextbookSettings';
 
 export default function Navigation({ group, page }) {
@@ -25,6 +26,8 @@ export default function Navigation({ group, page }) {
   const [mainTextbook, setMainTextBook] = useState(null);
   const [chapter, setChapter] = useState(null);
   const { pathname } = router;
+
+  const { showLink } = useAppContext();
 
   const setCurrentChapter = () => {
     if (pathname.match('complex')) {
@@ -116,7 +119,8 @@ export default function Navigation({ group, page }) {
         )}
         <Spacer />
         <HStack spacing={3} alignItems="center">
-          <Tabs defaultIndex={5} borderBottomColor="transparent">
+          {showLink && (
+            <Tabs defaultIndex={5} borderBottomColor="transparent">
             <TabList flexWrap="wrap">
               <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
@@ -132,6 +136,7 @@ export default function Navigation({ group, page }) {
               </Tab>
             </TabList>
           </Tabs>
+          )}
           <IconButton aria-label="Search database" icon={<RiSettings4Line />} onClick={onOpen} />
         </HStack>
       </Flex>

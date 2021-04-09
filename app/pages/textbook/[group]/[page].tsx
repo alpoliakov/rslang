@@ -45,7 +45,7 @@ export default function Pages({ group, page }) {
   const [audioMeaning, setAudioMeaning] = useState('');
   const [audioExample, setAudioExample] = useState('');
   const [interrupt, setInterrupt] = useState(false);
-  const [pageCount, setPageCount] = useState(30);
+  const [pageCount, setPageCount] = useState(null);
   const [startMeaning, setStartMeaning] = useState(false);
   const [startExample, setStartExample] = useState(false);
   const [session, setSession] = useState(false);
@@ -143,6 +143,7 @@ export default function Pages({ group, page }) {
   useEffect(() => {
     setLoadingWords(true);
     setLocalState({ ...localStatistics });
+    setPageCount(30);
     console.log(localStatistics);
     setTimeout(() => {
       setSession(true);
@@ -206,8 +207,8 @@ export default function Pages({ group, page }) {
       if (data.editAggregatedWord._id && deleted) {
         fetchWords();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -235,18 +236,18 @@ export default function Pages({ group, page }) {
     }
 
     const word = await fetchCurrentWord(event.target.dataset.word);
-    const { optional, complexity, deleted } = word;
+    const { optional, complexity, deleted, studied } = word;
     const { repeat, rightAnswers } = optional;
 
     const args = {
       id: event.target.dataset.word,
-      studied: true,
     };
 
     if (event.target.dataset.name === 'deleted') {
       await editWord({
         ...args,
         deleted: true,
+        studied: false,
         complexity,
         repeat,
         rightAnswers,
@@ -259,6 +260,7 @@ export default function Pages({ group, page }) {
       await editWord({
         ...args,
         deleted,
+        studied: true,
         complexity: true,
         repeat: repeat + 1,
         rightAnswers: rightAnswers + 1,
@@ -281,6 +283,11 @@ export default function Pages({ group, page }) {
       console.log(state.length);
 
       if (state.length === 0) {
+        if (page === pageCount - 1) {
+          router.push(`/textbook/${group}/${page - 1}`);
+          return;
+        }
+
         router.push(`/textbook/${group}/${page + 1}`);
         return;
       }
