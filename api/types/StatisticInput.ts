@@ -12,8 +12,44 @@ export class StatisticInput implements Partial<Statistic> {
   learnedWords?: number;
 
   @Field({ nullable: true })
-  title?: string;
+  wordsCount?: number;
 
   @Field({ nullable: true })
-  description?: string;
+  rightAnswers?: number;
+
+  @Field({ nullable: true })
+  wordsCountSavanna?: number;
+
+  @Field({ nullable: true })
+  rightAnswersSavanna?: number;
+
+  @Field({ nullable: true })
+  seriesSavanna?: number;
+
+  @Field({ nullable: true })
+  wordsCountCall?: number;
+
+  @Field({ nullable: true })
+  rightAnswersCall?: number;
+
+  @Field({ nullable: true })
+  seriesCall?: number;
+
+  @Field({ nullable: true })
+  wordsCountSprint?: number;
+
+  @Field({ nullable: true })
+  rightAnswersSprint?: number;
+
+  @Field({ nullable: true })
+  seriesSprint?: number;
+
+  @Field({ nullable: true })
+  wordsCountNew?: number;
+
+  @Field({ nullable: true })
+  rightAnswersNew?: number;
+
+  @Field({ nullable: true })
+  seriesNew?: number;
 }

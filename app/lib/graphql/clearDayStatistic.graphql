@@ -1,5 +1,5 @@
-mutation EditStatistic($input: StatisticInput!) {
-  editStatistic(input: $input) {
+mutation ClearDayStatistic {
+  clearDayStatistic{
     _id
     user {
       _id
@@ -43,4 +43,3 @@ mutation EditStatistic($input: StatisticInput!) {
     }
   }
 }
-

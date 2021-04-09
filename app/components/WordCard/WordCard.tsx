@@ -148,7 +148,7 @@ export default function WordCard({ word, chapter }) {
           <Badge fontSize="0.9em" colorScheme="red">
             {word.complexity ? 'cложное' : ''}
           </Badge>
-          {showButtons && (
+          {showButtons && chapter !== 'studied' && (
             <Flex alignItems="center" justifyContent="space-between">
               <Button mr={3} data-word={word._id} data-name={chapter} onClick={handleButtons}>
                 Восстановить
