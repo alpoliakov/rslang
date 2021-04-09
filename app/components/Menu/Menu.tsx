@@ -26,7 +26,7 @@ const Menu = () => {
       <Link as={NextLink} href={url}>
         <a>
           <Flex
-            h={70}
+            h={[30, 30, 70]}
             p={5}
             justify="center"
             align="center"
@@ -48,7 +48,7 @@ const Menu = () => {
 
   return (
     <Grid
-      templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
+      templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
       gap={6}
       mx="auto">
       <MenuItem menuItem={MenuTitle.TEXT_BOOK}>
