@@ -34,6 +34,13 @@ input AuthInput {
   password: String!
 }
 
+type CallGameStatistic {
+  percentsRightCall: Float
+  rightAnswersCall: Float
+  seriesCall: Float
+  wordsCountCall: Float
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -46,6 +53,7 @@ input EditUserInput {
 }
 
 type Mutation {
+  clearDayStatistic: Statistic!
   createAggregatedWord(input: AggregatedWordInput!): AggregatedWord!
   createUserWord(input: UserWordInput!): UserWord!
   deleteAggregatedWord(aggregatedWordId: ObjectId!): Boolean!
@@ -60,6 +68,13 @@ type Mutation {
   editUserWord(input: UserWordInput!): UserWord!
   login(input: AuthInput!): UserResponse!
   register(input: AuthInput!): UserResponse!
+}
+
+type NewGameStatistic {
+  percentsRightNew: Float
+  rightAnswersNew: Float
+  seriesNew: Float
+  wordsCountNew: Float
 }
 
 """Mongo object id scalar type"""
@@ -77,8 +92,14 @@ type OptionalSettings {
 }
 
 type OptionalStatistic {
-  description: String
-  title: String
+  audioCall: CallGameStatistic
+  createDate: DateTime!
+  newGame: NewGameStatistic
+  percentsRight: Float
+  rightAnswers: Float!
+  savanna: SavannaGameStatistic
+  sprint: SprintGameStatistic
+  wordsCount: Float!
 }
 
 type OptionalUserWord {
@@ -104,6 +125,13 @@ type Query {
   words(input: WordInput!): [Word!]
 }
 
+type SavannaGameStatistic {
+  percentsRightSavanna: Float
+  rightAnswersSavanna: Float
+  seriesSavanna: Float
+  wordsCountSavanna: Float
+}
+
 type Settings {
   _id: ObjectId!
   optional: OptionalSettings!
@@ -118,18 +146,43 @@ input SettingsInput {
   wordsPerDay: Float
 }
 
+type SprintGameStatistic {
+  percentsRightSprint: Float
+  rightAnswersSprint: Float
+  seriesSprint: Float
+  wordsCountSprint: Float
+}
+
 type Statistic {
   _id: ObjectId!
   learnedWords: Float!
   optional: OptionalStatistic!
+  statisticPerDay: [StatisticObject!]!
   user: User!
 }
 
 input StatisticInput {
-  description: String
   id: ObjectId
   learnedWords: Float
-  title: String
+  rightAnswers: Float
+  rightAnswersCall: Float
+  rightAnswersNew: Float
+  rightAnswersSavanna: Float
+  rightAnswersSprint: Float
+  seriesCall: Float
+  seriesNew: Float
+  seriesSavanna: Float
+  seriesSprint: Float
+  wordsCount: Float
+  wordsCountCall: Float
+  wordsCountNew: Float
+  wordsCountSavanna: Float
+  wordsCountSprint: Float
+}
+
+type StatisticObject {
+  countWords: Float
+  date: DateTime
 }
 
 type User {
