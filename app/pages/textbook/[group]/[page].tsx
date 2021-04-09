@@ -264,7 +264,13 @@ export default function Pages({ group, page }) {
           Group: {group + 1}
         </Heading>
       </Flex>
-      <Flex p={1} px={2} w="full" alignItems="center" justifyContent="center" flexDirection="column">
+      <Flex
+        p={1}
+        px={2}
+        w="full"
+        alignItems="center"
+        justifyContent="center"
+        flexDirection="column">
         {!loadingWords &&
           state &&
           state.map((word) => {
@@ -350,9 +356,9 @@ export default function Pages({ group, page }) {
                       {user ? (
                         word.complexity ? (
                           <Flex align="center" justify="center" bg="red.100" borderRadius={5}>
-                            <Badge size="2xl" colorScheme="red">
+                            <Text style={{ textTransform: 'uppercase' }} color="red.500">
                               cложное
-                            </Badge>
+                            </Text>
                           </Flex>
                         ) : (
                           ''
