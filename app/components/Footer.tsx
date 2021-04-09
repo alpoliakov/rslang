@@ -62,16 +62,6 @@ export default function Footer() {
                 className="shadow__item hover__item">
                 @w1r3d7
               </Link>
-              <Link
-                href="https://github.com/buiiz"
-                target="_blank"
-                p="1"
-                _hover={{
-                  color: 'red.500',
-                }}
-                className="shadow__item hover__item">
-                @buiiz
-              </Link>
             </Flex>
           </Flex>
         </Flex>
