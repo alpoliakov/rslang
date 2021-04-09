@@ -60,8 +60,28 @@ export class AuthResolver {
       learnedWords: 0,
       user: user.id,
       optional: {
-        title: `${user.name} statistic`,
-        description: 'Test description statistic',
+        wordsCount: 0,
+        rightAnswers: 0,
+        savanna: {
+          wordsCountSavanna: 0,
+          rightAnswersSavanna: 0,
+          seriesSavanna: 0,
+        },
+        audioCall: {
+          wordsCountCall: 0,
+          rightAnswersCall: 0,
+          seriesCall: 0,
+        },
+        sprint: {
+          wordsCountSprint: 0,
+          rightAnswersSprint: 0,
+          seriesSprint: 0,
+        },
+        newGame: {
+          wordsCountNew: 0,
+          rightAnswersNew: 0,
+          seriesNew: 0,
+        },
       },
     } as Statistic);
 

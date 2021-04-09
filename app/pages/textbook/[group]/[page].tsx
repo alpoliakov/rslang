@@ -26,6 +26,7 @@ import { GET_LOCAL_STATISTIC } from '../../../context/statistic/operations/queri
 import { initializeApollo } from '../../../lib/apollo';
 import { AggregatedWordDocument } from '../../../lib/graphql/aggregatedWord.graphql';
 import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.graphql';
+import { useAggregatedWordsQuery } from '../../../lib/graphql/aggregatedWords.graphql';
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
 import { useAuth } from '../../../lib/useAuth';
@@ -46,8 +47,13 @@ export default function Pages({ group, page }) {
   const [startMeaning, setStartMeaning] = useState(false);
   const [startExample, setStartExample] = useState(false);
   const [session, setSession] = useState(false);
+  const [localState, setLocalState] = useState(null);
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
+
+  const reload = () => {
+    router.push(format({ pathname, query }));
+  };
 
   const {
     data: { localStatistics },
@@ -74,8 +80,9 @@ export default function Pages({ group, page }) {
   // @ts-ignore
   const [playWord, objPlayWord] = useSound(wordAudioUrl, { onend: () => setStartMeaning(true) });
 
-  const userFetch = async () => {
+  const userFetchCache = async () => {
     setLoadingWords(true);
+
     const apollo = initializeApollo();
 
     const { data } = await apollo.query({
@@ -83,9 +90,28 @@ export default function Pages({ group, page }) {
       variables: {
         input: { group, page },
       },
+      fetchPolicy: 'cache-first',
     });
 
-    await setState([...data.aggregatedWords]);
+    console.log(data);
+    await setState(data.aggregatedWords);
+  };
+
+  const userFetch = async () => {
+    setLoadingWords(true);
+
+    const apollo = initializeApollo();
+
+    const { data } = await apollo.query({
+      query: AggregatedWordsDocument,
+      variables: {
+        input: { group, page },
+      },
+      fetchPolicy: 'network-only',
+    });
+
+    console.log(data);
+    return data.aggregatedWords;
   };
 
   const nonUserFetch = async () => {
@@ -97,16 +123,16 @@ export default function Pages({ group, page }) {
       variables: { group, page },
     });
 
-    await setState([...data.words]);
+    return data.words;
   };
 
   const fetchWords = async () => {
     if (user) {
-      userFetch();
+      userFetch().then((data) => setState(data));
     }
 
     if (!user) {
-      nonUserFetch();
+      nonUserFetch().then((data) => setState(data));
     }
 
     setCurrentPage(page);
@@ -114,6 +140,8 @@ export default function Pages({ group, page }) {
 
   useEffect(() => {
     setLoadingWords(true);
+    setLocalState({ ...localStatistics });
+    console.log(localStatistics);
     setTimeout(() => {
       setSession(true);
     }, 1000);
@@ -144,10 +172,6 @@ export default function Pages({ group, page }) {
     }
   }, [startMeaning, startExample, interrupt]);
 
-  // const reload = () => {
-  //   router.push(format({ pathname, query }));
-  // };
-
   const handleSound = () => {
     setInterrupt(false);
 
@@ -159,7 +183,6 @@ export default function Pages({ group, page }) {
   const setJumpToPage = (newPage) => {
     setInterrupt(true);
     const href = `/textbook/${group}/${newPage}`;
-
     router.push(href, href);
   };
 
@@ -174,7 +197,11 @@ export default function Pages({ group, page }) {
         variables: { input: { id, complexity, deleted, repeat, rightAnswers, studied } },
       });
 
-      if (data.editAggregatedWord._id) {
+      if (data.editAggregatedWord._id && complexity) {
+        userFetchCache();
+      }
+
+      if (data.editAggregatedWord._id && deleted) {
         fetchWords();
       }
     } catch (err) {
@@ -211,8 +238,6 @@ export default function Pages({ group, page }) {
 
     const args = {
       id: event.target.dataset.word,
-      repeat: repeat + 1,
-      rightAnswers: rightAnswers + 1,
       studied: true,
     };
 
@@ -221,6 +246,8 @@ export default function Pages({ group, page }) {
         ...args,
         deleted: true,
         complexity,
+        repeat,
+        rightAnswers,
       });
 
       return;
@@ -231,15 +258,30 @@ export default function Pages({ group, page }) {
         ...args,
         deleted,
         complexity: true,
+        repeat: repeat + 1,
+        rightAnswers: rightAnswers + 1,
       });
+
+      localState.wordsCount = localState.wordsCount + 1;
+      setLocalState(localState);
+      EditLocalStatistics(localState);
 
       return;
     }
   };
 
   useEffect(() => {
-    if (Array.isArray(state) && state.length > 0) {
+    if (Array.isArray(state) && state.length >= 0) {
       setLoadingWords(false);
+    }
+
+    if (user && state) {
+      console.log(state.length);
+
+      if (state.length === 0) {
+        router.push(`/textbook/${group}/${page + 1}`);
+        return;
+      }
     }
   }, [state]);
 
@@ -267,106 +309,111 @@ export default function Pages({ group, page }) {
           state &&
           state.map((word) => {
             return (
-              !word.deleted && (
-                <Box
-                  bg={useColorModeValue('white', 'gray.800')}
-                  mx={{ lg: 8 }}
-                  my={4}
-                  key={word._id}
-                  display={{ lg: 'flex' }}
-                  w="full"
-                  maxW={{ lg: '5xl' }}
-                  shadow={{ lg: 'lg' }}
-                  rounded={{ lg: 'lg' }}>
-                  <Box w={{ lg: '40%' }}>
-                    <Box
-                      h={{ base: 64, lg: 'full' }}
-                      rounded={{ lg: 'lg' }}
-                      bgSize="cover"
-                      bgPosition="center"
-                      style={{
-                        backgroundImage: `url(${LOCAL_HOST}${user ? word.word.image : word.image})`,
+              <Box
+                bg={useColorModeValue('white', 'gray.800')}
+                mx={{ lg: 8 }}
+                my={4}
+                key={word._id}
+                display={{ lg: 'flex' }}
+                w="full"
+                maxW={{ lg: '5xl' }}
+                shadow={{ lg: 'lg' }}
+                rounded={{ lg: 'lg' }}>
+                <Box w={{ lg: '40%' }}>
+                  <Box
+                    h={{ base: 64, lg: 'full' }}
+                    rounded={{ lg: 'lg' }}
+                    bgSize="cover"
+                    bgPosition="center"
+                    style={{
+                      backgroundImage: `url(${LOCAL_HOST}${user ? word.word.image : word.image})`,
+                    }}
+                  />
+                </Box>
+                <Box py={12} px={6} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
+                  <Heading
+                    fontSize={{ base: 'xl', md: '2xl' }}
+                    color={useColorModeValue('gray.800', 'white')}
+                    fontWeight="bold">
+                    <Text color={useColorModeValue('brand.600', 'brand.400')}>
+                      {user ? word.word.word : word.word} -{' '}
+                      {user ? word.word.transcription : word.transcription}{' '}
+                      {showTranslate && `- ${user ? word.word.wordTranslate : word.wordTranslate}`}
+                    </Text>
+                  </Heading>
+                  <Box my={2}>
+                    <Text
+                      color={useColorModeValue('gray.600', 'gray.200')}
+                      dangerouslySetInnerHTML={{
+                        __html: showTranslate
+                          ? `<p>${user ? word.word.textMeaning : word.textMeaning} - ${
+                              user ? word.word.textMeaningTranslate : word.textMeaningTranslate
+                            }</p>`
+                          : `<p>${user ? word.word.textMeaning : word.textMeaning}`,
                       }}
                     />
                   </Box>
-                  <Box py={12} px={6} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
-                    <Heading
-                      fontSize={{ base: 'xl', md: '2xl' }}
-                      color={useColorModeValue('gray.800', 'white')}
-                      fontWeight="bold">
-                      <Text color={useColorModeValue('brand.600', 'brand.400')}>
-                        {user ? word.word.word : word.word} -{' '}
-                        {user ? word.word.transcription : word.transcription}{' '}
-                        {showTranslate &&
-                          `- ${user ? word.word.wordTranslate : word.wordTranslate}`}
-                      </Text>
-                    </Heading>
-                    <Box my={2}>
-                      <Text
-                        color={useColorModeValue('gray.600', 'gray.200')}
-                        dangerouslySetInnerHTML={{
-                          __html: showTranslate
-                            ? `<p>${user ? word.word.textMeaning : word.textMeaning} - ${
-                                user ? word.word.textMeaningTranslate : word.textMeaningTranslate
-                              }</p>`
-                            : `<p>${user ? word.word.textMeaning : word.textMeaning}`,
-                        }}
-                      />
-                    </Box>
-                    <Box my={2}>
-                      <Text
-                        color={useColorModeValue('gray.600', 'gray.200')}
-                        dangerouslySetInnerHTML={{
-                          __html: showTranslate
-                            ? `<p>${user ? word.word.textExample : word.textExample} - ${
-                                user ? word.word.textExampleTranslate : word.textExampleTranslate
-                              }</p>`
-                            : `<p>${user ? word.textExample : word.textExample}</p>`,
-                        }}
-                      />
-                    </Box>
-                    <Flex mt={4} w="full" alignItems="center" justifyContent="space-between">
-                      <IconButton
-                        colorScheme="teal"
-                        onMouseDown={() => {
-                          setInterrupt(true);
-                          setWordAudioUrl(LOCAL_HOST + `${user ? word.word.audio : word.audio}`);
-                          setAudioMeaning(
-                            LOCAL_HOST + `${user ? word.word.audioMeaning : word.audioMeaning}`,
-                          );
-                          setAudioExample(
-                            LOCAL_HOST + `${user ? word.word.audioExample : word.audioExample}`,
-                          );
-                        }}
-                        onClick={handleSound}
-                        aria-label="Listen audio"
-                        icon={<MdHeadset size="24px" />}
-                      />
-                      <Badge fontSize="0.9em" colorScheme="red">
-                        {user ? (word.complexity ? 'cложное' : '') : ''}
-                      </Badge>
-                      {showButtons && (
-                        <Flex alignItems="center" justifyContent="space-between">
-                          <Button
-                            mr={3}
-                            disabled={user ? word.complexity : ''}
-                            data-word={user ? word._id : ''}
-                            data-name="complex"
-                            onClick={handleButtons}>
-                            Сложное слово
-                          </Button>
-                          <Button
-                            data-word={user ? word._id : ''}
-                            data-name="deleted"
-                            onClick={handleButtons}>
-                            Удалить слово
-                          </Button>
-                        </Flex>
-                      )}
-                    </Flex>
+                  <Box my={2}>
+                    <Text
+                      color={useColorModeValue('gray.600', 'gray.200')}
+                      dangerouslySetInnerHTML={{
+                        __html: showTranslate
+                          ? `<p>${user ? word.word.textExample : word.textExample} - ${
+                              user ? word.word.textExampleTranslate : word.textExampleTranslate
+                            }</p>`
+                          : `<p>${user ? word.textExample : word.textExample}</p>`,
+                      }}
+                    />
                   </Box>
+                  <Flex mt={4} w="full" alignItems="center" justifyContent="space-between">
+                    <IconButton
+                      colorScheme="teal"
+                      onMouseDown={() => {
+                        setInterrupt(true);
+                        setWordAudioUrl(LOCAL_HOST + `${user ? word.word.audio : word.audio}`);
+                        setAudioMeaning(
+                          LOCAL_HOST + `${user ? word.word.audioMeaning : word.audioMeaning}`,
+                        );
+                        setAudioExample(
+                          LOCAL_HOST + `${user ? word.word.audioExample : word.audioExample}`,
+                        );
+                      }}
+                      onClick={handleSound}
+                      aria-label="Listen audio"
+                      icon={<MdHeadset size="24px" />}
+                    />
+                    <Badge fontSize="0.9em" colorScheme="red">
+                      {user ? (word.complexity ? 'cложное' : '') : ''}
+                    </Badge>
+                    {showButtons && (
+                      <Flex alignItems="center" justifyContent="space-between">
+                        <Button
+                          mr={3}
+                          disabled={user ? word.complexity : ''}
+                          data-word={user ? word._id : ''}
+                          data-name="complex"
+                          onClick={handleButtons}>
+                          Сложное слово
+                        </Button>
+                        <Button
+                          data-word={user ? word._id : ''}
+                          data-name="deleted"
+                          onClick={handleButtons}>
+                          Удалить слово
+                        </Button>
+                      </Flex>
+                    )}
+                  </Flex>
+                  {user && word.optional && (
+                    <Box mt={4}>
+                      <Text size="sm" fontWeight="bold">
+                        Ипользовано: {word.optional.repeat}. Правильных ответов:{' '}
+                        {word.optional.rightAnswers}
+                      </Text>
+                    </Box>
+                  )}
                 </Box>
-              )
+              </Box>
             );
           })}
       </Flex>
