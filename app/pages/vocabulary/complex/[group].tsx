@@ -37,7 +37,7 @@ export default function ComplexWords({ group }) {
   const router = useRouter();
   const { pathname } = router;
 
-  const { setShowLink } = useAppContext();
+  const { setShowLink, setVocabularyPage } = useAppContext();
 
   const { data, loading, refetch } = useAggregatedWordsComplexityQuery({
     variables: { input: { group } },
@@ -91,6 +91,7 @@ export default function ComplexWords({ group }) {
       console.log(words);
       setWords(toMatrix(data.aggregatedWordsComplexity, WORDS_IN_PAGE)[currentPage]);
     }
+    setVocabularyPage(currentPage);
   }, [currentPage]);
 
   const onPageChanged: OnPageChangeCallback = (selectedItem) => {
@@ -120,7 +121,7 @@ export default function ComplexWords({ group }) {
           p={1}
           height="full"
           bg={bg}
-          zIndex="10"
+          zIndex="1"
           width="full">
           <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
             <Tabs defaultIndex={group} borderBottomColor="transparent" mx="auto">

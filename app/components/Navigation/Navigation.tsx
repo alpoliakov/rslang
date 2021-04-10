@@ -121,21 +121,21 @@ export default function Navigation({ group, page }) {
         <HStack spacing={3} alignItems="center">
           {showLink && (
             <Tabs defaultIndex={5} borderBottomColor="transparent">
-            <TabList flexWrap="wrap">
-              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
-              </Tab>
-              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={`/mini-games/sprint/${group}/${page}`}>Спринт</NextLink>
-              </Tab>
-              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={`/mini-games/audiocall/${group}/${page}`}>Аудиовызов</NextLink>
-              </Tab>
-              <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={`/mini-games/new-game/${group}/${page}`}>Написание</NextLink>
-              </Tab>
-            </TabList>
-          </Tabs>
+              <TabList flexWrap="wrap">
+                <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
+                  <NextLink href={`/mini-games/savanna/${group}/${page}`}>Саванна</NextLink>
+                </Tab>
+                <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
+                  <NextLink href={`/mini-games/sprint/${group}/${page}`}>Спринт</NextLink>
+                </Tab>
+                <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
+                  <NextLink href={`/mini-games/audiocall/${group}/${page}`}>Аудиовызов</NextLink>
+                </Tab>
+                <Tab py={4} px={{ base: 2, xl: 4 }} m={0} _focus={{ boxShadow: 'none' }}>
+                  <NextLink href={`/mini-games/new-game/${group}/${page}`}>Написание</NextLink>
+                </Tab>
+              </TabList>
+            </Tabs>
           )}
           <IconButton aria-label="Search database" icon={<RiSettings4Line />} onClick={onOpen} />
         </HStack>

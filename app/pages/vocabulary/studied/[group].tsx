@@ -25,7 +25,6 @@ import WordCard from '../../../components/WordCard/WordCard';
 import { VOCABULARY_GROUP_NAV_LINKS, WORDS_IN_PAGE } from '../../../constants';
 import { useAppContext } from '../../../context/ContextApp';
 import { useAggregatedWordsStudiedQuery } from '../../../lib/graphql/aggregatedWordsStudied.graphql';
-import { useAuth } from '../../../lib/useAuth';
 
 export default function StudiedWords({ group }) {
   const bg = useColorModeValue('gray.50', '#223c50');
@@ -38,19 +37,19 @@ export default function StudiedWords({ group }) {
   const router = useRouter();
   const { pathname } = router;
 
-  const { setShowLink } = useAppContext();
+  const { setShowLink, setVocabularyPage } = useAppContext();
 
   const { data, loading, refetch } = useAggregatedWordsStudiedQuery({
     variables: { input: { group } },
   });
 
-  const searchChapter = () => {
-    if (pathname.match('complex')) {
+  const searchChapter = (pathName) => {
+    if (pathName.match('complex')) {
       setChapter('complex');
       return;
     }
 
-    if (pathname.match('deleted')) {
+    if (pathName.match('deleted')) {
       setChapter('deleted');
       return;
     }
@@ -72,16 +71,23 @@ export default function StudiedWords({ group }) {
   };
 
   useEffect(() => {
-    searchChapter();
+    searchChapter(pathname);
     refetch();
   }, []);
 
   useEffect(() => {
     if (data) {
-      setWords(toMatrix(data.aggregatedWordsStudied, WORDS_IN_PAGE)[currentPage]);
+      setDimArray(toMatrix(data.aggregatedWordsStudied, WORDS_IN_PAGE));
+
       calcNumberPages(data.aggregatedWordsStudied);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (dimArray) {
+      setWords(dimArray[currentPage]);
+    }
+  }, [dimArray]);
 
   useEffect(() => {
     setShowLink(!!words);
@@ -89,9 +95,9 @@ export default function StudiedWords({ group }) {
 
   useEffect(() => {
     if (words) {
-      console.log(words);
-      setWords(toMatrix(data.aggregatedWordsStudied, WORDS_IN_PAGE)[currentPage]);
+      setWords(dimArray[currentPage]);
     }
+    setVocabularyPage(currentPage);
   }, [currentPage]);
 
   const onPageChanged: OnPageChangeCallback = (selectedItem) => {
@@ -120,8 +126,8 @@ export default function StudiedWords({ group }) {
           top={{ base: 170, lg: 120 }}
           p={1}
           height="full"
+          zIndex="1"
           bg={bg}
-          zIndex="10"
           width="full">
           <Flex alignItems="center" justifyContent="center" borderWidth={0}>
             <Tabs defaultIndex={group} borderBottomColor="transparent" mx="auto">
