@@ -137,6 +137,10 @@ export class OptionalStatistic {
   @Property({ default: new Date(), required: true })
   createDate: Date;
 
+  @Field()
+  @Property({ nullable: true })
+  localRate: number;
+
   @Field(() => SavannaGameStatistic, { nullable: true })
   @Property({ required: false })
   savanna?: SavannaGameStatistic;
@@ -165,7 +169,7 @@ export class Statistic {
 
   @Field()
   @Property()
-  learnedWords: number;
+  globalRate: number;
 
   @Field(() => OptionalStatistic)
   @Property({ required: false })

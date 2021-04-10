@@ -5,12 +5,12 @@ import {
   Container,
   Flex,
   Grid,
+  GridItem,
   Heading,
   IconButton,
   Tab,
   TabList,
   Tabs,
-  GridItem,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -168,7 +168,7 @@ export default function WordCard({ word, chapter, refetch }) {
           }}
         />
       </Box>
-      <Box py={12} px={{base: 2, lg: 6}} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
+      <Box py={12} px={{ base: 2, lg: 6 }} maxW={{ base: 'xl', lg: '5xl' }} w={{ lg: '60%' }}>
         <Heading
           fontSize={{ base: 'xl', md: '2xl' }}
           color={useColorModeValue('gray.800', 'white')}
@@ -197,7 +197,12 @@ export default function WordCard({ word, chapter, refetch }) {
             }}
           />
         </Box>
-        <Grid mt={4} w="100%" templateColumns={{base: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}} gap={{base: 2, lg: 5}}>
+        <Grid
+          mt={4}
+          zIndex="0"
+          w="100%"
+          templateColumns={{ base: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+          gap={{ base: 2, lg: 5 }}>
           <GridItem colSpan={word.complexity ? 2 : 1}>
             <IconButton
               w="100%"
@@ -222,7 +227,7 @@ export default function WordCard({ word, chapter, refetch }) {
           ) : (
             ''
           )}
-          {showButtons && (
+          {showButtons && chapter !== 'studied' && (
             <Button mr={3} data-word={word._id} data-name={chapter} onClick={handleButtons}>
               Восстановить
             </Button>

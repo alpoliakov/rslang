@@ -62,7 +62,7 @@ export default function Pages({ group, page }) {
     loading,
   } = useQuery(GET_LOCAL_STATISTIC);
 
-  const { data } = useAppContext();
+  const { data, setShowLink } = useAppContext();
   const { showTranslate, showButtons } = data;
 
   const [playExample, objPlayExample] = useSound(audioExample, {
@@ -144,6 +144,7 @@ export default function Pages({ group, page }) {
     setLoadingWords(true);
     setLocalState({ ...localStatistics });
     setPageCount(30);
+    setShowLink(true);
     console.log(localStatistics);
     setTimeout(() => {
       setSession(true);

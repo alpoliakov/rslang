@@ -33,7 +33,7 @@ export default function DeletedWords({ group }) {
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { setShowLink } = useAppContext();
+  const { setShowLink, setVocabularyPage } = useAppContext();
 
   const router = useRouter();
   const { pathname } = router;
@@ -90,6 +90,7 @@ export default function DeletedWords({ group }) {
       console.log(words);
       setWords(toMatrix(data.aggregatedWordsDeleted, WORDS_IN_PAGE)[currentPage]);
     }
+    setVocabularyPage(currentPage);
   }, [currentPage]);
 
   const onPageChanged: OnPageChangeCallback = (selectedItem) => {
@@ -119,7 +120,7 @@ export default function DeletedWords({ group }) {
           p={1}
           height="full"
           bg={bg}
-          zIndex="10"
+          zIndex="1"
           width="full">
           <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
             <Tabs defaultIndex={group} borderBottomColor="transparent" mx="auto">

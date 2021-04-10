@@ -33,8 +33,9 @@ export class StatisticResolver {
     @Ctx() ctx: MyContext,
   ): Promise<Statistic> {
     const {
-      learnedWords,
+      globalRate,
       wordsCount,
+      localRate,
       rightAnswers,
       wordsCountSavanna,
       rightAnswersSavanna,
@@ -49,7 +50,7 @@ export class StatisticResolver {
       rightAnswersNew,
       seriesNew,
     } = statisticInput;
-    const optional = { wordsCount, rightAnswers };
+
     const savanna = {
       wordsCountSavanna,
       rightAnswersSavanna,
@@ -71,11 +72,13 @@ export class StatisticResolver {
       seriesNew,
     };
 
+    const optional = { wordsCount, rightAnswers, localRate, savanna, audioCall, sprint, newGame };
+
     const statistic = await StatisticModel.findOneAndUpdate(
       { user: ctx.res.locals.userId },
       {
-        optional: { ...optional, savanna, audioCall, sprint, newGame } as OptionalStatistic,
-        learnedWords,
+        optional: { ...optional } as OptionalStatistic,
+        globalRate,
       },
       { runValidators: true, new: true },
     );
@@ -109,6 +112,7 @@ export class StatisticResolver {
         optional: {
           wordsCount: 0,
           rightAnswers: 0,
+          localRate: 0,
           createDate: new Date(),
           savanna: {
             wordsCountSavanna: 0,

@@ -20,7 +20,6 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { BiChevronDown, BiMenu } from 'react-icons/bi';
-import { IoInvertModeOutline, IoInvertModeSharp } from 'react-icons/io5';
 import {
   RiListSettingsLine,
   RiLoginCircleLine,
@@ -32,6 +31,7 @@ import {
 } from 'react-icons/ri';
 
 import { MenuTitle } from '../constants';
+import { useAppContext } from '../context/ContextApp';
 import { useAuth } from '../lib/useAuth';
 import Navigation from './Navigation/Navigation';
 
@@ -61,6 +61,7 @@ export default function Header() {
   const [showColorModeButton, setShowColorModeButton] = useState(true);
 
   const { user, signOut } = useAuth();
+  const { vocabularyPage } = useAppContext();
 
   const router = useRouter();
   const { pathname, query } = router;
@@ -68,13 +69,19 @@ export default function Header() {
   useEffect(() => {
     const { group, page } = query;
     setGroup(+group);
-    setPage(+page);
+
+    if (!isNaN(+page)) {
+      setPage(+page);
+    } else {
+      setPage(vocabularyPage);
+    }
 
     if (pathname.match('textbook') || pathname.match('vocabulary')) {
       return setShowNav(true);
     }
+
     setShowNav(false);
-  }, [pathname, query]);
+  }, [pathname, query, vocabularyPage]);
 
   useEffect(() => {
     if (pathname.match('mini-games')) {
