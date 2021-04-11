@@ -56,7 +56,6 @@ export default function AudiocallGamePage({ group, page }) {
         },
       };
       EditLocalStatistics(args);
-      console.log(data?.localStatistics);
     }
   }, [endGame]);
 
@@ -190,8 +189,6 @@ export default function AudiocallGamePage({ group, page }) {
 AudiocallGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(group);
 
   return {
     group,
