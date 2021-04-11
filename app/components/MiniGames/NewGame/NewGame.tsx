@@ -35,19 +35,26 @@ const NewGame = ({
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [colorAnswer, setColorAnswer] = useState('');
   const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
-  const [wordAudioUrl, setWordAudioUrl] = useState('');
+  const audio = `${LOCAL_HOST}${
+    user ? combination.mainWord?.word?.audio : combination.mainWord?.audio
+  }`;
+  const [wordAudioUrl, setWordAudioUrl] = useState(audio);
   const inputRef = React.createRef<HTMLInputElement>();
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
 
+  useEffect(() => {
+    setWordAudioUrl(audio);
+  }, [combination, user]);
+
   const [playWord] = useSound(wordAudioUrl);
 
-  const handleOnChange = (e) => {
-    setInputValue(e.target.value);
+  const handleOnChange = (event) => {
+    setInputValue(event.target.value);
   };
 
-  const handleAnswer = async (e) => {
-    e.preventDefault();
+  const handleAnswer = async (event) => {
+    event?.preventDefault();
     setIsAnswered(true);
     const isUserAnswerCorrect = checkAnswerNewGame(combination.mainWord, inputValue, user);
 
@@ -90,8 +97,6 @@ const NewGame = ({
       isMusicOn && correct();
     }
     const currentAnswers = [...answersArr, isUserAnswerCorrect];
-    const correctInRow =
-      currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
 
     setAnswersArr(currentAnswers);
     const seenWords = [...learnedWords, combination.mainWord];
@@ -105,8 +110,28 @@ const NewGame = ({
     setIsAnswered(false);
   };
 
-  useHotkeys('enter', handleAnswer, [learnedWords, setLearnedWord, isMusicOn, isAnswered]);
-  useHotkeys('right', callNextWord, [learnedWords, setLearnedWord, isMusicOn, isAnswered]);
+  useHotkeys(
+    'right',
+    () => {
+      isAnswered && callNextWord();
+    },
+    [learnedWords, setLearnedWord, isMusicOn, isAnswered],
+  );
+  useHotkeys(
+    'enter',
+    () => {
+      !isAnswered && handleAnswer();
+    },
+    [learnedWords, setLearnedWord, isMusicOn, isAnswered],
+  );
+
+  useHotkeys(
+    'space',
+    () => {
+      playWord();
+    },
+    [playWord],
+  );
 
   useEffect(() => {
     if (!combination.mainWord?.word) {
@@ -135,12 +160,6 @@ const NewGame = ({
               variant="outline"
               _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
               className="audiocall-button-sound"
-              onMouseDown={() => {
-                setWordAudioUrl(
-                  LOCAL_HOST +
-                    `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
-                );
-              }}
               onClick={playWord}>
               <Icon
                 className="newgame-sound"
