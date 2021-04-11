@@ -45,8 +45,6 @@ export const checkAnswerSprint = (answer, mainWord, translation) => {
 
 // ------- SAVANNA -------
 
-// export const mixVariants = (arr) => arr.sort(() => Math.random() - 0.5);
-
 export const getNextWordSavanna = (arr, learnedWords) => {
   const [mainWord] = arr
     .filter((word) => !learnedWords.includes(word))
