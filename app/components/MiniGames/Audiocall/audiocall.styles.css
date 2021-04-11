@@ -40,8 +40,6 @@
 .audiocall-answer-box {
   display: flex;
   justify-content: center;
-
-  /* align-items: center; */
 }
 
 .audiocall-pic {

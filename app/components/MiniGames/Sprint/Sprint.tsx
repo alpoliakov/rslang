@@ -22,7 +22,6 @@ const Sprint = ({
   setCounter,
   words,
   user,
-  fetchWords,
   timeOver,
   setTimeOver,
   setCurrentPage,
@@ -72,7 +71,7 @@ const Sprint = ({
           wrongAnswers: wrongAnswers + 1,
           studied: true,
         };
-        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        await editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setCorrectAnswersArr([]);
@@ -90,7 +89,7 @@ const Sprint = ({
           wrongAnswers: wrongAnswers,
           studied: true,
         };
-        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setCorrectAnswersArr([...correctAnswersArr, isUserAnswerCorrect]);

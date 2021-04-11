@@ -99,7 +99,6 @@ export default function SprintGamePage({ group, page }) {
             setCounter={setCounter}
             words={words}
             user={user}
-            fetchWords={fetchWords}
             timeOver={timeOver}
             setTimeOver={setTimeOver}
             setCurrentPage={setCurrentPage}

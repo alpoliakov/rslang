@@ -123,7 +123,6 @@ export default function SavannaGamePage({ group, page }) {
               setEndGame={setEndGame}
               endGame={endGame}
               user={user}
-              fetchWords={fetchWords}
               isPaused={isPaused}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}

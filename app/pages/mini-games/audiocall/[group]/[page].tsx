@@ -38,6 +38,14 @@ export default function AudiocallGamePage({ group, page }) {
   const [answersArr, setAnswersArr] = useState([]);
 
   const { data } = useQuery(GET_LOCAL_STATISTIC);
+  const { query } = useRouter();
+  const chooseLevel = query.page === '0$menu=true';
+
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
 
   useEffect(() => {
     if (endGame) {
@@ -72,15 +80,6 @@ export default function AudiocallGamePage({ group, page }) {
   useEffect(() => {
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const { query } = useRouter();
-  const chooseLevel = query.page === '0$menu=true';
-
-  useEffect(() => {
-    if (chooseLevel) {
-      setCurrentPage(0);
-    }
-  }, []);
 
   const fullScreen = useFullScreenHandle();
 
@@ -130,7 +129,6 @@ export default function AudiocallGamePage({ group, page }) {
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
               user={user}
-              fetchWords={fetchWords}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}
             />

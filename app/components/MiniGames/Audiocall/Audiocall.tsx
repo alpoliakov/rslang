@@ -18,7 +18,6 @@ const Audiocall = ({
   learnedWords,
   setLearnedWord,
   user,
-  fetchWords,
   answersArr,
   setAnswersArr,
 }) => {
@@ -60,7 +59,7 @@ const Audiocall = ({
           wrongAnswers: wrongAnswers + 1,
           studied: true,
         };
-        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        await editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setColorAnswer('red');
@@ -78,7 +77,7 @@ const Audiocall = ({
           wrongAnswers: wrongAnswers,
           studied: true,
         };
-        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        editWord(args, complexity, deleted, editAggregatedWord);
       }
       setColorAnswer('green');
       setCounter(counter + 10);
@@ -211,7 +210,8 @@ const Audiocall = ({
               );
             }}
             onClick={() => handleAnswer(word)}>
-            {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
+            {key + 1}
+            {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}
       </div>

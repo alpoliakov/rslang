@@ -15,7 +15,6 @@ const Savanna = ({
   setEndGame,
   endGame,
   user,
-  fetchWords,
   isPaused,
   answersArr,
   setAnswersArr,
@@ -51,7 +50,7 @@ const Savanna = ({
           wrongAnswers: wrongAnswers + 1,
           studied: true,
         };
-        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        await editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setLives((lives) => [false, ...lives.slice(0, -1)]);
@@ -69,7 +68,7 @@ const Savanna = ({
           wrongAnswers: wrongAnswers,
           studied: true,
         };
-        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setCounter(counter + 10);

@@ -43,7 +43,6 @@ export default function NewGamePage({ group, page }) {
   const chooseLevel = query.page === '0$menu=true';
 
   useEffect(() => {
-    editStatistic();
     if (chooseLevel) {
       setCurrentPage(0);
     }
@@ -52,26 +51,40 @@ export default function NewGamePage({ group, page }) {
   const { data } = useQuery(GET_LOCAL_STATISTIC);
   console.log(data?.localStatistics);
 
-  useEffect(() => {
-    if (endGame) {
-      const { wordsCount, rightAnswers, newGame } = data.localStatistics;
-      const totalTrue = answersArr.filter((answer) => answer === true).length;
-      const strike = getStrike(answersArr);
+  // useEffect(() => {
+  //   if (endGame) {
+  //     const { wordsCount, rightAnswers, newGame } = data.localStatistics;
+  //     const totalTrue = answersArr.filter((answer) => answer === true).length;
+  //     const strike = getStrike(answersArr);
 
-      const args = {
-        ...data?.localStatistics,
-        wordsCount: wordsCount + learnedWords.length,
-        rightAnswers: rightAnswers + totalTrue,
-        newGame: {
-          wordsCount: newGame.wordsCount + learnedWords.length,
-          rightAnswers: newGame.rightAnswers + totalTrue,
-          series: newGame.series + strike,
-        },
-      };
-      EditLocalStatistics(args);
-      console.log(data?.localStatistics);
-    }
-  }, [endGame]);
+  //     const argsLocal = {
+  //       ...data?.localStatistics,
+  //       wordsCount: wordsCount + learnedWords.length,
+  //       rightAnswers: rightAnswers + totalTrue,
+  //       newGame: {
+  //         wordsCount: newGame.wordsCount + learnedWords.length,
+  //         rightAnswers: newGame.rightAnswers + totalTrue,
+  //         series: newGame.series + strike,
+  //       },
+  //     };
+
+  //     const argsStatistic = {
+  //       ...data?.StatisticQuery,
+  //       optional: {wordsCount: optional.wordsCount +learnedWords.length,
+  //         rightAnswers:optional.rightAnswers + totalTrue,
+  //         localRate: optional.localRate + counter
+  //       },
+  //       newGame: {
+  //         wordsCountNew:newGame.wordsCount + learnedWords.length,
+  //       rightAnswersNew: newGame.rightAnswers + totalTrue,
+  //       seriesNew: newGame.series + strike
+  //       },
+  //     }
+
+  //     user?changeStatistic(editStatistic, argsStatistic):EditLocalStatistics(argsLocal);
+  //     console.log(data?.localStatistics);
+  //   }
+  // }, [endGame]);
 
   const fetchWords = async () => {
     if (user) {
@@ -124,7 +137,6 @@ export default function NewGamePage({ group, page }) {
               setEndGame={setEndGame}
               endGame={endGame}
               user={user}
-              fetchWords={fetchWords}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}
               learnedWords={learnedWords}
@@ -197,8 +209,6 @@ export default function NewGamePage({ group, page }) {
 NewGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(group);
 
   return {
     group,
