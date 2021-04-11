@@ -36,6 +36,7 @@ export default function SavannaGamePage({ group, page }) {
   const [answersArr, setAnswersArr] = useState([]);
 
   const { data } = useQuery(GET_LOCAL_STATISTIC);
+  console.log(data?.localStatistics);
 
   useEffect(() => {
     if (endGame) {
@@ -66,7 +67,6 @@ export default function SavannaGamePage({ group, page }) {
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
     }
-    // setCurrentPage(page);
   };
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -93,7 +93,10 @@ export default function SavannaGamePage({ group, page }) {
     setMusic(!isMusicOn);
   };
 
-  useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
+  useEffect(() => {
+    !lives.includes(true) && setEndGame(true);
+    if (endGame) setPause(true);
+  }, [lives, endGame]);
 
   return (
     <>
