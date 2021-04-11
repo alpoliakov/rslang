@@ -14,10 +14,10 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 
 import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 
 export default function NewGamePage({ group, page }) {
