@@ -14,6 +14,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 
 import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
@@ -35,7 +36,21 @@ export default function NewGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
+  const fullScreen = useFullScreenHandle();
+  const [editStatistic] = useEditStatisticMutation();
+
+  const { query } = useRouter();
+  const chooseLevel = query.page === '0$menu=true';
+
+  useEffect(() => {
+    editStatistic();
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
+
   const { data } = useQuery(GET_LOCAL_STATISTIC);
+  console.log(data?.localStatistics);
 
   useEffect(() => {
     if (endGame) {
@@ -68,20 +83,9 @@ export default function NewGamePage({ group, page }) {
     }
   };
 
-  const { query } = useRouter();
-  const chooseLevel = query.page === '0$menu=true';
-
-  useEffect(() => {
-    if (chooseLevel) {
-      setCurrentPage(0);
-    }
-  }, []);
-
   useEffect(() => {
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
@@ -125,6 +129,9 @@ export default function NewGamePage({ group, page }) {
               setAnswersArr={setAnswersArr}
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              chooseLevel={chooseLevel}
             />
           )}
           <div className="progress-hearts">
