@@ -4,10 +4,7 @@ import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.gr
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
-  console.log('inside fetchCurrentWords', group, group === '', typeof group);
-  console.log(`group: ${group}, page: ${page}`);
   if (group === '') return;
-  console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -17,16 +14,13 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
 
   const words = [...data.words];
   setWords([...data.words]);
-  console.log(words);
   if (words) {
     setLoading(false);
   }
 };
 
 export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWords) => {
-  console.log('inside fetchCurrentWordsAudiocall', group === '');
   if (group === '') return;
-  console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -36,7 +30,6 @@ export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWor
 
   const words = [...data.words];
   setWords(words.splice(9, 10));
-  console.log(words);
   if (words) {
     setLoading(false);
   }
@@ -54,7 +47,7 @@ export const fetchCurrentWord = async (id) => {
       return data.aggregatedWord;
     }
   } catch (err) {
-    console.error(err.message, 'error in fetchWord');
+    console.error(err.message);
   }
 };
 
@@ -69,10 +62,8 @@ export const editWord = async (
     const { data } = await editAggregatedWord({
       variables: { input: { id, complexity, deleted, repeat, rightAnswers, studied } },
     });
-
-    console.log(data, 'data in editword');
   } catch (err) {
-    console.log(err);
+    console.error(err.message);
   }
 };
 
