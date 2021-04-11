@@ -26,6 +26,7 @@ const Audiocall = ({
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [isAnswered, setIsAnswered] = useState(false);
   const [wordAudioUrl, setWordAudioUrl] = useState('');
+  const [colorAnswer, setColorAnswer] = useState('');
   const [wordPicUrl, setWordPicUrl] = useState('');
   const [combination, setCombination] = useState(getNextWordAudiocall(words, learnedWords));
 
@@ -36,11 +37,6 @@ const Audiocall = ({
   const handleSound = () => {
     playWord();
   };
-
-  // useEffect(() => {
-  //   setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-  //   playWord();
-  // }, [combination]);
 
   const handleAnswer = async (answer) => {
     setIsAnswered(true);
@@ -60,6 +56,7 @@ const Audiocall = ({
         await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
       }
 
+      setColorAnswer('red');
       isMusicOn && incorrect();
     } else {
       if (user) {
@@ -76,20 +73,13 @@ const Audiocall = ({
         };
         editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
       }
-
+      setColorAnswer('green');
       setCounter(counter + 10);
       isMusicOn && correct();
     }
     setWordPicUrl(
       LOCAL_HOST + (user ? combination.mainWord.word.image : combination.mainWord.image),
     );
-
-    // {isAnswered &&
-    //   (learnedWords[learnedWords.length - 1] ? (
-    //     <CheckCircleIcon color="green" />
-    //   ) : (
-    //     <NotAllowedIcon color="red" />
-    //   ))}
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
@@ -109,9 +99,8 @@ const Audiocall = ({
     [learnedWords, setLearnedWord, isMusicOn, combination, isAnswered],
   );
 
-  isAnswered
-    ? useHotkeys('enter', callNextWord, [learnedWords, isAnswered])
-    : useHotkeys('enter', () => handleAnswer(''), [learnedWords, isAnswered]);
+  useHotkeys('right', callNextWord, [learnedWords, isAnswered]);
+  useHotkeys('enter', () => handleAnswer(''), [learnedWords, isAnswered]);
 
   useHotkeys('space', () => playWord());
 
@@ -150,7 +139,7 @@ const Audiocall = ({
                 />
               </Button>
             </div>
-            <div className="audiocall-answer">
+            <div className="audiocall-answer" style={{ textShadow: `3px 3px 3px ${colorAnswer}` }}>
               {user ? combination.mainWord.word.word : combination.mainWord.word}
             </div>
           </div>
