@@ -94,24 +94,23 @@ export default function SprintGamePage({ group, page }) {
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
           <Timer setTimeOver={setTimeOver} timeOver={timeOver} isPaused={isPaused} />
-          {!loading && (
-            <Sprint
-              counter={counter}
-              setCounter={setCounter}
-              words={words}
-              user={user}
-              fetchWords={fetchWords}
-              timeOver={timeOver}
-              setTimeOver={setTimeOver}
-              setCurrentPage={setCurrentPage}
-              currentPage={currentPage}
-              chooseLevel={chooseLevel}
-              answersArr={answersArr}
-              setAnswersArr={setAnswersArr}
-              learnedWords={learnedWords}
-              setLearnedWord={setLearnedWord}
-            />
-          )}
+          <Sprint
+            counter={counter}
+            setCounter={setCounter}
+            words={words}
+            user={user}
+            fetchWords={fetchWords}
+            timeOver={timeOver}
+            setTimeOver={setTimeOver}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            chooseLevel={chooseLevel}
+            answersArr={answersArr}
+            setAnswersArr={setAnswersArr}
+            learnedWords={learnedWords}
+            setLearnedWord={setLearnedWord}
+            loading={loading}
+          />
           <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"
