@@ -4,6 +4,8 @@ import {
   Box,
   Button,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   IconButton,
   Text,
@@ -43,7 +45,7 @@ export default function Pages({ group, page }) {
   const [audioMeaning, setAudioMeaning] = useState('');
   const [audioExample, setAudioExample] = useState('');
   const [interrupt, setInterrupt] = useState(false);
-  const [pageCount, setPageCount] = useState(30);
+  const [pageCount, setPageCount] = useState(null);
   const [startMeaning, setStartMeaning] = useState(false);
   const [startExample, setStartExample] = useState(false);
   const [session, setSession] = useState(false);
@@ -60,7 +62,7 @@ export default function Pages({ group, page }) {
     loading,
   } = useQuery(GET_LOCAL_STATISTIC);
 
-  const { data } = useAppContext();
+  const { data, setShowLink } = useAppContext();
   const { showTranslate, showButtons } = data;
 
   const [playExample, objPlayExample] = useSound(audioExample, {
@@ -141,6 +143,8 @@ export default function Pages({ group, page }) {
   useEffect(() => {
     setLoadingWords(true);
     setLocalState({ ...localStatistics });
+    setPageCount(30);
+    setShowLink(true);
     console.log(localStatistics);
     setTimeout(() => {
       setSession(true);
@@ -204,8 +208,8 @@ export default function Pages({ group, page }) {
       if (data.editAggregatedWord._id && deleted) {
         fetchWords();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -233,18 +237,18 @@ export default function Pages({ group, page }) {
     }
 
     const word = await fetchCurrentWord(event.target.dataset.word);
-    const { optional, complexity, deleted } = word;
+    const { optional, complexity, deleted, studied } = word;
     const { repeat, rightAnswers } = optional;
 
     const args = {
       id: event.target.dataset.word,
-      studied: true,
     };
 
     if (event.target.dataset.name === 'deleted') {
       await editWord({
         ...args,
         deleted: true,
+        studied: false,
         complexity,
         repeat,
         rightAnswers,
@@ -257,6 +261,7 @@ export default function Pages({ group, page }) {
       await editWord({
         ...args,
         deleted,
+        studied: true,
         complexity: true,
         repeat: repeat + 1,
         rightAnswers: rightAnswers + 1,
@@ -279,6 +284,11 @@ export default function Pages({ group, page }) {
       console.log(state.length);
 
       if (state.length === 0) {
+        if (page === pageCount - 1) {
+          router.push(`/textbook/${group}/${page - 1}`);
+          return;
+        }
+
         router.push(`/textbook/${group}/${page + 1}`);
         return;
       }
@@ -365,30 +375,42 @@ export default function Pages({ group, page }) {
                       }}
                     />
                   </Box>
-                  <Flex mt={4} w="full" alignItems="center" justifyContent="space-between">
-                    <IconButton
-                      colorScheme="teal"
-                      onMouseDown={() => {
-                        setInterrupt(true);
-                        setWordAudioUrl(LOCAL_HOST + `${user ? word.word.audio : word.audio}`);
-                        setAudioMeaning(
-                          LOCAL_HOST + `${user ? word.word.audioMeaning : word.audioMeaning}`,
-                        );
-                        setAudioExample(
-                          LOCAL_HOST + `${user ? word.word.audioExample : word.audioExample}`,
-                        );
-                      }}
-                      onClick={handleSound}
-                      aria-label="Listen audio"
-                      icon={<MdHeadset size="24px" />}
-                    />
-                    <Badge fontSize="0.9em" colorScheme="red">
-                      {user ? (word.complexity ? 'cложное' : '') : ''}
-                    </Badge>
+                  <Grid mt={4} w="100%" templateColumns="repeat(2, 1fr)" gap={5}>
+                    <GridItem colSpan={word.complexity ? 1 : 2}>
+                      <IconButton
+                        w="100%"
+                        colorScheme="teal"
+                        onMouseDown={() => {
+                          setInterrupt(true);
+                          setWordAudioUrl(LOCAL_HOST + `${user ? word.word.audio : word.audio}`);
+                          setAudioMeaning(
+                            LOCAL_HOST + `${user ? word.word.audioMeaning : word.audioMeaning}`,
+                          );
+                          setAudioExample(
+                            LOCAL_HOST + `${user ? word.word.audioExample : word.audioExample}`,
+                          );
+                        }}
+                        onClick={handleSound}
+                        aria-label="Listen audio"
+                        icon={<MdHeadset size="24px" />}
+                      />
+                    </GridItem>
+                    {user ? (
+                      word.complexity ? (
+                        <Flex align="center" justify="center" bg="red.100" borderRadius={5}>
+                          <Text style={{ textTransform: 'uppercase' }} color="red.500">
+                            cложное
+                          </Text>
+                        </Flex>
+                      ) : (
+                        ''
+                      )
+                    ) : (
+                      ''
+                    )}
                     {showButtons && (
-                      <Flex alignItems="center" justifyContent="space-between">
+                      <>
                         <Button
-                          mr={3}
                           disabled={user ? word.complexity : ''}
                           data-word={user ? word._id : ''}
                           data-name="complex"
@@ -401,13 +423,13 @@ export default function Pages({ group, page }) {
                           onClick={handleButtons}>
                           Удалить слово
                         </Button>
-                      </Flex>
+                      </>
                     )}
-                  </Flex>
+                  </Grid>
                   {user && word.optional && (
                     <Box mt={4}>
                       <Text size="sm" fontWeight="bold">
-                        Ипользовано: {word.optional.repeat}. Правильных ответов:{' '}
+                        Использовано: {word.optional.repeat}. Правильных ответов:{' '}
                         {word.optional.rightAnswers}
                       </Text>
                     </Box>

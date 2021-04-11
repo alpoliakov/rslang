@@ -57,11 +57,12 @@ export class AuthResolver {
     } as Settings);
 
     const statistic = await new StatisticModel({
-      learnedWords: 0,
+      globalRate: 0,
       user: user.id,
       optional: {
         wordsCount: 0,
         rightAnswers: 0,
+        localRate: 0,
         savanna: {
           wordsCountSavanna: 0,
           rightAnswersSavanna: 0,

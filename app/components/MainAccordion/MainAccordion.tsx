@@ -7,8 +7,8 @@ import { ACTIVE_BUTTON_COLOR, PASSIVE_BUTTON_COLOR } from '../../constants';
 
 const accordionTitleStyle = {
   borderRadius: '10px',
+  padding: '10px',
   cursor: 'pointer',
-  height: '40px',
   marginBottom: '20px',
   display: 'flex',
   justifyContent: 'center',
@@ -29,7 +29,7 @@ const Accordion = ({ i, expanded, setExpanded, content }) => {
         style={accordionTitleStyle}
         animate={{ backgroundColor: isOpen ? menuItemColor : menuItemHoverColor }}
         onClick={() => setExpanded(isOpen ? false : i)}>
-        <Heading as="h2" fontSize={20}>
+        <Heading as="h2" textAlign="center" fontSize={[12, 15, 20]}>
           {ACCORDION_TITLES[i]}
         </Heading>
       </motion.div>
