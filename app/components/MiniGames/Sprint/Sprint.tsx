@@ -100,8 +100,6 @@ const Sprint = ({
 
     setAnswersArr([...answersArr, isUserAnswerCorrect]);
 
-    console.log(correctAnswersArr, 'correctInRow');
-
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
     setCombination(getNextWordSprint(words, seenWords));
@@ -132,7 +130,14 @@ const Sprint = ({
 
   useEffect(() => {
     if (!combination.mainWord?.word) {
-      chooseLevel ? setCurrentPage(currentPage + 1) : setTimeOver(!timeOver);
+      if (chooseLevel) {
+        setCurrentPage(currentPage + 1);
+      }
+      if (!chooseLevel && currentPage !== 0) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setTimeOver(!timeOver);
+      }
     }
   }, [combination]);
 
@@ -140,7 +145,6 @@ const Sprint = ({
     setCombination(getNextWordSprint(words, learnedWords));
   }, [words]);
 
-  console.log(combination.mainWord?.word, combination, words);
   if (!combination.mainWord?.word || loading) {
     return null;
   }

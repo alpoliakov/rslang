@@ -135,7 +135,14 @@ const NewGame = ({
 
   useEffect(() => {
     if (!combination.mainWord?.word) {
-      chooseLevel ? setCurrentPage(currentPage + 1) : setEndGame(!endGame);
+      if (chooseLevel) {
+        setCurrentPage(currentPage + 1);
+      }
+      if (!chooseLevel && currentPage !== 0) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setEndGame(!endGame);
+      }
     }
   }, [combination]);
 
