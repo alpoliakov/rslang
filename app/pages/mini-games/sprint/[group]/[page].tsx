@@ -32,7 +32,18 @@ export default function SprintGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
+  const fullScreen = useFullScreenHandle();
+
+  const { query } = useRouter();
+  const chooseLevel = query.page === '0$menu=true';
+
   const { data } = useQuery(GET_LOCAL_STATISTIC);
+
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
 
   useEffect(() => {
     if (timeOver) {
@@ -55,15 +66,6 @@ export default function SprintGamePage({ group, page }) {
     }
   }, [timeOver]);
 
-  const { query } = useRouter();
-  const chooseLevel = query.page === '0$menu=true';
-
-  useEffect(() => {
-    if (chooseLevel) {
-      setCurrentPage(0);
-    }
-  }, []);
-
   const fetchWords = async () => {
     if (user) {
       userFetch(currentGroup, currentPage, setLoading, setWords);
@@ -72,14 +74,11 @@ export default function SprintGamePage({ group, page }) {
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
     }
-    // setCurrentPage(page);
   };
+
   useEffect(() => {
-    console.log('call fetchWords with group/page', currentGroup, currentPage);
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
@@ -167,8 +166,6 @@ export default function SprintGamePage({ group, page }) {
 SprintGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(group);
 
   return {
     group,
