@@ -9,10 +9,13 @@ export class StatisticInput implements Partial<Statistic> {
   id?: ObjectId;
 
   @Field({ nullable: true })
-  learnedWords?: number;
+  globalRate?: number;
 
   @Field({ nullable: true })
   wordsCount?: number;
+
+  @Field({ nullable: true })
+  localRate?: number;
 
   @Field({ nullable: true })
   rightAnswers?: number;

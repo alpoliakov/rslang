@@ -19,9 +19,11 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import Loading from '../../../components/Loading';
+import Pagination, { OnPageChangeCallback } from '../../../components/Pagination/Pagination';
 import VocabularyNav from '../../../components/VocabularyNav/VocabularyNav';
 import WordCard from '../../../components/WordCard/WordCard';
 import { VOCABULARY_GROUP_NAV_LINKS, WORDS_IN_PAGE } from '../../../constants';
+import { useAppContext } from '../../../context/ContextApp';
 import { useAggregatedWordsComplexityQuery } from '../../../lib/graphql/aggregatedWordsComplexity.graphql';
 
 export default function ComplexWords({ group }) {
@@ -30,9 +32,12 @@ export default function ComplexWords({ group }) {
   const [loadingData, setLoadingData] = useState(false);
   const [chapter, setChapter] = useState(null);
   const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const router = useRouter();
   const { pathname } = router;
+
+  const { setShowLink, setVocabularyPage } = useAppContext();
 
   const { data, loading, refetch } = useAggregatedWordsComplexityQuery({
     variables: { input: { group } },
@@ -52,15 +57,17 @@ export default function ComplexWords({ group }) {
     return setChapter('studied');
   };
 
+  const toMatrix = (arr, width) =>
+    arr.reduce(
+      (rows, key, index) =>
+        (index % width == 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) && rows,
+      [],
+    );
+
   const calcNumberPages = async (arr) => {
     const length = await arr.length;
-    console.log('Array length - ', length);
 
-    if (length <= WORDS_IN_PAGE) {
-      return;
-    }
-
-    return setPageCount(Math.ceil(arr.length / 20));
+    return setPageCount(Math.ceil(length / WORDS_IN_PAGE));
   };
 
   useEffect(() => {
@@ -70,10 +77,27 @@ export default function ComplexWords({ group }) {
 
   useEffect(() => {
     if (data) {
-      setWords([...data.aggregatedWordsComplexity]);
+      setWords(toMatrix(data.aggregatedWordsComplexity, WORDS_IN_PAGE)[currentPage]);
       calcNumberPages(data.aggregatedWordsComplexity);
     }
   }, [data]);
+
+  useEffect(() => {
+    setShowLink(!!words);
+  }, [words]);
+
+  useEffect(() => {
+    if (words) {
+      console.log(words);
+      setWords(toMatrix(data.aggregatedWordsComplexity, WORDS_IN_PAGE)[currentPage]);
+    }
+    setVocabularyPage(currentPage);
+  }, [currentPage]);
+
+  const onPageChanged: OnPageChangeCallback = (selectedItem) => {
+    const newPage = selectedItem.selected;
+    setCurrentPage(newPage);
+  };
 
   if (loading) {
     return <Loading />;
@@ -90,7 +114,6 @@ export default function ComplexWords({ group }) {
         <title>Complex Words</title>
       </Head>
       <Grid templateRows="auto 1fr" gap={6} width="full" height="full">
-        {loadingData && <Loading />}
         <Container
           maxW="container.xl"
           position="sticky"
@@ -98,7 +121,7 @@ export default function ComplexWords({ group }) {
           p={1}
           height="full"
           bg={bg}
-          zIndex="10"
+          zIndex="1"
           width="full">
           <Flex alignItems="center" justifyContent="space-between" borderWidth={0}>
             <Tabs defaultIndex={group} borderBottomColor="transparent" mx="auto">
@@ -123,16 +146,26 @@ export default function ComplexWords({ group }) {
             </Heading>
           </Flex>
           <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
-            {!loadingData && words && words.length === 0 && (
+            {!loading && !words && (
               <Heading size="lg" m={1}>
                 В данной группе слов нет.
               </Heading>
             )}
-            {!loadingData &&
+            {!loading &&
               words &&
               words.length > 0 &&
-              words.map((word) => <WordCard word={word} chapter={chapter} key={word._id} />)}
-            <Heading size="lg">Pagination</Heading>
+              words.map((word) => (
+                <WordCard word={word} refetch={refetch} chapter={chapter} key={word._id} />
+              ))}
+            {!loading && words && words.length && (
+              <Box>
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  onPageChange={onPageChanged}
+                />
+              </Box>
+            )}
           </Flex>
         </Container>
       </Grid>

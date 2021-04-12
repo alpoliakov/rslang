@@ -1,7 +1,8 @@
+import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { useColorModeValue } from '@chakra-ui/react';
 import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Savanna } from 'components/MiniGames/Savanna/Savanna';
@@ -14,6 +15,8 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 
 export default function SavannaGamePage({ group, page }) {
@@ -32,6 +35,30 @@ export default function SavannaGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  console.log(data?.localStatistics);
+
+  useEffect(() => {
+    if (endGame) {
+      const { wordsCount, rightAnswers, savanna } = data.localStatistics;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...data?.localStatistics,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        savanna: {
+          wordsCount: savanna.wordsCount + learnedWords.length,
+          rightAnswers: savanna.rightAnswers + totalTrue,
+          series: savanna.series + strike,
+        },
+      };
+      EditLocalStatistics(args);
+      console.log(data?.localStatistics);
+    }
+  }, [endGame]);
+
   const fetchWords = async () => {
     if (user) {
       userFetch(currentGroup, currentPage, setLoading, setWords);
@@ -40,7 +67,6 @@ export default function SavannaGamePage({ group, page }) {
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
     }
-    // setCurrentPage(page);
   };
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -67,7 +93,10 @@ export default function SavannaGamePage({ group, page }) {
     setMusic(!isMusicOn);
   };
 
-  useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
+  useEffect(() => {
+    !lives.includes(true) && setEndGame(true);
+    if (endGame) setPause(true);
+  }, [lives, endGame]);
 
   return (
     <>
@@ -94,7 +123,6 @@ export default function SavannaGamePage({ group, page }) {
               setEndGame={setEndGame}
               endGame={endGame}
               user={user}
-              fetchWords={fetchWords}
               isPaused={isPaused}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}

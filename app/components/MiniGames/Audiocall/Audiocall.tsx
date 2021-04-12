@@ -18,29 +18,31 @@ const Audiocall = ({
   learnedWords,
   setLearnedWord,
   user,
-  fetchWords,
   answersArr,
   setAnswersArr,
 }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [isAnswered, setIsAnswered] = useState(false);
-  const [wordAudioUrl, setWordAudioUrl] = useState('');
-  const [wordPicUrl, setWordPicUrl] = useState('');
   const [combination, setCombination] = useState(getNextWordAudiocall(words, learnedWords));
+  const audio = `${LOCAL_HOST}${
+    user ? combination.mainWord?.word?.audio : combination.mainWord?.audio
+  }`;
+  const [wordAudioUrl, setWordAudioUrl] = useState(audio);
+  const [colorAnswer, setColorAnswer] = useState('');
+  const [wordPicUrl, setWordPicUrl] = useState('');
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
+
+  useEffect(() => {
+    setWordAudioUrl(audio);
+  }, [combination, user]);
 
   const [playWord] = useSound(wordAudioUrl);
 
   const handleSound = () => {
     playWord();
   };
-
-  // useEffect(() => {
-  //   setWordAudioUrl(LOCAL_HOST + combination.mainWord.audio);
-  //   playWord();
-  // }, [combination]);
 
   const handleAnswer = async (answer) => {
     setIsAnswered(true);
@@ -57,9 +59,10 @@ const Audiocall = ({
           wrongAnswers: wrongAnswers + 1,
           studied: true,
         };
-        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        await editWord(args, complexity, deleted, editAggregatedWord);
       }
 
+      setColorAnswer('red');
       isMusicOn && incorrect();
     } else {
       if (user) {
@@ -74,22 +77,15 @@ const Audiocall = ({
           wrongAnswers: wrongAnswers,
           studied: true,
         };
-        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        editWord(args, complexity, deleted, editAggregatedWord);
       }
-
+      setColorAnswer('green');
       setCounter(counter + 10);
       isMusicOn && correct();
     }
     setWordPicUrl(
       LOCAL_HOST + (user ? combination.mainWord.word.image : combination.mainWord.image),
     );
-
-    // {isAnswered &&
-    //   (learnedWords[learnedWords.length - 1] ? (
-    //     <CheckCircleIcon color="green" />
-    //   ) : (
-    //     <NotAllowedIcon color="red" />
-    //   ))}
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
@@ -109,12 +105,28 @@ const Audiocall = ({
     [learnedWords, setLearnedWord, isMusicOn, combination, isAnswered],
   );
 
-  isAnswered
-    ? useHotkeys('enter', callNextWord, [learnedWords, isAnswered])
-    : useHotkeys('enter', () => handleAnswer(''), [learnedWords, isAnswered]);
+  useHotkeys(
+    'right',
+    () => {
+      isAnswered && callNextWord();
+    },
+    [learnedWords, isAnswered],
+  );
+  useHotkeys(
+    'enter',
+    () => {
+      !isAnswered && handleAnswer('');
+    },
+    [learnedWords, isAnswered],
+  );
 
-  useHotkeys('space', () => playWord());
-
+  useHotkeys(
+    'space',
+    () => {
+      playWord();
+    },
+    [playWord],
+  );
   return (
     <div className="savanna-outer">
       {isAnswered ? (
@@ -131,12 +143,6 @@ const Audiocall = ({
                 variant="outline"
                 _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
                 className="audiocall-button-sound"
-                onMouseDown={() => {
-                  setWordAudioUrl(
-                    LOCAL_HOST +
-                      `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
-                  );
-                }}
                 onClick={handleSound}>
                 <Icon
                   className="audiocall-sound"
@@ -150,7 +156,7 @@ const Audiocall = ({
                 />
               </Button>
             </div>
-            <div className="audiocall-answer">
+            <div className="audiocall-answer" style={{ textShadow: `3px 3px 3px ${colorAnswer}` }}>
               {user ? combination.mainWord.word.word : combination.mainWord.word}
             </div>
           </div>
@@ -204,7 +210,8 @@ const Audiocall = ({
               );
             }}
             onClick={() => handleAnswer(word)}>
-            {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
+            {key + 1}
+            {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}
       </div>

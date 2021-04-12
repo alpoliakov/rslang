@@ -1,6 +1,8 @@
+import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { Sprint } from 'components/MiniGames/Sprint/Sprint';
@@ -12,6 +14,8 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 
 export default function SprintGamePage({ group, page }) {
@@ -28,14 +32,39 @@ export default function SprintGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
+  const fullScreen = useFullScreenHandle();
+
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
 
   useEffect(() => {
     if (chooseLevel) {
       setCurrentPage(0);
     }
   }, []);
+
+  useEffect(() => {
+    if (timeOver) {
+      const { wordsCount, rightAnswers, sprint } = data.localStatistics;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...data?.localStatistics,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        sprint: {
+          wordsCount: sprint.wordsCount + learnedWords.length,
+          rightAnswers: sprint.rightAnswers + totalTrue,
+          series: sprint.series + strike,
+        },
+      };
+      EditLocalStatistics(args);
+      console.log(data?.localStatistics);
+    }
+  }, [timeOver]);
 
   const fetchWords = async () => {
     if (user) {
@@ -45,14 +74,11 @@ export default function SprintGamePage({ group, page }) {
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
     }
-    // setCurrentPage(page);
   };
+
   useEffect(() => {
-    console.log('call fetchWords with group/page', currentGroup, currentPage);
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
@@ -68,24 +94,22 @@ export default function SprintGamePage({ group, page }) {
       {showGame ? (
         <FullScreen handle={fullScreen} className="sprint-container">
           <Timer setTimeOver={setTimeOver} timeOver={timeOver} isPaused={isPaused} />
-          {!loading && (
-            <Sprint
-              counter={counter}
-              setCounter={setCounter}
-              words={words}
-              user={user}
-              fetchWords={fetchWords}
-              timeOver={timeOver}
-              setTimeOver={setTimeOver}
-              setCurrentPage={setCurrentPage}
-              currentPage={currentPage}
-              chooseLevel={chooseLevel}
-              answersArr={answersArr}
-              setAnswersArr={setAnswersArr}
-              learnedWords={learnedWords}
-              setLearnedWord={setLearnedWord}
-            />
-          )}
+          <Sprint
+            counter={counter}
+            setCounter={setCounter}
+            words={words}
+            user={user}
+            timeOver={timeOver}
+            setTimeOver={setTimeOver}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            chooseLevel={chooseLevel}
+            answersArr={answersArr}
+            setAnswersArr={setAnswersArr}
+            learnedWords={learnedWords}
+            setLearnedWord={setLearnedWord}
+            loading={loading}
+          />
           <div className="sprint-close-full">
             <IconButton
               colorScheme="whiteAlpha"
@@ -140,8 +164,6 @@ export default function SprintGamePage({ group, page }) {
 SprintGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(group);
 
   return {
     group,

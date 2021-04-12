@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
@@ -7,6 +8,7 @@ import {
   fetchCurrentWordsAudiocall,
   userFetchAudiocall,
 } from 'components/MiniGames/helpers/fetchWords';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import Head from 'next/head';
@@ -16,6 +18,8 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 
 export default function AudiocallGamePage({ group, page }) {
@@ -33,6 +37,36 @@ export default function AudiocallGamePage({ group, page }) {
   const { user } = useAuth();
   const [answersArr, setAnswersArr] = useState([]);
 
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  const { query } = useRouter();
+  const chooseLevel = query.page === '0$menu=true';
+
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(0);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (endGame) {
+      const { wordsCount, rightAnswers, audioCall } = data.localStatistics;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...data?.localStatistics,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        audioCall: {
+          wordsCount: audioCall.wordsCount + learnedWords.length,
+          rightAnswers: audioCall.rightAnswers + totalTrue,
+          series: audioCall.series + strike,
+        },
+      };
+      EditLocalStatistics(args);
+    }
+  }, [endGame]);
+
   const fetchWords = async () => {
     if (user) {
       userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
@@ -46,15 +80,6 @@ export default function AudiocallGamePage({ group, page }) {
   useEffect(() => {
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const { query } = useRouter();
-  const chooseLevel = query.page === '0$menu=true';
-
-  useEffect(() => {
-    if (chooseLevel) {
-      setCurrentPage(0);
-    }
-  }, []);
 
   const fullScreen = useFullScreenHandle();
 
@@ -104,7 +129,6 @@ export default function AudiocallGamePage({ group, page }) {
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
               user={user}
-              fetchWords={fetchWords}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}
             />
@@ -163,8 +187,6 @@ export default function AudiocallGamePage({ group, page }) {
 AudiocallGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(group);
 
   return {
     group,

@@ -23,8 +23,8 @@ import Pagination, { OnPageChangeCallback } from '../../../components/Pagination
 import VocabularyNav from '../../../components/VocabularyNav/VocabularyNav';
 import WordCard from '../../../components/WordCard/WordCard';
 import { VOCABULARY_GROUP_NAV_LINKS, WORDS_IN_PAGE } from '../../../constants';
+import { useAppContext } from '../../../context/ContextApp';
 import { useAggregatedWordsStudiedQuery } from '../../../lib/graphql/aggregatedWordsStudied.graphql';
-import { useAuth } from '../../../lib/useAuth';
 
 export default function StudiedWords({ group }) {
   const bg = useColorModeValue('gray.50', '#223c50');
@@ -37,19 +37,19 @@ export default function StudiedWords({ group }) {
   const router = useRouter();
   const { pathname } = router;
 
+  const { setShowLink, setVocabularyPage } = useAppContext();
+
   const { data, loading, refetch } = useAggregatedWordsStudiedQuery({
     variables: { input: { group } },
   });
 
-  console.log(data);
-
-  const searchChapter = () => {
-    if (pathname.match('complex')) {
+  const searchChapter = (pathName) => {
+    if (pathName.match('complex')) {
       setChapter('complex');
       return;
     }
 
-    if (pathname.match('deleted')) {
+    if (pathName.match('deleted')) {
       setChapter('deleted');
       return;
     }
@@ -66,31 +66,38 @@ export default function StudiedWords({ group }) {
 
   const calcNumberPages = async (arr) => {
     const length = await arr.length;
-    console.log('Array length - ', length);
 
-    if (length <= WORDS_IN_PAGE) {
-      return;
-    }
-
-    return setPageCount(Math.ceil(arr.length / 20));
+    return setPageCount(Math.ceil(length / WORDS_IN_PAGE));
   };
 
   useEffect(() => {
-    searchChapter();
+    searchChapter(pathname);
     refetch();
   }, []);
 
   useEffect(() => {
     if (data) {
-      setWords(toMatrix(data.aggregatedWordsStudied, 20)[currentPage]);
+      setDimArray(toMatrix(data.aggregatedWordsStudied, WORDS_IN_PAGE));
+
       calcNumberPages(data.aggregatedWordsStudied);
     }
   }, [data]);
 
   useEffect(() => {
+    if (dimArray) {
+      setWords(dimArray[currentPage]);
+    }
+  }, [dimArray]);
+
+  useEffect(() => {
+    setShowLink(!!words);
+  }, [words]);
+
+  useEffect(() => {
     if (words) {
       setWords(dimArray[currentPage]);
     }
+    setVocabularyPage(currentPage);
   }, [currentPage]);
 
   const onPageChanged: OnPageChangeCallback = (selectedItem) => {
@@ -101,8 +108,6 @@ export default function StudiedWords({ group }) {
   if (loading) {
     return <Loading />;
   }
-
-  console.log(dimArray);
 
   return (
     <Flex
@@ -121,8 +126,8 @@ export default function StudiedWords({ group }) {
           top={{ base: 170, lg: 120 }}
           p={1}
           height="full"
+          zIndex="1"
           bg={bg}
-          zIndex="10"
           width="full">
           <Flex alignItems="center" justifyContent="center" borderWidth={0}>
             <Tabs defaultIndex={group} borderBottomColor="transparent" mx="auto">
@@ -147,14 +152,14 @@ export default function StudiedWords({ group }) {
             </Heading>
           </Flex>
           <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
-            {!loading && words && words.length === 0 && (
-              <Heading size="lg">В данной группе слова отсутствуют.</Heading>
-            )}
+            {!loading && !words && <Heading size="lg">В данной группе слова отсутствуют.</Heading>}
             {!loading &&
               words &&
               words.length > 0 &&
-              words.map((word) => <WordCard word={word} chapter={chapter} key={word._id} />)}
-            {!loading && words && words.length > 1 && (
+              words.map((word) => (
+                <WordCard word={word} refetch={refetch} chapter={chapter} key={word._id} />
+              ))}
+            {!loading && words && words.length && (
               <Box>
                 <Pagination
                   currentPage={currentPage}

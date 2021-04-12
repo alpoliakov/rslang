@@ -22,7 +22,6 @@ const Sprint = ({
   setCounter,
   words,
   user,
-  fetchWords,
   timeOver,
   setTimeOver,
   setCurrentPage,
@@ -32,18 +31,25 @@ const Sprint = ({
   setAnswersArr,
   learnedWords,
   setLearnedWord,
+  loading,
 }) => {
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
 
   const [pic, setPic] = useState(egg);
-  const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [combination, setCombination] = useState(getNextWordSprint(words, learnedWords));
-
+  const audio = `${LOCAL_HOST}${
+    user ? combination.mainWord?.word?.audio : combination.mainWord?.audio
+  }`;
+  const [wordAudioUrl, setWordAudioUrl] = useState(audio);
   const [editAggregatedWord] = useEditAggregatedWordMutation();
 
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
+  useEffect(() => {
+    setWordAudioUrl(audio);
+  }, [combination, user]);
+
   const [playWord] = useSound(wordAudioUrl);
 
   const handleAnswer = async (answer) => {
@@ -65,7 +71,7 @@ const Sprint = ({
           wrongAnswers: wrongAnswers + 1,
           studied: true,
         };
-        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        await editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setCorrectAnswersArr([]);
@@ -83,21 +89,15 @@ const Sprint = ({
           wrongAnswers: wrongAnswers,
           studied: true,
         };
-        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setCorrectAnswersArr([...correctAnswersArr, isUserAnswerCorrect]);
       setCounter(counter + extraPoints(pic));
       isMusicOn && correct();
     }
-    // const currentAnswers = [...correctAnswersArr, userAnswer];
-    // const correctInRow =
-    //   currentAnswers.reverse().findIndex((el) => !el) < 0 && currentAnswers.length;
 
     setAnswersArr([...answersArr, isUserAnswerCorrect]);
-
-    // changePicture(correctAnswersArr.length, setPic);
-    console.log(correctAnswersArr, 'correctInRow');
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
@@ -106,8 +106,18 @@ const Sprint = ({
 
   useEffect(() => changePicture(correctAnswersArr.length, setPic), [correctAnswersArr]);
 
-  useHotkeys('left', () => handleAnswer(false), [counter, correctAnswersArr]);
-  useHotkeys('right', () => handleAnswer(true), [counter, correctAnswersArr]);
+  useHotkeys('left', () => handleAnswer(false), [
+    counter,
+    correctAnswersArr,
+    isMusicOn,
+    combination,
+  ]);
+  useHotkeys('right', () => handleAnswer(true), [
+    counter,
+    correctAnswersArr,
+    isMusicOn,
+    combination,
+  ]);
 
   const handleSound = () => {
     playWord();
@@ -119,15 +129,22 @@ const Sprint = ({
 
   useEffect(() => {
     if (!combination.mainWord?.word) {
-      chooseLevel ? setCurrentPage(currentPage + 1) : setTimeOver(!timeOver);
+      if (chooseLevel) {
+        setCurrentPage(currentPage + 1);
+      }
+      if (!chooseLevel && currentPage !== 0) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setTimeOver(!timeOver);
+      }
     }
-
-    // if (!combination.mainWord?.word) {
-    //   setTimeOver(!timeOver);
-    // }
   }, [combination]);
 
-  if (!combination.mainWord?.word) {
+  useEffect(() => {
+    setCombination(getNextWordSprint(words, learnedWords));
+  }, [words]);
+
+  if (!combination.mainWord?.word || loading) {
     return null;
   }
 
@@ -161,12 +178,6 @@ const Sprint = ({
               variant="ghost"
               colorScheme="whiteAlpha"
               aria-label="Switch sound"
-              onMouseDown={() => {
-                setWordAudioUrl(
-                  LOCAL_HOST +
-                    `${user ? combination.mainWord.word.audio : combination.mainWord.audio}`,
-                );
-              }}
               onClick={handleSound}
               icon={<GiSpeaker />}
             />

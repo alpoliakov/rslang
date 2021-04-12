@@ -1,7 +1,11 @@
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import React from 'react';
 
+import { useAuth } from '../../../lib/useAuth';
+
 export const AnswerList = ({ learnedWords, answersArr }) => {
+  const { user } = useAuth();
+
   const totalFalse = answersArr.filter((answer) => answer === false).length;
   const totalTrue = answersArr.filter((answer) => answer === true).length;
   const showIcons = (arr) =>
@@ -12,7 +16,8 @@ export const AnswerList = ({ learnedWords, answersArr }) => {
         <NotAllowedIcon key={indx} color="red" />
       ),
     );
-  const showWords = (arr) => arr.map((answer, indx) => <span key={indx}>{answer.word}</span>);
+  const showWords = (arr) =>
+    arr.map((answer, indx) => <span key={indx}>{user ? answer.word.word : answer.word}</span>);
 
   return (
     <div className="answerlist">

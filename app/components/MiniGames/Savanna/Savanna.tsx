@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
 import { checkAnswerSavanna, getNextWordSavanna } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +15,6 @@ const Savanna = ({
   setEndGame,
   endGame,
   user,
-  fetchWords,
   isPaused,
   answersArr,
   setAnswersArr,
@@ -32,7 +30,7 @@ const Savanna = ({
   useEffect(() => {
     const timeOutAnswer = setTimeout(() => handleAnswer(''), 5000);
     if (isPaused) {
-      clearInterval(timeOutAnswer);
+      clearTimeout(timeOutAnswer);
     }
     return () => clearTimeout(timeOutAnswer);
   }, [learnedWords, isPaused]);
@@ -52,7 +50,7 @@ const Savanna = ({
           wrongAnswers: wrongAnswers + 1,
           studied: true,
         };
-        await editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        await editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setLives((lives) => [false, ...lives.slice(0, -1)]);
@@ -70,7 +68,7 @@ const Savanna = ({
           wrongAnswers: wrongAnswers,
           studied: true,
         };
-        editWord(args, complexity, deleted, editAggregatedWord, fetchWords);
+        editWord(args, complexity, deleted, editAggregatedWord);
       }
 
       setCounter(counter + 10);
@@ -89,7 +87,7 @@ const Savanna = ({
     (_, handler) => {
       handleAnswer(combination.translations[Number(handler.key) - 1]);
     },
-    [learnedWords, setLearnedWord, isMusicOn],
+    [learnedWords, setLearnedWord, isMusicOn, combination],
   );
 
   useEffect(() => {

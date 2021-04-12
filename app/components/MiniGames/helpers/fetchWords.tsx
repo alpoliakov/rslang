@@ -4,10 +4,7 @@ import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.gr
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
-  console.log('inside fetchCurrentWords', group, group === '', typeof group);
-  console.log(`group: ${group}, page: ${page}`);
   if (group === '') return;
-  console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -15,18 +12,24 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
     variables: { group: Number(group), page },
   });
 
-  const words = [...data.words];
-  setWords([...data.words]);
-  console.log(words);
+  let words = [...data.words];
+  if (words.length < 10 && page !== 0) {
+    const { data } = await apollo.query({
+      query: WordsDocument,
+      variables: {
+        input: { group: Number(group), page: page - 1 },
+      },
+    });
+    words = [...words, ...data.words];
+  }
+  await setWords(words);
   if (words) {
     setLoading(false);
   }
 };
 
 export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWords) => {
-  console.log('inside fetchCurrentWordsAudiocall', group === '');
   if (group === '') return;
-  console.log('here fetchCurrentWords');
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -34,9 +37,17 @@ export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWor
     variables: { group: Number(group), page },
   });
 
-  const words = [...data.words];
-  setWords(words.splice(9, 10));
-  console.log(words);
+  let words = [...data.words];
+  if (words.length < 10 && page !== 0) {
+    const { data } = await apollo.query({
+      query: WordsDocument,
+      variables: {
+        input: { group: Number(group), page: page - 1 },
+      },
+    });
+    words = [...words, ...data.words];
+  }
+  await setWords(words.splice(9, 10));
   if (words) {
     setLoading(false);
   }
@@ -54,7 +65,7 @@ export const fetchCurrentWord = async (id) => {
       return data.aggregatedWord;
     }
   } catch (err) {
-    console.error(err.message, 'error in fetchWord');
+    console.error(err.message);
   }
 };
 
@@ -63,16 +74,13 @@ export const editWord = async (
   complexity,
   deleted,
   editAggregatedWord,
-  fetchWords,
 ) => {
   try {
     const { data } = await editAggregatedWord({
       variables: { input: { id, complexity, deleted, repeat, rightAnswers, studied } },
     });
-
-    console.log(data, 'data in editword');
   } catch (err) {
-    console.log(err);
+    console.error(err.message);
   }
 };
 
@@ -86,9 +94,17 @@ export const userFetch = async (group, page, setLoading, setWords) => {
       input: { group: Number(group), page },
     },
   });
-  const words = [...data.aggregatedWords];
-
-  await setWords([...data.aggregatedWords]);
+  let words = [...data.aggregatedWords];
+  if (words.length < 20 && page !== 0) {
+    const { data } = await apollo.query({
+      query: AggregatedWordsDocument,
+      variables: {
+        input: { group: Number(group), page: page - 1 },
+      },
+    });
+    words = [...words, ...data.aggregatedWords];
+  }
+  await setWords(words);
 
   if (words) {
     setLoading(false);
@@ -106,7 +122,16 @@ export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
     },
   });
 
-  const words = [...data.aggregatedWords];
+  let words = [...data.aggregatedWords];
+  if (words.length < 10 && page !== 0) {
+    const { data } = await apollo.query({
+      query: AggregatedWordsDocument,
+      variables: {
+        input: { group: Number(group), page: page - 1 },
+      },
+    });
+    words = [...words, ...data.aggregatedWords];
+  }
   await setWords(words.splice(9, 10));
 
   if (words) {

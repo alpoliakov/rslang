@@ -45,8 +45,6 @@ export const checkAnswerSprint = (answer, mainWord, translation) => {
 
 // ------- SAVANNA -------
 
-// export const mixVariants = (arr) => arr.sort(() => Math.random() - 0.5);
-
 export const getNextWordSavanna = (arr, learnedWords) => {
   const [mainWord] = arr
     .filter((word) => !learnedWords.includes(word))
@@ -87,4 +85,22 @@ export const getNextWordAudiocall = (arr, learnedWords) => {
     .sort(() => Math.random() - 0.5);
 
   return { mainWord, translations };
+};
+
+export const getStrike = (arr) => {
+  let streak = 0;
+  let maxStreak = 0;
+
+  for (let i = 0; i <= arr.length; i++) {
+    if (arr[i] === true) {
+      streak += 1;
+    } else {
+      if (streak > maxStreak) {
+        maxStreak = streak;
+        streak = 0;
+      }
+      streak = 0;
+    }
+  }
+  return maxStreak;
 };
