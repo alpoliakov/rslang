@@ -1,6 +1,8 @@
+import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
 import { NewGame } from 'components/MiniGames/NewGame/NewGame';
@@ -13,6 +15,9 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
+import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 
 export default function NewGamePage({ group, page }) {
@@ -31,15 +36,8 @@ export default function NewGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
-  const fetchWords = async () => {
-    if (user) {
-      userFetch(currentGroup, currentPage, setLoading, setWords);
-    }
-
-    if (!user) {
-      fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
-    }
-  };
+  const fullScreen = useFullScreenHandle();
+  const [editStatistic] = useEditStatisticMutation();
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -50,11 +48,57 @@ export default function NewGamePage({ group, page }) {
     }
   }, []);
 
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  console.log(data?.localStatistics);
+
+  // useEffect(() => {
+  //   if (endGame) {
+  //     const { wordsCount, rightAnswers, newGame } = data.localStatistics;
+  //     const totalTrue = answersArr.filter((answer) => answer === true).length;
+  //     const strike = getStrike(answersArr);
+
+  //     const argsLocal = {
+  //       ...data?.localStatistics,
+  //       wordsCount: wordsCount + learnedWords.length,
+  //       rightAnswers: rightAnswers + totalTrue,
+  //       newGame: {
+  //         wordsCount: newGame.wordsCount + learnedWords.length,
+  //         rightAnswers: newGame.rightAnswers + totalTrue,
+  //         series: newGame.series + strike,
+  //       },
+  //     };
+
+  //     const argsStatistic = {
+  //       ...data?.StatisticQuery,
+  //       optional: {wordsCount: optional.wordsCount +learnedWords.length,
+  //         rightAnswers:optional.rightAnswers + totalTrue,
+  //         localRate: optional.localRate + counter
+  //       },
+  //       newGame: {
+  //         wordsCountNew:newGame.wordsCount + learnedWords.length,
+  //       rightAnswersNew: newGame.rightAnswers + totalTrue,
+  //       seriesNew: newGame.series + strike
+  //       },
+  //     }
+
+  //     user?changeStatistic(editStatistic, argsStatistic):EditLocalStatistics(argsLocal);
+  //     console.log(data?.localStatistics);
+  //   }
+  // }, [endGame]);
+
+  const fetchWords = async () => {
+    if (user) {
+      userFetch(currentGroup, currentPage, setLoading, setWords);
+    }
+
+    if (!user) {
+      fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+    }
+  };
+
   useEffect(() => {
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
@@ -93,11 +137,13 @@ export default function NewGamePage({ group, page }) {
               setEndGame={setEndGame}
               endGame={endGame}
               user={user}
-              fetchWords={fetchWords}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              chooseLevel={chooseLevel}
             />
           )}
           <div className="progress-hearts">
@@ -163,8 +209,6 @@ export default function NewGamePage({ group, page }) {
 NewGamePage.getInitialProps = async ({ query }) => {
   const group = +query.group;
   const page = +query.page || 0;
-
-  console.log(group);
 
   return {
     group,
