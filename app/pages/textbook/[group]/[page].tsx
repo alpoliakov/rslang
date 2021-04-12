@@ -146,6 +146,7 @@ export default function Pages({ group, page }) {
     setPageCount(30);
     setShowLink(true);
     console.log(localStatistics);
+    // console.log(localStatistics.percentsRight());
     setTimeout(() => {
       setSession(true);
     }, 1000);
@@ -281,8 +282,6 @@ export default function Pages({ group, page }) {
     }
 
     if (user && state) {
-      console.log(state.length);
-
       if (state.length === 0) {
         if (page === pageCount - 1) {
           router.push(`/textbook/${group}/${page - 1}`);
