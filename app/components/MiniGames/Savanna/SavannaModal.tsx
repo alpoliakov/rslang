@@ -19,8 +19,11 @@ export const ModalSavanna = ({ setShowGame, showGame, group, setGroup, chooseLev
         <div className="modalEntrance-box">
           <div>
             Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше
-            очков опыта получишь. <br /> Чтобы дать ответ, кликай по нему мышкой или выбирай из
-            клавиш 1, 2, 3, 4
+            очков опыта получишь. На ответ у тебя есть 5 секунд!
+            <br />
+            <br />
+            Чтобы играть с помощью клавиатуры, используй клавиши
+            <br /> 1, 2, 3, 4
           </div>
           {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>
