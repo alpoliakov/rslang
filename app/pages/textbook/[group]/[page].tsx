@@ -51,6 +51,8 @@ export default function Pages({ group, page }) {
   const [startExample, setStartExample] = useState(false);
   const [session, setSession] = useState(false);
   const [localState, setLocalState] = useState(null);
+  const [wordsUsed, setWordsUsed] = useState(null);
+  const [rightAnswers, setRightAnswers] = useState(null);
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
 
@@ -96,7 +98,6 @@ export default function Pages({ group, page }) {
       fetchPolicy: 'cache-first',
     });
 
-    console.log(data);
     await setState(data.aggregatedWords);
   };
 
@@ -277,12 +278,27 @@ export default function Pages({ group, page }) {
     }
   };
 
+  const setPageStatistic = () => {
+    let words = 0;
+    let right = 0;
+
+    state.forEach((item) => {
+      words = words + item.optional.repeat;
+      right = right + item.optional.rightAnswers;
+    });
+
+    setWordsUsed(words);
+    setRightAnswers(right);
+  };
+
   useEffect(() => {
     if (Array.isArray(state) && state.length >= 0) {
       setLoadingWords(false);
     }
 
     if (user && state) {
+      setPageStatistic();
+
       if (state.length === 0) {
         if (page === pageCount - 1) {
           router.push(`/textbook/${group}/${page - 1}`);
@@ -309,10 +325,18 @@ export default function Pages({ group, page }) {
       <Head>
         <title>Textbook</title>
       </Head>
-      <Flex alignItems="center" justifyContent="center">
+      <Flex alignItems="center" justifyContent="center" flexDirection="column">
         <Heading size="lg" p={1}>
           Group: {group + 1}
         </Heading>
+        <Heading size="md" p={1}>
+          Page: {page + 1}
+        </Heading>
+        {user && (
+          <Text size="sm" fontWeight="bold">
+            использовано слов: {wordsUsed} / правильных ответов: {rightAnswers}
+          </Text>
+        )}
       </Flex>
       <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
         {!loadingWords &&
