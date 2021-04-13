@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const GET_LOCAL_STATISTIC = gql`
-  query GetLocalStatistics @client {
-    localStatistics {
+  query GetLocalStatistics {
+    localStatistics @client {
+      date
       wordsCount
       rightAnswers
-      words
+      localRate
       savanna
       audioCall
       sprint

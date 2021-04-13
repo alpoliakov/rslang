@@ -19,7 +19,8 @@ export const cache = new InMemoryCache({
 const statisticInitialValue: LocalStatistics = {
   wordsCount: 0,
   rightAnswers: 0,
-  words: [],
+  localRate: 0,
+  date: new Date(),
   savanna: {
     wordsCount: 0,
     rightAnswers: 0,

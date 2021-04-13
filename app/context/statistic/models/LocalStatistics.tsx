@@ -9,9 +9,10 @@ export interface GameField {
 }
 
 export interface LocalStatistics {
+  date: Date;
   wordsCount: number;
   rightAnswers: number;
-  words?: [string] | [];
+  localRate: number;
   savanna: GameField;
   audioCall: GameField;
   sprint: GameField;

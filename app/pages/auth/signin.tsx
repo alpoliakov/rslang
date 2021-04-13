@@ -89,7 +89,6 @@ export default function SignIn() {
     }
 
     await signIn(email, password);
-    console.log(email, password);
   };
 
   return (
