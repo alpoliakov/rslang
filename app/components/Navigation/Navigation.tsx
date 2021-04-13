@@ -51,14 +51,12 @@ export default function Navigation({ group, page }) {
 
     if (pathname.match('complex')) {
       setPreviousPageName('complex');
-    }
-
-    if (pathname.match('deleted')) {
+    } else if (pathname.match('deleted')) {
       setPreviousPageName('deleted');
-    }
-
-    if (pathname.match('studied')) {
+    } else if (pathname.match('studied')) {
       setPreviousPageName('studied');
+    } else {
+      setPreviousPageName('');
     }
 
     setMainTextBook(false);
