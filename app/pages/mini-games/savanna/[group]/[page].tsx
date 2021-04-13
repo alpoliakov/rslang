@@ -19,6 +19,8 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import { useAppContext } from '../../../../context/ContextApp';
+import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
@@ -47,6 +49,8 @@ export default function SavannaGamePage({ group, page }) {
   const {
     data: { localStatistics },
   } = useQuery(GET_LOCAL_STATISTIC);
+
+  const { previousPageName } = useAppContext();
 
   useEffect(() => {
     if (endGame) {
@@ -91,6 +95,7 @@ export default function SavannaGamePage({ group, page }) {
     if (chooseLevel) {
       setCurrentPage(Math.floor(Math.random() * 28));
     }
+    console.log(previousPageName);
   }, []);
 
   useEffect(() => {
