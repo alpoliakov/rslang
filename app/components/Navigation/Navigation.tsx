@@ -28,7 +28,7 @@ export default function Navigation({ group, page }) {
   const [chapter, setChapter] = useState(null);
   const { pathname } = router;
 
-  const { showLink } = useAppContext();
+  const { showLink, setPreviousPageName } = useAppContext();
 
   const { user } = useAuth();
 
@@ -49,8 +49,19 @@ export default function Navigation({ group, page }) {
       return setMainTextBook(true);
     }
 
+    if (pathname.match('complex')) {
+      setPreviousPageName('complex');
+    }
+
+    if (pathname.match('deleted')) {
+      setPreviousPageName('deleted');
+    }
+
+    if (pathname.match('studied')) {
+      setPreviousPageName('studied');
+    }
+
     setMainTextBook(false);
-    console.log(pathname);
   }, [pathname]);
 
   return (
