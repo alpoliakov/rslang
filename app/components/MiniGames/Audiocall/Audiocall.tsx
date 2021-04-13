@@ -210,8 +210,7 @@ const Audiocall = ({
               );
             }}
             onClick={() => handleAnswer(word)}>
-            {key + 1}
-            {user ? word.word.wordTranslate : word.wordTranslate}
+            {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}
       </div>
