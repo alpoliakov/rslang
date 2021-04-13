@@ -84,7 +84,6 @@ export const editWord = async (
   try {
     const { data } = await editAggregatedWord({
       variables: { input: { id, complexity, deleted, repeat, rightAnswers, studied } },
-      fetchPolicy: 'network-only',
     });
   } catch (err) {
     console.error(err.message);
@@ -143,7 +142,42 @@ export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
     });
     words = [...words, ...data.aggregatedWords];
   }
-  await setWords(words.splice(9, 10));
+  if (words.length > 10) {
+    words.splice(9, 10);
+  }
+  console.log(words, 'from userFetchAudiocall');
+  await setWords(words);
+
+  if (words) {
+    setLoading(false);
+  }
+};
+
+export const getBackUpWords = async (group, page, setLoading, setAdditionalWords) => {
+  setLoading(true);
+  const apollo = initializeApollo();
+
+  const { data } = await apollo.query({
+    query: AggregatedWordsDocument,
+    variables: {
+      input: { group: Number(group), page: page + 1 },
+      fetchPolicy: 'network-only',
+    },
+  });
+
+  let words = [...data.aggregatedWords];
+  if (words.length < 10 && page !== 0) {
+    const { data } = await apollo.query({
+      query: AggregatedWordsDocument,
+      variables: {
+        input: { group: Number(group), page: page + 2 },
+        fetchPolicy: 'network-only',
+      },
+    });
+    words = [...words, ...data.aggregatedWords];
+  }
+  console.log('words from getBackUpWords', words);
+  setAdditionalWords(words);
 
   if (words) {
     setLoading(false);
