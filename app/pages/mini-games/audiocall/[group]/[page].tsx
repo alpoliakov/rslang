@@ -21,6 +21,7 @@ import { RiMusic2Fill } from 'react-icons/ri';
 import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -37,9 +38,16 @@ export default function AudiocallGamePage({ group, page }) {
   const { user } = useAuth();
   const [answersArr, setAnswersArr] = useState([]);
 
+  const [localStatistic, setLocalStatistic] = useState(null);
+
   const { data } = useQuery(GET_LOCAL_STATISTIC);
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
+
+  useEffect(
+    () => setLocalStatistic(nonAuthUserStatistic('localStatistic', data.localStatistics)),
+    [],
+  );
 
   useEffect(() => {
     if (chooseLevel) {
@@ -54,7 +62,7 @@ export default function AudiocallGamePage({ group, page }) {
       const strike = getStrike(answersArr);
 
       const args = {
-        ...data?.localStatistics,
+        ...localStatistic,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
         audioCall: {
@@ -63,7 +71,9 @@ export default function AudiocallGamePage({ group, page }) {
           series: audioCall.series + strike,
         },
       };
-      EditLocalStatistics(args);
+      setLocalStatistic(args);
+      nonAuthUserStatistic('localStatistic', data.localStatistics, localStatistic);
+      console.log('final localStatistic in audioacall', localStatistic, 'final data', data);
     }
   }, [endGame]);
 
