@@ -107,7 +107,11 @@ const Savanna = ({
       </div>
       <div className="savanna-translation">
         {combination.translations.map((word, key) => (
-          <div key={word._id} className="savanna-variants" onClick={() => handleAnswer(word)}>
+          <div
+            key={word._id}
+            role="presentation"
+            className="savanna-variants"
+            onClick={() => handleAnswer(word)}>
             {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}
