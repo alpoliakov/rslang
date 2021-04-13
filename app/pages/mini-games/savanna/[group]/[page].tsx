@@ -15,9 +15,9 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
 export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -35,29 +35,40 @@ export default function SavannaGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
-  console.log(data?.localStatistics);
+  const [localState, setLocalState] = useState(null);
+
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, savanna } = data.localStatistics;
+      const { wordsCount, rightAnswers, savanna, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
       const args = {
-        ...data?.localStatistics,
+        ...localState,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
+        localRate: localRate + counter,
         savanna: {
           wordsCount: savanna.wordsCount + learnedWords.length,
           rightAnswers: savanna.rightAnswers + totalTrue,
           series: savanna.series + strike,
         },
       };
-      EditLocalStatistics(args);
-      console.log(data?.localStatistics);
+      setLocalState(args);
     }
   }, [endGame]);
+
+  useEffect(() => {
+    if (localState) {
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+    }
+  }, [localState]);
 
   const fetchWords = async () => {
     if (user) {

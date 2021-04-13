@@ -14,9 +14,9 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
-import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
@@ -32,12 +32,16 @@ export default function SprintGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
+  const [localState, setLocalState] = useState(null);
+
   const fullScreen = useFullScreenHandle();
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
 
   useEffect(() => {
     if (chooseLevel) {
@@ -45,26 +49,34 @@ export default function SprintGamePage({ group, page }) {
     }
   }, []);
 
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+
   useEffect(() => {
     if (timeOver) {
-      const { wordsCount, rightAnswers, sprint } = data.localStatistics;
+      const { wordsCount, rightAnswers, sprint, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
       const args = {
-        ...data?.localStatistics,
+        ...localState,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
+        localRate: localRate + counter,
         sprint: {
           wordsCount: sprint.wordsCount + learnedWords.length,
           rightAnswers: sprint.rightAnswers + totalTrue,
           series: sprint.series + strike,
         },
       };
-      EditLocalStatistics(args);
-      console.log(data?.localStatistics);
+      setLocalState(args);
     }
   }, [timeOver]);
+
+  useEffect(() => {
+    if (localState) {
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+    }
+  }, [localState]);
 
   const fetchWords = async () => {
     if (user) {
