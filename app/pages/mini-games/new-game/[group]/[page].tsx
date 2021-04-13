@@ -144,7 +144,12 @@ export default function NewGamePage({ group, page }) {
     setMusic(!isMusicOn);
   };
 
-  useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
+  useEffect(() => {
+    !lives.includes(true) && setEndGame(true);
+    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
+      setEndGame(true);
+    }
+  }, [lives, learnedWords]);
 
   return (
     <>

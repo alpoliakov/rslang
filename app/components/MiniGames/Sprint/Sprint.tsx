@@ -32,12 +32,15 @@ const Sprint = ({
   learnedWords,
   setLearnedWord,
   loading,
+  additionalWords,
 }) => {
   const [isMusicOn, setMusic] = useState(true);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
 
   const [pic, setPic] = useState(egg);
-  const [combination, setCombination] = useState(getNextWordSprint(words, learnedWords));
+  const [combination, setCombination] = useState(
+    getNextWordSprint(words, learnedWords, additionalWords),
+  );
   const audio = `${LOCAL_HOST}${
     user ? combination.mainWord?.word?.audio : combination.mainWord?.audio
   }`;
@@ -101,7 +104,7 @@ const Sprint = ({
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
-    setCombination(getNextWordSprint(words, seenWords));
+    setCombination(getNextWordSprint(words, seenWords, additionalWords));
   };
 
   useEffect(() => changePicture(correctAnswersArr.length, setPic), [correctAnswersArr]);

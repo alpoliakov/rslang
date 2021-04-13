@@ -1,7 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import {
+  fetchCurrentWords,
+  getBackUpWords,
+  userFetch,
+} from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -31,6 +35,7 @@ export default function SprintGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+  const [additionalWords, setAdditionalWords] = useState([]);
 
   const [localState, setLocalState] = useState(null);
 
@@ -98,6 +103,19 @@ export default function SprintGamePage({ group, page }) {
     fullScreen.exit();
   };
 
+  useEffect(() => {
+    if (words.length < 2) {
+      getBackUpWords(group, page, setLoading, setAdditionalWords);
+    }
+  }, [words]);
+
+  useEffect(() => {
+    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
+      console.log('learnedWords.length', learnedWords.length, words.length);
+      setTimeOver(true);
+    }
+  }, [learnedWords]);
+
   return (
     <>
       <Head>
@@ -121,6 +139,7 @@ export default function SprintGamePage({ group, page }) {
             learnedWords={learnedWords}
             setLearnedWord={setLearnedWord}
             loading={loading}
+            additionalWords={additionalWords}
           />
           <div className="sprint-close-full">
             <IconButton

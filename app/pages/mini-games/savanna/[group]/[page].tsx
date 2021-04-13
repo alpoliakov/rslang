@@ -1,7 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import {
+  fetchCurrentWords,
+  getBackUpWords,
+  userFetch,
+} from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -34,6 +38,7 @@ export default function SavannaGamePage({ group, page }) {
   const { user } = useAuth();
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+  const [additionalWords, setAdditionalWords] = useState([]);
 
   const [localState, setLocalState] = useState(null);
 
@@ -106,8 +111,17 @@ export default function SavannaGamePage({ group, page }) {
 
   useEffect(() => {
     !lives.includes(true) && setEndGame(true);
+    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
+      setEndGame(true);
+    }
     if (endGame) setPause(true);
-  }, [lives, endGame]);
+  }, [lives, endGame, learnedWords]);
+
+  useEffect(() => {
+    if (words.length < 5) {
+      getBackUpWords(group, page, setLoading, setAdditionalWords);
+    }
+  }, [words]);
 
   return (
     <>
@@ -139,6 +153,7 @@ export default function SavannaGamePage({ group, page }) {
               setAnswersArr={setAnswersArr}
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
+              additionalWords={additionalWords}
             />
           )}
           <div className="progress-hearts">
