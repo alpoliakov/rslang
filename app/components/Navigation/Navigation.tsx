@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { RiSettings4Line } from 'react-icons/ri';
 
 import { useAppContext } from '../../context/ContextApp';
+import { useAuth } from '../../lib/useAuth';
 import TextbookSettings from '../TextbookSettings/TextbookSettings';
 
 export default function Navigation({ group, page }) {
@@ -28,6 +29,8 @@ export default function Navigation({ group, page }) {
   const { pathname } = router;
 
   const { showLink } = useAppContext();
+
+  const { user } = useAuth();
 
   const setCurrentChapter = () => {
     if (pathname.match('complex')) {
@@ -79,13 +82,15 @@ export default function Navigation({ group, page }) {
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
                 <NextLink href={'/textbook/5/0'}>Group 6</NextLink>
               </Tab>
-              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/vocabulary/studied/0'}>
-                  <Text color="tomato" fontWeight="bold">
-                    Словарь
-                  </Text>
-                </NextLink>
-              </Tab>
+              {user && (
+                <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
+                  <NextLink href={'/vocabulary/studied/0'}>
+                    <Text color="tomato" fontWeight="bold">
+                      Словарь
+                    </Text>
+                  </NextLink>
+                </Tab>
+              )}
             </TabList>
           </Tabs>
         )}

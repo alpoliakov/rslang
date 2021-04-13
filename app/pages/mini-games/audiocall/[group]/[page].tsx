@@ -38,16 +38,15 @@ export default function AudiocallGamePage({ group, page }) {
   const { user } = useAuth();
   const [answersArr, setAnswersArr] = useState([]);
 
-  const [localStatistic, setLocalStatistic] = useState(null);
+  const [localState, setLocalState] = useState(null);
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(
-    () => setLocalStatistic(nonAuthUserStatistic('localStatistic', data.localStatistics)),
-    [],
-  );
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
 
   useEffect(() => {
     if (chooseLevel) {
@@ -57,12 +56,12 @@ export default function AudiocallGamePage({ group, page }) {
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, audioCall } = data.localStatistics;
+      const { wordsCount, rightAnswers, audioCall } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
       const args = {
-        ...localStatistic,
+        ...localState,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
         audioCall: {
@@ -71,11 +70,18 @@ export default function AudiocallGamePage({ group, page }) {
           series: audioCall.series + strike,
         },
       };
-      setLocalStatistic(args);
-      nonAuthUserStatistic('localStatistic', data.localStatistics, localStatistic);
-      console.log('final localStatistic in audioacall', localStatistic, 'final data', data);
+      setLocalState(args);
+
+      console.log('final localStatistic in audioacall', localState, 'final data');
     }
   }, [endGame]);
+
+  useEffect(() => {
+    if (localState) {
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+    }
+    console.log(localState);
+  }, [localState]);
 
   const fetchWords = async () => {
     if (user) {
