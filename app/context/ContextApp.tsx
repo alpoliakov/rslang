@@ -9,6 +9,7 @@ export function AppWrapper({ children }) {
   });
   const [show, setShow] = useState(true);
   const [page, setPage] = useState(0);
+  const [prevPage, setPrevPage] = useState('');
 
   const sharedState = {
     data: settings,
@@ -22,6 +23,10 @@ export function AppWrapper({ children }) {
     vocabularyPage: page,
     setVocabularyPage: (value) => {
       setPage(value);
+    },
+    previousPageName: prevPage,
+    setPreviousPageName: (value) => {
+      setPrevPage(value);
     },
   };
 
