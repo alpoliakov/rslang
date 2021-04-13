@@ -9,6 +9,7 @@ export interface GameField {
 }
 
 export interface LocalStatistics {
+  date: Date;
   wordsCount: number;
   rightAnswers: number;
   localRate: number;

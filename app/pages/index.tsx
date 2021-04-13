@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { Box, Container, Flex, Heading } from '@chakra-ui/layout';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
@@ -11,10 +12,15 @@ import Menu from '../components/Menu';
 import Player from '../components/Player';
 import Promo from '../components/Promo';
 import { DAY_IN_mSECONDS, DEMONSTRATION_VIDEO } from '../constants';
+import { GET_LOCAL_STATISTIC } from '../context/statistic/operations/queries/getLocalStatistic';
 import { initializeApollo } from '../lib/apollo';
 import { useClearDayStatisticMutation } from '../lib/graphql/clearDayStatistic.graphql';
 import { StatisticDocument } from '../lib/graphql/statistic.graphql';
 import { useAuth } from '../lib/useAuth';
+import {
+  nonAuthUserStatistic,
+  processingTimeStatistics,
+} from '../utils/processingUserLocalStatistic';
 
 export default function Home() {
   const [state, setState] = useState(false);
@@ -23,6 +29,11 @@ export default function Home() {
   const [clearStatistic] = useClearDayStatisticMutation();
 
   const { user } = useAuth();
+
+  const {
+    data: { localStatistics },
+    loading,
+  } = useQuery(GET_LOCAL_STATISTIC);
 
   const fetchStatistic = async () => {
     const apollo = initializeApollo();
@@ -40,28 +51,28 @@ export default function Home() {
     }
   };
 
-  const processingTimeStatistics = async () => {
-    const dataStatistic = new Date(statistic.optional.createDate).getTime();
-    const currentTime = new Date().getTime();
-    const difTimeInDays = (currentTime - dataStatistic) / DAY_IN_mSECONDS;
-
-    if (difTimeInDays > 1) {
-      const { data } = await clearStatistic();
-      if (data.clearDayStatistic._id) {
-        toast.success('Дневная статистика очищена');
-      }
+  const clearAuthUserStatistic = async () => {
+    const { data } = await clearStatistic();
+    if (data.clearDayStatistic._id) {
+      toast.success('Дневная статистика очищена');
     }
   };
 
   useEffect(() => {
     if (statistic) {
-      processingTimeStatistics();
+      processingTimeStatistics(statistic.optional.createDate, clearAuthUserStatistic);
     }
   }, [statistic]);
 
   useEffect(() => {
     if (user) {
       fetchStatistic().then((data) => setStatistic(data));
+      console.log('User');
+    }
+
+    if (!user) {
+      console.log('Non user');
+      nonAuthUserStatistic('localStatistic', localStatistics);
     }
   }, [user]);
 

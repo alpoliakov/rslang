@@ -23,6 +23,7 @@ function createApolloClient() {
       },
     };
   });
+
   const httpLink = new HttpLink({
     uri: 'http://localhost:8000/graphql',
     credentials: 'include',

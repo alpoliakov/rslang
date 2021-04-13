@@ -32,6 +32,7 @@ import { useAggregatedWordsQuery } from '../../../lib/graphql/aggregatedWords.gr
 import { useEditAggregatedWordMutation } from '../../../lib/graphql/editAggregatedWord.graphql';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
 import { useAuth } from '../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../utils/processingUserLocalStatistic';
 
 export default function Pages({ group, page }) {
   const router = useRouter();
@@ -142,11 +143,10 @@ export default function Pages({ group, page }) {
 
   useEffect(() => {
     setLoadingWords(true);
-    setLocalState({ ...localStatistics });
+    setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
     setPageCount(30);
     setShowLink(true);
-    console.log(localStatistics);
-    // console.log(localStatistics.percentsRight());
+
     setTimeout(() => {
       setSession(true);
     }, 1000);
@@ -156,6 +156,7 @@ export default function Pages({ group, page }) {
     if (session) {
       fetchWords();
       setSession(false);
+      console.log(localState);
     }
   }, [session]);
 

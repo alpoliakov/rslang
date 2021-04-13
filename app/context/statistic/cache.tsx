@@ -20,6 +20,7 @@ const statisticInitialValue: LocalStatistics = {
   wordsCount: 0,
   rightAnswers: 0,
   localRate: 0,
+  date: new Date(),
   savanna: {
     wordsCount: 0,
     rightAnswers: 0,
