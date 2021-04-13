@@ -51,7 +51,7 @@ export default function AudiocallGamePage({ group, page }) {
 
   useEffect(() => {
     if (chooseLevel) {
-      setCurrentPage(0);
+      setCurrentPage(Math.floor(Math.random() * 28));
     }
   }, []);
 
