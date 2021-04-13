@@ -1,13 +1,11 @@
-import { Badge, Flex, Grid, Heading, GridItem, Stack } from '@chakra-ui/layout';
+import { Badge, Flex, Grid, GridItem, Heading, Stack } from '@chakra-ui/layout';
 import { Avatar, Link } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
 const TeamMember = ({ name, githubName, githubUrl, avatarUrl, children }) => {
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ ease: 'linear', duration: 0.3 }}>
+    <motion.div whileHover={{ scale: 1.02 }} transition={{ ease: 'linear', duration: 0.3 }}>
       <Flex
         align="center"
         direction="column"
@@ -31,11 +29,11 @@ const AboutTeam = () => {
   return (
     <>
       <Grid
-        templateColumns={{base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)',}}
+        templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
         gap={10}
         w="90%"
         mx="auto">
-        <GridItem colSpan={{base: 1, md: 2}}>
+        <GridItem colSpan={{ base: 1, md: 2 }}>
           <TeamMember
             name="Alexsandr Poliakov"
             avatarUrl="https://avatars.githubusercontent.com/u/27024108"

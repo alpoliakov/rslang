@@ -1,8 +1,8 @@
 import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
-import { BsController, BsExclamationTriangleFill, BsExclamationTriangle } from 'react-icons/bs';
 import { BiDollar, BiNavigation } from 'react-icons/bi';
+import { BsController, BsExclamationTriangle, BsExclamationTriangleFill } from 'react-icons/bs';
 
 import { ACTIVE_BUTTON_COLOR } from '../../constants';
 

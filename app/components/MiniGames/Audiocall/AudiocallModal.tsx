@@ -18,7 +18,13 @@ export const ModalAudiocall = ({ setShowGame, showGame, group, setGroup, chooseL
         <div className="modalEntrance-box">
           <div>
             Тренировка Аудиовызов улучшает восприятие речи на слух.
-            <br /> Чтобы дать ответ, кликай по нему мышкой или выбирай из клавиш 1, 2, 3, 4, 5
+            <br />
+            <br /> Чтобы играть с помощью клавиатуры, используй клавиши
+            <br /> 1, 2, 3, 4, 5 - чтобы дать ответ, <br />
+            space - для воспроизведения звука,
+            <br /> enter - чтобы пропустить вопрос,
+            <br />
+            стрелка-вправо - чтобы перейти к следующему вопросу.
           </div>
           {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>

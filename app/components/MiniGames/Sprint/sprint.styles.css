@@ -5,8 +5,8 @@
 
 .sprint-container {
   background-color: rgb(88, 89, 94);
-  background-blend-mode: multiply;
-  background-image: url('https://images.pexels.com/photos/6109124/pexels-photo-6109124.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-blend-mode: overlay;
+  background-image: url('https://images.pexels.com/photos/2259232/pexels-photo-2259232.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
