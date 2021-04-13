@@ -109,13 +109,6 @@ export default function SprintGamePage({ group, page }) {
     }
   }, [words]);
 
-  useEffect(() => {
-    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
-      console.log('learnedWords.length', learnedWords.length, words.length);
-      setTimeOver(true);
-    }
-  }, [learnedWords]);
-
   return (
     <>
       <Head>

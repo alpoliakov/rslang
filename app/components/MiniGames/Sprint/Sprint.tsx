@@ -144,7 +144,7 @@ const Sprint = ({
   }, [combination]);
 
   useEffect(() => {
-    setCombination(getNextWordSprint(words, learnedWords));
+    setCombination(getNextWordSprint(words, learnedWords, additionalWords));
   }, [words]);
 
   if (!combination.mainWord?.word || loading) {
