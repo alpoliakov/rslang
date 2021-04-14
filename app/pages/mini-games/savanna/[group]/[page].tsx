@@ -5,6 +5,9 @@ import {
   fetchCurrentWords,
   getBackUpWords,
   userFetch,
+  fetchWordsFromComplexity,
+  fetchWordsFromStudied,
+  fetchWordsFromDeleted,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -79,9 +82,17 @@ export default function SavannaGamePage({ group, page }) {
     }
   }, [localState]);
 
-  const fetchWords = async () => {
+  const fetchWords = async (previousPage) => {
     if (user) {
-      userFetch(currentGroup, currentPage, setLoading, setWords);
+      if (previousPage === 'complex') {
+        fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPage === 'deleted') {
+        fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPage === 'studied') {
+        fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
+      } else {
+        userFetch(currentGroup, currentPage, setLoading, setWords);
+      }
     }
 
     if (!user) {
@@ -95,11 +106,11 @@ export default function SavannaGamePage({ group, page }) {
     if (chooseLevel) {
       setCurrentPage(Math.floor(Math.random() * 28));
     }
-    console.log(previousPageName);
+    console.log(previousPageName, 'previousPageName');
   }, []);
 
   useEffect(() => {
-    fetchWords();
+    fetchWords(previousPageName);
   }, [currentGroup, showGame, currentPage, setGroup]);
 
   const fullScreen = useFullScreenHandle();
@@ -123,6 +134,7 @@ export default function SavannaGamePage({ group, page }) {
   }, [lives, endGame, learnedWords]);
 
   useEffect(() => {
+    console.log(words, 'state words');
     if (words.length < 5) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }

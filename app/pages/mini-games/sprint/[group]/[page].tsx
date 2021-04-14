@@ -5,6 +5,9 @@ import {
   fetchCurrentWords,
   getBackUpWords,
   userFetch,
+  fetchWordsFromComplexity,
+  fetchWordsFromStudied,
+  fetchWordsFromDeleted,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -21,6 +24,7 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
+import { useAppContext } from '../../../../context/ContextApp';
 
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
@@ -40,6 +44,7 @@ export default function SprintGamePage({ group, page }) {
   const [localState, setLocalState] = useState(null);
 
   const fullScreen = useFullScreenHandle();
+  const { previousPageName } = useAppContext();
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -85,7 +90,15 @@ export default function SprintGamePage({ group, page }) {
 
   const fetchWords = async () => {
     if (user) {
-      userFetch(currentGroup, currentPage, setLoading, setWords);
+      if (previousPageName === 'complex') {
+        fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'deleted') {
+        fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'studied') {
+        fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
+      } else {
+        userFetch(currentGroup, currentPage, setLoading, setWords);
+      }
     }
 
     if (!user) {
@@ -104,6 +117,7 @@ export default function SprintGamePage({ group, page }) {
   };
 
   useEffect(() => {
+    console.log('state words', words);
     if (words.length < 2) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }

@@ -8,6 +8,9 @@ import {
   fetchCurrentWordsAudiocall,
   getBackUpWords,
   userFetchAudiocall,
+  fetchWordsFromComplexity,
+  fetchWordsFromStudied,
+  fetchWordsFromDeleted,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -24,6 +27,7 @@ import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/qu
 import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
+import { useAppContext } from '../../../../context/ContextApp';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -45,6 +49,7 @@ export default function AudiocallGamePage({ group, page }) {
   const [localState, setLocalState] = useState(null);
 
   const [editStatistic] = useEditStatisticMutation();
+  const { previousPageName } = useAppContext();
 
   const {
     // data: { statistic },
@@ -112,9 +117,6 @@ export default function AudiocallGamePage({ group, page }) {
         };
         console.log(args, JSON.stringify(args));
         setUserStatistic(args);
-        // editStatistic({
-        //   variables: { input: userStatistic },
-        // });
       }
     }
   }, [endGame, user]);
@@ -133,7 +135,15 @@ export default function AudiocallGamePage({ group, page }) {
 
   const fetchWords = async () => {
     if (user) {
-      userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
+      if (previousPageName === 'complex') {
+        fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'deleted') {
+        fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'studied') {
+        fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
+      } else {
+        userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
+      }
     }
 
     if (!user) {
