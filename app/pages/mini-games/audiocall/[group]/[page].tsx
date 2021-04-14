@@ -40,23 +40,32 @@ export default function AudiocallGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
   const [answersArr, setAnswersArr] = useState([]);
+  const [userStatistic, setUserStatistic] = useState(null);
 
   const [localState, setLocalState] = useState(null);
 
   const [editStatistic] = useEditStatisticMutation();
 
-  // const {
-  //   data: { statistic },
-  // } = useStatisticQuery();
-  // console.log(statistic, 'data from useStatisticQuery');
+  const {
+    // data: { statistic },
+    data,
+  } = useStatisticQuery();
+  console.log(data?.statistic, 'data from useStatisticQuery (global)');
 
   const {
     data: { localStatistics },
   } = useQuery(GET_LOCAL_STATISTIC);
+
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+  useEffect(
+    () =>
+      user
+        ? setLocalState(nonAuthUserStatistic('localStatistic', localStatistics))
+        : setUserStatistic(data?.statistic),
+    [user],
+  );
 
   useEffect(() => {
     if (chooseLevel) {
@@ -82,14 +91,45 @@ export default function AudiocallGamePage({ group, page }) {
         },
       };
       setLocalState(args);
+
+      if (user) {
+        const { globalRate, optional } = userStatistic;
+        const { audioCall, localRate, rightAnswers, wordsCount } = optional;
+
+        const args = {
+          ...userStatistic,
+          globalRate: globalRate + counter,
+          optional: {
+            audioCall: {
+              wordsCountCall: audioCall.wordsCountCall + learnedWords.length,
+              rightAnswersCall: audioCall.rightAnswersCall + totalTrue,
+              seriesCall: strike,
+            },
+            localRate: localRate + counter,
+            wordsCount: wordsCount + learnedWords.length,
+            rightAnswers: rightAnswers + totalTrue,
+          },
+        };
+        console.log(args, JSON.stringify(args));
+        setUserStatistic(args);
+        // editStatistic({
+        //   variables: { input: userStatistic },
+        // });
+      }
     }
-  }, [endGame]);
+  }, [endGame, user]);
 
   useEffect(() => {
     if (localState) {
       nonAuthUserStatistic('localStatistic', localStatistics, localState);
     }
-  }, [localState]);
+    if (userStatistic) {
+      editStatistic({
+        variables: { input: userStatistic },
+      });
+    }
+    console.log('statistic after editGlobalStatistic ', data?.statistic);
+  }, [localState, endGame, userStatistic]);
 
   const fetchWords = async () => {
     if (user) {

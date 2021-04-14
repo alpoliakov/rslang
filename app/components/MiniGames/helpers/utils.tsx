@@ -89,8 +89,6 @@ export const getNextWordAudiocall = (arr, learnedWords, reserveArr) => {
     .concat([mainWord])
     .sort(() => Math.random() - 0.5);
 
-  console.log('final translations:', translations);
-
   return { mainWord, translations };
 };
 
