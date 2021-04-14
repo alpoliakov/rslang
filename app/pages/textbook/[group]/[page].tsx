@@ -327,14 +327,14 @@ export default function Pages({ group, page }) {
       </Head>
       <Flex alignItems="center" justifyContent="center" flexDirection="column">
         <Heading size="lg" p={1}>
-          Group: {group + 1}
+          Группа: {group + 1}
         </Heading>
         <Heading size="md" p={1}>
-          Page: {page + 1}
+          Страница: {page + 1}
         </Heading>
         {user && (
           <Text size="sm" fontWeight="bold">
-            использовано слов: {wordsUsed} / правильных ответов: {rightAnswers}
+            использовано - {wordsUsed} : правильные ответы - {rightAnswers}
           </Text>
         )}
       </Flex>
