@@ -13,40 +13,60 @@ import {
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import Loading from '../../components/Loading';
 import ShortTermStatistics from '../../components/ShortTermStatistics';
 import { GET_LOCAL_STATISTIC } from '../../context/statistic/operations/queries/getLocalStatistic';
+import { initializeApollo } from '../../lib/apollo';
+import { StatisticDocument } from '../../lib/graphql/statistic.graphql';
+import { useAuth } from '../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../utils/processingUserLocalStatistic';
 
 export default function Stat() {
   const [isButtonDayActive, setIsButtonDayActive] = useState(true);
   const [isButtonAllTimeActive, setIsButtonAllTimeActive] = useState(false);
+  const [statistic, setStatistic] = useState(null);
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
-  console.log(data.localStatistics);
+  const { user } = useAuth();
+  const [localState, setLocalState] = useState(null);
 
-  const wordsLearnedByDay = [
-    {
-      day: '10 апреля',
-      words: 10,
-    },
-    {
-      day: '11 апреля',
-      words: 15,
-    },
-    {
-      day: '12 апреля',
-      words: 25,
-    },
-    {
-      day: '13 апреля',
-      words: 20,
-    },
-    {
-      day: '14 апреля',
-      words: 0,
-    },
-  ];
+  const {
+    data: { localStatistics },
+    loading,
+  } = useQuery(GET_LOCAL_STATISTIC);
+
+  useEffect(() => {
+    setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  const fetchStatistic = async () => {
+    const apollo = initializeApollo();
+
+    try {
+      const { data } = await apollo.query({
+        query: StatisticDocument,
+      });
+
+      if (data.statistic._id) {
+        return data.statistic;
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchStatistic().then((data) => setStatistic(data));
+    }
+  }, [user]);
+
+  const stat = user ? statistic : localState;
 
   const handleButtonClick = (buttonType) => () => {
     if (!buttonType) {
@@ -61,6 +81,8 @@ export default function Stat() {
     },
     { ssr: false },
   );
+
+  console.log(statistic);
 
   return (
     <Container maxW="container.xl" p={2}>
@@ -80,20 +102,34 @@ export default function Stat() {
           onClick={handleButtonClick(isButtonDayActive)}>
           Статистика за день
         </Button>
-        <Button
-          colorScheme="teal"
-          variant="outline"
-          isActive={isButtonAllTimeActive}
-          onClick={handleButtonClick(isButtonAllTimeActive)}>
-          Статистика за все время
-        </Button>
+
+        {user && statistic ? (
+          <Button
+            colorScheme="teal"
+            variant="outline"
+            isActive={isButtonAllTimeActive}
+            onClick={handleButtonClick(isButtonAllTimeActive)}>
+            Статистика за все время
+          </Button>
+        ) : (
+          ''
+        )}
       </Flex>
-      <Collapse in={isButtonDayActive} animateOpacity>
-        <ShortTermStatistics />
-      </Collapse>
-      <Collapse in={isButtonAllTimeActive} animateOpacity>
-        <LongTermStatistics statistics={wordsLearnedByDay} />
-      </Collapse>
+      {stat ? (
+        <Collapse in={isButtonDayActive} animateOpacity>
+          <ShortTermStatistics statistics={stat} />
+        </Collapse>
+      ) : (
+        <Loading />
+      )}
+
+      {user && statistic ? (
+        <Collapse in={isButtonAllTimeActive} animateOpacity>
+          <LongTermStatistics statistics={statistic.statisticPerDay} />
+        </Collapse>
+      ) : (
+        ''
+      )}
     </Container>
   );
 }
