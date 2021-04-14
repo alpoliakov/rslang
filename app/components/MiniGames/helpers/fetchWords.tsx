@@ -1,12 +1,12 @@
+import { WORDS_IN_PAGE } from '../../../constants/index';
 import { initializeApollo } from '../../../lib/apollo';
 import { AggregatedWordDocument } from '../../../lib/graphql/aggregatedWord.graphql';
-import { AggregatedWordsComplexityDocument } from '../../../lib/graphql/aggregatedWordsComplexity.graphql';
-import { AggregatedWordsStudiedDocument } from '../../../lib/graphql/aggregatedWordsStudied.graphql';
-import { AggregatedWordsDeletedDocument } from '../../../lib/graphql/aggregatedWordsDeleted.graphql';
 import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.graphql';
-import { WordsDocument } from '../../../lib/graphql/words.graphql';
+import { AggregatedWordsComplexityDocument } from '../../../lib/graphql/aggregatedWordsComplexity.graphql';
+import { AggregatedWordsDeletedDocument } from '../../../lib/graphql/aggregatedWordsDeleted.graphql';
+import { AggregatedWordsStudiedDocument } from '../../../lib/graphql/aggregatedWordsStudied.graphql';
 import { StatisticDocument } from '../../../lib/graphql/statistic.graphql';
-import { WORDS_IN_PAGE } from '../../../constants/index';
+import { WordsDocument } from '../../../lib/graphql/words.graphql';
 import { toMatrix } from '../helpers/utils';
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
@@ -273,13 +273,49 @@ export const fetchUserStatistic = async () => {
 
 export const editGlobalStatistic = async (editStatistic, userStatistic) => {
   try {
+    const {
+      globalRate,
+      wordsCountSprint,
+      rightAnswersSprint,
+      seriesSprint,
+      wordsCountSavanna,
+      rightAnswersSavanna,
+      seriesSavanna,
+      wordsCountCall,
+      rightAnswersCall,
+      seriesCall,
+      wordsCountNew,
+      rightAnswersNew,
+      seriesNew,
+      localRate,
+      wordsCount,
+      rightAnswers,
+    } = userStatistic;
     const { data } = await editStatistic({
-      variables: { input: userStatistic },
-      fetchPolicy: 'network-only',
+      variables: {
+        input: {
+          globalRate,
+          wordsCountSprint,
+          rightAnswersSprint,
+          seriesSprint,
+          wordsCountSavanna,
+          rightAnswersSavanna,
+          seriesSavanna,
+          wordsCountCall,
+          rightAnswersCall,
+          seriesCall,
+          wordsCountNew,
+          rightAnswersNew,
+          seriesNew,
+          localRate,
+          wordsCount,
+          rightAnswers,
+        },
+      },
     });
 
-    if (data.editStatistic._id) {
-      console.log(data);
+    if (data) {
+      return data;
     }
   } catch (err) {
     console.error(err.message);

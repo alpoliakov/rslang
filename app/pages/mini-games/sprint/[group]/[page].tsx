@@ -2,14 +2,14 @@ import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import {
+  editGlobalStatistic,
   fetchCurrentWords,
+  fetchUserStatistic,
+  fetchWordsFromComplexity,
+  fetchWordsFromDeleted,
+  fetchWordsFromStudied,
   getBackUpWords,
   userFetch,
-  fetchWordsFromComplexity,
-  fetchWordsFromStudied,
-  fetchWordsFromDeleted,
-  fetchUserStatistic,
-  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -22,12 +22,12 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
-import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 
+import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
-import { useAppContext } from '../../../../context/ContextApp';
 
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
@@ -62,9 +62,7 @@ export default function SprintGamePage({ group, page }) {
     if (chooseLevel) {
       setCurrentPage(Math.floor(Math.random() * 28));
     }
-  }, []);
 
-  useEffect(() => {
     if (!user) {
       setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
     }
@@ -100,23 +98,35 @@ export default function SprintGamePage({ group, page }) {
       }
       if (user) {
         const { globalRate, optional } = userStatistic;
-        const { audioCall, localRate, rightAnswers, wordsCount } = optional;
+        const {
+          audioCall,
+          savanna,
+          sprint,
+          newGame,
+          localRate,
+          rightAnswers,
+          wordsCount,
+        } = optional;
+
+        const { wordsCountSprint, rightAnswersSprint } = sprint;
+
         const args = {
-          ...userStatistic,
           globalRate: globalRate + counter,
-          optional: {
-            audioCall: {
-              wordsCountCall: audioCall.wordsCountCall + learnedWords.length,
-              rightAnswersCall: audioCall.rightAnswersCall + totalTrue,
-              seriesCall: strike,
-            },
-            localRate: localRate + counter,
-            wordsCount: wordsCount + learnedWords.length,
-            rightAnswers: rightAnswers + totalTrue,
-          },
+          ...savanna,
+          ...audioCall,
+          ...newGame,
+          wordsCountSprint: wordsCountSprint + learnedWords.length,
+          rightAnswersSprint: rightAnswersSprint + totalTrue,
+          seriesSprint: strike,
+          localRate: localRate + counter,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
         };
 
-        setUserStatistic(args);
+        console.log(args);
+
+        console.log('Edit statistic');
+        editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }
   }, [timeOver]);
@@ -127,14 +137,16 @@ export default function SprintGamePage({ group, page }) {
     }
   }, [localState]);
 
-  useEffect(() => {
-    if (userStatistic) {
-      editGlobalStatistic(editStatistic, userStatistic);
-    }
-  }, [userStatistic]);
+  // useEffect(() => {
+  //   if (userStatistic) {
+  //     console.log('Edit statistic');
+  //     editGlobalStatistic(editStatistic, userStatistic).then((data) => console.log(data));
+  //   }
+  // }, [userStatistic]);
 
   const fetchWords = async () => {
     if (user) {
+      console.log('Откуда этот запрос');
       if (previousPageName === 'complex') {
         fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
       } else if (previousPageName === 'deleted') {
@@ -148,6 +160,7 @@ export default function SprintGamePage({ group, page }) {
 
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
+      //  Почему ты вызываешь этот метод при незалогинином юзере???
     }
   };
 

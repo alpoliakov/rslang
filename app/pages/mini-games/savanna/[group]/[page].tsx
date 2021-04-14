@@ -3,11 +3,11 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import {
   fetchCurrentWords,
+  fetchWordsFromComplexity,
+  fetchWordsFromDeleted,
+  fetchWordsFromStudied,
   getBackUpWords,
   userFetch,
-  fetchWordsFromComplexity,
-  fetchWordsFromStudied,
-  fetchWordsFromDeleted,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
