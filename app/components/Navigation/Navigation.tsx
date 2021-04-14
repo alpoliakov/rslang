@@ -74,22 +74,22 @@ export default function Navigation({ group, page }) {
           <Tabs defaultIndex={group} borderBottomColor="transparent">
             <TabList flexWrap="wrap">
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/0/0'}>Group 1</NextLink>
+                <NextLink href={'/textbook/0/0'}>Группа 1</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/1/0'}>Group 2</NextLink>
+                <NextLink href={'/textbook/1/0'}>Группа 2</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/2/0'}>Group 3</NextLink>
+                <NextLink href={'/textbook/2/0'}>Группа 3</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/3/0'}>Group 4</NextLink>
+                <NextLink href={'/textbook/3/0'}>Группа 4</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/4/0'}>Group 5</NextLink>
+                <NextLink href={'/textbook/4/0'}>Группа 5</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/5/0'}>Group 6</NextLink>
+                <NextLink href={'/textbook/5/0'}>Группа 6</NextLink>
               </Tab>
               {user && (
                 <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>

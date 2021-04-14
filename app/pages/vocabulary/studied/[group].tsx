@@ -148,7 +148,7 @@ export default function StudiedWords({ group }) {
         <Container maxW="container.xl">
           <Flex alignItems="center" justifyContent="center">
             <Heading size="lg" p={1}>
-              Group: {group + 1}
+              Группа: {group + 1}
             </Heading>
           </Flex>
           <Flex p={10} w="full" alignItems="center" justifyContent="center" flexDirection="column">
@@ -157,7 +157,14 @@ export default function StudiedWords({ group }) {
               words &&
               words.length > 0 &&
               words.map((word) => (
-                <WordCard word={word} refetch={refetch} chapter={chapter} key={word._id} />
+                <WordCard
+                  word={word}
+                  right={word.optional.rightAnswers}
+                  wrong={word.optional.wrongAnswers}
+                  refetch={refetch}
+                  chapter={chapter}
+                  key={word._id}
+                />
               ))}
             {!loading && words && words.length && (
               <Box>

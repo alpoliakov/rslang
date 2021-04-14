@@ -24,7 +24,7 @@ import { initializeApollo } from '../../lib/apollo';
 import { AggregatedWordDocument } from '../../lib/graphql/aggregatedWord.graphql';
 import { useEditAggregatedWordMutation } from '../../lib/graphql/editAggregatedWord.graphql';
 
-export default function WordCard({ word, chapter, refetch }) {
+export default function WordCard({ word, right, wrong, chapter, refetch }) {
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [audioMeaning, setAudioMeaning] = useState('');
   const [audioExample, setAudioExample] = useState('');
@@ -233,6 +233,14 @@ export default function WordCard({ word, chapter, refetch }) {
             </Button>
           )}
         </Grid>
+        {chapter === 'studied' && (
+          <Box mt={3}>
+            <Text size="sm" fontWeight="bold">
+              ответы: правильные - <i color="orange">{right}</i>, ошибки -{' '}
+              <i color="orange">{wrong}</i>
+            </Text>
+          </Box>
+        )}
       </Box>
     </Box>
   );
