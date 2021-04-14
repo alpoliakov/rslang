@@ -70,7 +70,7 @@ export default function SprintGamePage({ group, page }) {
         sprint: {
           wordsCount: sprint.wordsCount + learnedWords.length,
           rightAnswers: sprint.rightAnswers + totalTrue,
-          series: sprint.series + strike,
+          series: strike,
         },
       };
       setLocalState(args);

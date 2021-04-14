@@ -66,7 +66,7 @@ export default function SavannaGamePage({ group, page }) {
         savanna: {
           wordsCount: savanna.wordsCount + learnedWords.length,
           rightAnswers: savanna.rightAnswers + totalTrue,
-          series: savanna.series + strike,
+          series: strike,
         },
       };
       setLocalState(args);
