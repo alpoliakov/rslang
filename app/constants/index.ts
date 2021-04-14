@@ -49,7 +49,7 @@ const PASSIVE_BUTTON_COLOR = {
   DARK: '#61A0AF',
 };
 
-const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
+const DEMONSTRATION_VIDEO = 'https://youtu.be/j6DE2j3YAEI';
 
 const VOCABULARY_GROUP_NAV_LINKS = [
   { link: '/vocabulary/', title: 'Группа 1' },

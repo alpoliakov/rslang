@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react';
+import { Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
@@ -8,6 +8,10 @@ const formatedDate = (date) => {
 };
 
 const LongTermStatistics = ({ statistics }) => {
+  if (statistics.length === 0) {
+    return <Heading>Недостаточно данных для статистики</Heading>
+  }
+
   const formatedStat = statistics.map(({ countWords, date }) => {
     return {
       countWords,
