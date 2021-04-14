@@ -6,11 +6,13 @@ import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
 import {
   fetchCurrentWordsAudiocall,
+  getBackUpWords,
   userFetchAudiocall,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
+import { useStatisticQuery } from 'lib/graphql/statistic.graphql';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -18,8 +20,8 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
@@ -30,6 +32,7 @@ export default function AudiocallGamePage({ group, page }) {
   const [showGame, setShowGame] = useState(false);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
+  const [additionalWords, setAdditionalWords] = useState([]);
   const [endGame, setEndGame] = useState(false);
   const [learnedWords, setLearnedWord] = useState([]);
   const [currentPage, setCurrentPage] = useState(page);
@@ -39,6 +42,13 @@ export default function AudiocallGamePage({ group, page }) {
   const [answersArr, setAnswersArr] = useState([]);
 
   const [localState, setLocalState] = useState(null);
+
+  const [editStatistic] = useEditStatisticMutation();
+
+  // const {
+  //   data: { statistic },
+  // } = useStatisticQuery();
+  // console.log(statistic, 'data from useStatisticQuery');
 
   const {
     data: { localStatistics },
@@ -50,13 +60,13 @@ export default function AudiocallGamePage({ group, page }) {
 
   useEffect(() => {
     if (chooseLevel) {
-      setCurrentPage(0);
+      setCurrentPage(Math.floor(Math.random() * 28));
     }
   }, []);
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, audioCall } = localState;
+      const { wordsCount, rightAnswers, audioCall, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
@@ -64,15 +74,14 @@ export default function AudiocallGamePage({ group, page }) {
         ...localState,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
+        localRate: localRate + counter,
         audioCall: {
           wordsCount: audioCall.wordsCount + learnedWords.length,
           rightAnswers: audioCall.rightAnswers + totalTrue,
-          series: audioCall.series + strike,
+          series: strike,
         },
       };
       setLocalState(args);
-
-      console.log('final localStatistic in audioacall', localState, 'final data');
     }
   }, [endGame]);
 
@@ -80,7 +89,6 @@ export default function AudiocallGamePage({ group, page }) {
     if (localState) {
       nonAuthUserStatistic('localStatistic', localStatistics, localState);
     }
-    console.log(localState);
   }, [localState]);
 
   const fetchWords = async () => {
@@ -110,10 +118,16 @@ export default function AudiocallGamePage({ group, page }) {
   };
 
   useEffect(() => {
-    if (learnedWords.length === 10) {
+    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
       setEndGame(true);
     }
   }, [learnedWords]);
+
+  useEffect(() => {
+    if (words.length < 5) {
+      getBackUpWords(group, page, setLoading, setAdditionalWords);
+    }
+  }, [words]);
 
   return (
     <>
@@ -147,6 +161,7 @@ export default function AudiocallGamePage({ group, page }) {
               user={user}
               answersArr={answersArr}
               setAnswersArr={setAnswersArr}
+              additionalWords={additionalWords}
             />
           )}
           <div className="savanna-close-full">

@@ -25,12 +25,13 @@ export const extraPoints = (pic) => {
   return points;
 };
 
-export const getNextWordSprint = (arr, learnedWords) => {
+export const getNextWordSprint = (arr, learnedWords, reserveArr) => {
   const [mainWord] = arr
     .filter((word) => !learnedWords.includes(word))
     .sort(() => Math.random() - 0.5);
   const translation = arr
     .filter(({ word }) => word !== mainWord?.word)
+    .concat(reserveArr)
     .sort(() => Math.random() - 0.5)
     .slice(0, 1)
     .concat([mainWord])
@@ -45,12 +46,14 @@ export const checkAnswerSprint = (answer, mainWord, translation) => {
 
 // ------- SAVANNA -------
 
-export const getNextWordSavanna = (arr, learnedWords) => {
+export const getNextWordSavanna = (arr, learnedWords, reserveArr) => {
   const [mainWord] = arr
     .filter((word) => !learnedWords.includes(word))
     .sort(() => Math.random() - 0.5);
+
   const translations = arr
     .filter(({ word }) => word !== mainWord?.word)
+    .concat(reserveArr)
     .sort(() => Math.random() - 0.5)
     .slice(0, 3)
     .concat([mainWord])
@@ -73,16 +76,20 @@ export const checkAnswerNewGame = (wordToCheck, answer, user) => {
 
 // ------- AUDIOCALL -------
 
-export const getNextWordAudiocall = (arr, learnedWords) => {
+export const getNextWordAudiocall = (arr, learnedWords, reserveArr) => {
   const [mainWord] = arr
     .filter((word) => !learnedWords.includes(word))
     .sort(() => Math.random() - 0.5);
+
   const translations = arr
     .filter(({ word }) => word !== mainWord?.word)
+    .concat(reserveArr)
     .sort(() => Math.random() - 0.5)
     .slice(0, 4)
     .concat([mainWord])
     .sort(() => Math.random() - 0.5);
+
+  console.log('final translations:', translations);
 
   return { mainWord, translations };
 };

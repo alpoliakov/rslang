@@ -15,10 +15,9 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
-import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
 export default function NewGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -36,15 +35,50 @@ export default function NewGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
 
-  const fullScreen = useFullScreenHandle();
-  const [editStatistic] = useEditStatisticMutation();
+  const [localState, setLocalState] = useState(null);
 
+  const fullScreen = useFullScreenHandle();
+
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+
+  useEffect(() => {
+    if (endGame) {
+      const { wordsCount, rightAnswers, newGame, localRate } = localState;
+      const totalTrue = answersArr.filter((answer) => answer === true).length;
+      const strike = getStrike(answersArr);
+
+      const args = {
+        ...localState,
+        wordsCount: wordsCount + learnedWords.length,
+        rightAnswers: rightAnswers + totalTrue,
+        localRate: localRate + counter,
+        newGame: {
+          wordsCount: newGame.wordsCount + learnedWords.length,
+          rightAnswers: newGame.rightAnswers + totalTrue,
+          series: strike,
+        },
+      };
+      setLocalState(args);
+
+      console.log('final localStatistic in new game', localState, 'final data');
+    }
+  }, [endGame]);
+
+  useEffect(() => {
+    if (localState) {
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+    }
+  }, [localState]);
+
   useEffect(() => {
     if (chooseLevel) {
-      setCurrentPage(0);
+      setCurrentPage(Math.floor(Math.random() * 28));
     }
   }, []);
 
@@ -110,7 +144,12 @@ export default function NewGamePage({ group, page }) {
     setMusic(!isMusicOn);
   };
 
-  useEffect(() => !lives.includes(true) && setEndGame(true), [lives]);
+  useEffect(() => {
+    !lives.includes(true) && setEndGame(true);
+    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
+      setEndGame(true);
+    }
+  }, [lives, learnedWords]);
 
   return (
     <>
