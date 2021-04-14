@@ -9,26 +9,28 @@ import { nonAuthUserStatistic } from '../../utils/processingUserLocalStatistic';
 import Loading from '../Loading';
 
 const getPercent = (words, rightAnswers) => {
-  return `${Math.floor((rightAnswers / words) * 100)} %`;
+  const percent = (rightAnswers / words) * 100;
+  if (Number.isNaN(percent)) {
+    return 'недостаточно данных';
+  }
+  return `${Math.floor(percent)} %`;
 };
 
 const StatItem = ({ title, count }) => {
   const borderColor = useColorModeValue(ACTIVE_BUTTON_COLOR.LIGHT, ACTIVE_BUTTON_COLOR.DARK);
-
-  const result = Number.isNaN(count) ? 'нужно больше данных' : count;
   return (
     <GridItem h={200} border="1px" borderColor={borderColor} borderRadius="xl" p={2}>
       <Flex h="100%" direction="column" align="center" justify="space-around">
         <Heading textAlign="center" pt={2} as="h3" fontSize="xl">
           {title}
         </Heading>
-        <Text fontSize="2xl">{result}</Text>
+        <Text fontSize="2xl">{count}</Text>
       </Flex>
     </GridItem>
   );
 };
 
-const ShortTermStatistics = ({ statistics, user }) => {
+const ShortTermStatistics = ({ statistics }) => {
   const mainBorderColor = useColorModeValue(PASSIVE_BUTTON_COLOR.LIGHT, PASSIVE_BUTTON_COLOR.DARK);
   let stat = {};
   if (statistics.hasOwnProperty('optional')) {
@@ -36,15 +38,13 @@ const ShortTermStatistics = ({ statistics, user }) => {
   } else {
     stat = statistics;
   }
-
-  console.log(statistics);
   const { audioCall, savanna, newGame, sprint, wordsCount, rightAnswers } = stat;
 
   if (wordsCount === 0) {
-    return <Heading>Недостаточно данных для статистики</Heading>
+    return <Heading>Недостаточно данных для статистики</Heading>;
   }
 
-  console.log(savanna.seriesSavanna, savanna.percentsRightSavanna);
+  console.log(savanna);
 
   return (
     <Grid
@@ -58,11 +58,11 @@ const ShortTermStatistics = ({ statistics, user }) => {
       <StatItem count={wordsCount} title="Количество изученных слов" />
       <StatItem count={getPercent(wordsCount, rightAnswers)} title="Процент правильных ответов" />
       <StatItem
-        count={savanna.series || savanna.seriesSavanna}
+        count={savanna.series >= 0 ? savanna.series : savanna.seriesSavanna}
         title="Самая длинная серия по игре 'Саванна'"
       />
       <StatItem
-        count={savanna.wordsCount || savanna.wordsCountSavanna}
+        count={savanna.wordsCount >= 0 ? savanna.wordsCount : savanna.wordsCountSavanna}
         title="Количество изученных слов по игре 'Саванна'"
       />
       <StatItem
@@ -74,11 +74,11 @@ const ShortTermStatistics = ({ statistics, user }) => {
         title="Процент правильных ответов по игре 'Саванна'"
       />
       <StatItem
-        count={sprint.series || sprint.seriesSprint}
+        count={sprint.series >= 0 ? sprint.series : sprint.seriesSprint}
         title="Самая длинная серия по игре 'Спринт'"
       />
       <StatItem
-        count={sprint.wordsCount || sprint.wordsCountSprint}
+        count={sprint.wordsCount >= 0 ? sprint.wordsCount : sprint.wordsCountSprint}
         title="Количество изученных слов по игре 'Спринт'"
       />
       <StatItem
@@ -90,11 +90,11 @@ const ShortTermStatistics = ({ statistics, user }) => {
         title="Процент правильных ответов по игре 'Спринт'"
       />
       <StatItem
-        count={audioCall.series || audioCall.seriesCall}
+        count={audioCall.series >= 0 ? audioCall.series : audioCall.seriesCall}
         title="Самая длинная серия по игре 'Аудиовызов'"
       />
       <StatItem
-        count={audioCall.wordsCount || audioCall.wordsCountCall}
+        count={audioCall.wordsCount >= 0 ? audioCall.wordsCount : audioCall.wordsCountCall}
         title="Количество изученных слов по игре 'Аудиовызов'"
       />
       <StatItem
@@ -106,11 +106,11 @@ const ShortTermStatistics = ({ statistics, user }) => {
         title="Процент правильных ответов по игре 'Аудиовызов'"
       />
       <StatItem
-        count={newGame.series || newGame.seriesNew}
+        count={newGame.series >= 0 ? newGame.series : newGame.seriesNew}
         title="Самая длинная серия по игре 'Написание'"
       />
       <StatItem
-        count={newGame.wordsCount || newGame.wordsCountNew}
+        count={newGame.wordsCount >= 0 ? newGame.wordsCount : newGame.wordsCountNew}
         title="Количество изученных слов по игре 'Написание'"
       />
       <StatItem

@@ -117,7 +117,7 @@ export default function Stat() {
       </Flex>
       {stat ? (
         <Collapse in={isButtonDayActive} animateOpacity>
-          <ShortTermStatistics user={user} statistics={stat} />
+          <ShortTermStatistics statistics={stat} />
         </Collapse>
       ) : (
         <Loading />
