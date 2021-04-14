@@ -52,12 +52,12 @@ const PASSIVE_BUTTON_COLOR = {
 const DEMONSTRATION_VIDEO = 'https://www.youtube.com/watch?v=XqZsoesa55w';
 
 const VOCABULARY_GROUP_NAV_LINKS = [
-  { link: '/vocabulary/', title: 'Group 1' },
-  { link: '/vocabulary/', title: 'Group 2' },
-  { link: '/vocabulary/', title: 'Group 3' },
-  { link: '/vocabulary/', title: 'Group 4' },
-  { link: '/vocabulary/', title: 'Group 5' },
-  { link: '/vocabulary/', title: 'Group 6' },
+  { link: '/vocabulary/', title: 'Группа 1' },
+  { link: '/vocabulary/', title: 'Группа 2' },
+  { link: '/vocabulary/', title: 'Группа 3' },
+  { link: '/vocabulary/', title: 'Группа 4' },
+  { link: '/vocabulary/', title: 'Группа 5' },
+  { link: '/vocabulary/', title: 'Группа 6' },
 ];
 
 const WORDS_IN_PAGE = 20;

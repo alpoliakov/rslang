@@ -19,7 +19,12 @@ export const ModalSprint = ({ setShowGame, showGame, group, setGroup, chooseLeve
         <h1>СПРИНТ</h1>
         <div className="modalEntrance-box">
           {!chooseLevel && <MiniTimer setShowGame={setShowGame} />}
-          <div>Чтобы дать ответ, кликай по нему мышкой или нажимай клавиши-стрелки</div>
+          <div>
+            Тренировка Спринт поможет тебе проверить знаешь ли ты правильный перевод.
+            <br /> Игра длится 1 минуту или пока не закончаться слова.
+            <br />
+            <br /> Чтобы дать ответ, кликай по нему мышкой или нажимай клавиши-стрелки
+          </div>
           {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>
         <Button colorScheme="whiteAlpha" variant="outline" onClick={handleClick}>

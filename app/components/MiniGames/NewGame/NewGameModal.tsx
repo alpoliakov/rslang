@@ -20,7 +20,15 @@ export const ModalNewGame = ({ setShowGame, showGame, group, setGroup, chooseLev
         <div className="modalEntrance-box">
           <div>
             Напиши услышанное слово
-            <br /> Чтобы дать ответ, кликни на кнопку "Проверить" или нажми Enter
+            <br />
+            <br />
+            Чтобы играть с помощью клавиатуры, используй клавиши:
+            <br />
+            space - для воспроизведения звука,
+            <br />
+            enter - чтобы пропустить вопрос или дать ответ,
+            <br />
+            стрелка-вправо - чтобы перейти к следующему вопросу.
           </div>
           {chooseLevel && <ChooseLevelModal level={level} setLevel={setLevel} />}
         </div>

@@ -1,6 +1,10 @@
 import { ArrowForwardIcon, CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { Button, Icon } from '@chakra-ui/react';
-import { editWord, fetchCurrentWord } from 'components/MiniGames/helpers/fetchWords';
+import {
+  editWord,
+  fetchCurrentWord,
+  getBackUpWords,
+} from 'components/MiniGames/helpers/fetchWords';
 import { checkAnswerSavanna, getNextWordAudiocall } from 'components/MiniGames/helpers/utils';
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -20,11 +24,14 @@ const Audiocall = ({
   user,
   answersArr,
   setAnswersArr,
+  additionalWords,
 }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [isAnswered, setIsAnswered] = useState(false);
-  const [combination, setCombination] = useState(getNextWordAudiocall(words, learnedWords));
+  const [combination, setCombination] = useState(
+    getNextWordAudiocall(words, learnedWords, additionalWords),
+  );
   const audio = `${LOCAL_HOST}${
     user ? combination.mainWord?.word?.audio : combination.mainWord?.audio
   }`;
@@ -93,7 +100,7 @@ const Audiocall = ({
   };
 
   const callNextWord = () => {
-    setCombination(getNextWordAudiocall(words, learnedWords));
+    setCombination(getNextWordAudiocall(words, learnedWords, additionalWords));
     setIsAnswered(false);
   };
 
@@ -210,8 +217,7 @@ const Audiocall = ({
               );
             }}
             onClick={() => handleAnswer(word)}>
-            {key + 1}
-            {user ? word.word.wordTranslate : word.wordTranslate}
+            {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}
       </div>

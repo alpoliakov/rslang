@@ -20,10 +20,13 @@ const Savanna = ({
   setAnswersArr,
   learnedWords,
   setLearnedWord,
+  additionalWords,
 }) => {
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
-  const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
+  const [combination, setCombination] = useState(
+    getNextWordSavanna(words, learnedWords, additionalWords),
+  );
 
   const [editAggregatedWord] = useEditAggregatedWordMutation();
 
@@ -79,7 +82,7 @@ const Savanna = ({
 
     const seenWords = [...learnedWords, combination.mainWord];
     setLearnedWord(seenWords);
-    setCombination(getNextWordSavanna(words, seenWords));
+    setCombination(getNextWordSavanna(words, seenWords, additionalWords));
   };
 
   useHotkeys(
@@ -107,7 +110,11 @@ const Savanna = ({
       </div>
       <div className="savanna-translation">
         {combination.translations.map((word, key) => (
-          <div key={word._id} className="savanna-variants" onClick={() => handleAnswer(word)}>
+          <div
+            key={word._id}
+            role="presentation"
+            className="savanna-variants"
+            onClick={() => handleAnswer(word)}>
             {key + 1} {user ? word.word.wordTranslate : word.wordTranslate}
           </div>
         ))}

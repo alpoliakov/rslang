@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { RiSettings4Line } from 'react-icons/ri';
 
 import { useAppContext } from '../../context/ContextApp';
+import { useAuth } from '../../lib/useAuth';
 import TextbookSettings from '../TextbookSettings/TextbookSettings';
 
 export default function Navigation({ group, page }) {
@@ -27,7 +28,9 @@ export default function Navigation({ group, page }) {
   const [chapter, setChapter] = useState(null);
   const { pathname } = router;
 
-  const { showLink } = useAppContext();
+  const { showLink, setPreviousPageName } = useAppContext();
+
+  const { user } = useAuth();
 
   const setCurrentChapter = () => {
     if (pathname.match('complex')) {
@@ -46,8 +49,17 @@ export default function Navigation({ group, page }) {
       return setMainTextBook(true);
     }
 
+    if (pathname.match('complex')) {
+      setPreviousPageName('complex');
+    } else if (pathname.match('deleted')) {
+      setPreviousPageName('deleted');
+    } else if (pathname.match('studied')) {
+      setPreviousPageName('studied');
+    } else {
+      setPreviousPageName('');
+    }
+
     setMainTextBook(false);
-    console.log(pathname);
   }, [pathname]);
 
   return (
@@ -62,30 +74,32 @@ export default function Navigation({ group, page }) {
           <Tabs defaultIndex={group} borderBottomColor="transparent">
             <TabList flexWrap="wrap">
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/0/0'}>Group 1</NextLink>
+                <NextLink href={'/textbook/0/0'}>Группа 1</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/1/0'}>Group 2</NextLink>
+                <NextLink href={'/textbook/1/0'}>Группа 2</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/2/0'}>Group 3</NextLink>
+                <NextLink href={'/textbook/2/0'}>Группа 3</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/3/0'}>Group 4</NextLink>
+                <NextLink href={'/textbook/3/0'}>Группа 4</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/4/0'}>Group 5</NextLink>
+                <NextLink href={'/textbook/4/0'}>Группа 5</NextLink>
               </Tab>
               <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/textbook/5/0'}>Group 6</NextLink>
+                <NextLink href={'/textbook/5/0'}>Группа 6</NextLink>
               </Tab>
-              <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
-                <NextLink href={'/vocabulary/studied/0'}>
-                  <Text color="tomato" fontWeight="bold">
-                    Словарь
-                  </Text>
-                </NextLink>
-              </Tab>
+              {user && (
+                <Tab py={4} px={{ base: 1, lg: 2 }} m={0} _focus={{ boxShadow: 'none' }}>
+                  <NextLink href={'/vocabulary/studied/0'}>
+                    <Text color="tomato" fontWeight="bold">
+                      Словарь
+                    </Text>
+                  </NextLink>
+                </Tab>
+              )}
             </TabList>
           </Tabs>
         )}

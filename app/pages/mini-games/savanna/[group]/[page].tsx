@@ -1,7 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import {
+  fetchCurrentWords,
+  getBackUpWords,
+  userFetch,
+} from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -15,9 +19,11 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import { useAppContext } from '../../../../context/ContextApp';
 import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
 export default function SavannaGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -34,30 +40,44 @@ export default function SavannaGamePage({ group, page }) {
   const { user } = useAuth();
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+  const [additionalWords, setAdditionalWords] = useState([]);
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
-  console.log(data?.localStatistics);
+  const [localState, setLocalState] = useState(null);
+
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
+
+  const { previousPageName } = useAppContext();
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, savanna } = data.localStatistics;
+      const { wordsCount, rightAnswers, savanna, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
       const args = {
-        ...data?.localStatistics,
+        ...localState,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
+        localRate: localRate + counter,
         savanna: {
           wordsCount: savanna.wordsCount + learnedWords.length,
           rightAnswers: savanna.rightAnswers + totalTrue,
-          series: savanna.series + strike,
+          series: strike,
         },
       };
-      EditLocalStatistics(args);
-      console.log(data?.localStatistics);
+      setLocalState(args);
     }
   }, [endGame]);
+
+  useEffect(() => {
+    if (localState) {
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+    }
+  }, [localState]);
 
   const fetchWords = async () => {
     if (user) {
@@ -73,8 +93,9 @@ export default function SavannaGamePage({ group, page }) {
 
   useEffect(() => {
     if (chooseLevel) {
-      setCurrentPage(0);
+      setCurrentPage(Math.floor(Math.random() * 28));
     }
+    console.log(previousPageName);
   }, []);
 
   useEffect(() => {
@@ -95,8 +116,17 @@ export default function SavannaGamePage({ group, page }) {
 
   useEffect(() => {
     !lives.includes(true) && setEndGame(true);
+    if (learnedWords.length !== 0 && learnedWords.length === words.length) {
+      setEndGame(true);
+    }
     if (endGame) setPause(true);
-  }, [lives, endGame]);
+  }, [lives, endGame, learnedWords]);
+
+  useEffect(() => {
+    if (words.length < 5) {
+      getBackUpWords(group, page, setLoading, setAdditionalWords);
+    }
+  }, [words]);
 
   return (
     <>
@@ -128,6 +158,7 @@ export default function SavannaGamePage({ group, page }) {
               setAnswersArr={setAnswersArr}
               learnedWords={learnedWords}
               setLearnedWord={setLearnedWord}
+              additionalWords={additionalWords}
             />
           )}
           <div className="progress-hearts">

@@ -1,7 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import {
+  fetchCurrentWords,
+  getBackUpWords,
+  userFetch,
+} from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -14,9 +18,9 @@ import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 
-import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
+import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
 export default function SprintGamePage({ group, page }) {
   const [timeOver, setTimeOver] = useState(false);
@@ -31,40 +35,53 @@ export default function SprintGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+  const [additionalWords, setAdditionalWords] = useState([]);
+
+  const [localState, setLocalState] = useState(null);
 
   const fullScreen = useFullScreenHandle();
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
 
   useEffect(() => {
     if (chooseLevel) {
-      setCurrentPage(0);
+      setCurrentPage(Math.floor(Math.random() * 28));
     }
   }, []);
 
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+
   useEffect(() => {
     if (timeOver) {
-      const { wordsCount, rightAnswers, sprint } = data.localStatistics;
+      const { wordsCount, rightAnswers, sprint, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
 
       const args = {
-        ...data?.localStatistics,
+        ...localState,
         wordsCount: wordsCount + learnedWords.length,
         rightAnswers: rightAnswers + totalTrue,
+        localRate: localRate + counter,
         sprint: {
           wordsCount: sprint.wordsCount + learnedWords.length,
           rightAnswers: sprint.rightAnswers + totalTrue,
-          series: sprint.series + strike,
+          series: strike,
         },
       };
-      EditLocalStatistics(args);
-      console.log(data?.localStatistics);
+      setLocalState(args);
     }
   }, [timeOver]);
+
+  useEffect(() => {
+    if (localState) {
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+    }
+  }, [localState]);
 
   const fetchWords = async () => {
     if (user) {
@@ -85,6 +102,12 @@ export default function SprintGamePage({ group, page }) {
     setPause(true);
     fullScreen.exit();
   };
+
+  useEffect(() => {
+    if (words.length < 2) {
+      getBackUpWords(group, page, setLoading, setAdditionalWords);
+    }
+  }, [words]);
 
   return (
     <>
@@ -109,6 +132,7 @@ export default function SprintGamePage({ group, page }) {
             learnedWords={learnedWords}
             setLearnedWord={setLearnedWord}
             loading={loading}
+            additionalWords={additionalWords}
           />
           <div className="sprint-close-full">
             <IconButton

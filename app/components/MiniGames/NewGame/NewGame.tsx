@@ -33,7 +33,7 @@ const NewGame = ({
   const [correct] = useSound('/sounds/correct.mp3');
   const [incorrect] = useSound('/sounds/incorrect.mp3');
   const [colorAnswer, setColorAnswer] = useState('');
-  const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords));
+  const [combination, setCombination] = useState(getNextWordSavanna(words, learnedWords, []));
   const audio = `${LOCAL_HOST}${
     user ? combination.mainWord?.word?.audio : combination.mainWord?.audio
   }`;
@@ -105,7 +105,7 @@ const NewGame = ({
 
   const callNextWord = () => {
     setInputValue('');
-    setCombination(getNextWordSavanna(words, learnedWords));
+    setCombination(getNextWordSavanna(words, learnedWords, []));
     setIsAnswered(false);
   };
 

@@ -10,6 +10,7 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   const { data } = await apollo.query({
     query: WordsDocument,
     variables: { group: Number(group), page },
+    fetchPolicy: 'network-only',
   });
 
   let words = [...data.words];
@@ -18,6 +19,7 @@ export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
       query: WordsDocument,
       variables: {
         input: { group: Number(group), page: page - 1 },
+        fetchPolicy: 'network-only',
       },
     });
     words = [...words, ...data.words];
@@ -35,6 +37,7 @@ export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWor
   const { data } = await apollo.query({
     query: WordsDocument,
     variables: { group: Number(group), page },
+    fetchPolicy: 'network-only',
   });
 
   let words = [...data.words];
@@ -43,11 +46,13 @@ export const fetchCurrentWordsAudiocall = async (group, page, setLoading, setWor
       query: WordsDocument,
       variables: {
         input: { group: Number(group), page: page - 1 },
+        fetchPolicy: 'network-only',
       },
     });
     words = [...words, ...data.words];
   }
   await setWords(words.splice(9, 10));
+
   if (words) {
     setLoading(false);
   }
@@ -59,6 +64,7 @@ export const fetchCurrentWord = async (id) => {
     const { data } = await apollo.query({
       query: AggregatedWordDocument,
       variables: { aggregatedWordId: id },
+      fetchPolicy: 'network-only',
     });
 
     if (data.aggregatedWord._id) {
@@ -92,6 +98,7 @@ export const userFetch = async (group, page, setLoading, setWords) => {
     query: AggregatedWordsDocument,
     variables: {
       input: { group: Number(group), page },
+      fetchPolicy: 'network-only',
     },
   });
   let words = [...data.aggregatedWords];
@@ -100,6 +107,7 @@ export const userFetch = async (group, page, setLoading, setWords) => {
       query: AggregatedWordsDocument,
       variables: {
         input: { group: Number(group), page: page - 1 },
+        fetchPolicy: 'network-only',
       },
     });
     words = [...words, ...data.aggregatedWords];
@@ -119,6 +127,7 @@ export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
     query: AggregatedWordsDocument,
     variables: {
       input: { group: Number(group), page },
+      fetchPolicy: 'network-only',
     },
   });
 
@@ -128,11 +137,47 @@ export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
       query: AggregatedWordsDocument,
       variables: {
         input: { group: Number(group), page: page - 1 },
+        fetchPolicy: 'network-only',
       },
     });
     words = [...words, ...data.aggregatedWords];
   }
-  await setWords(words.splice(9, 10));
+  if (words.length > 10) {
+    words.splice(9, 10);
+  }
+  console.log(words, 'from userFetchAudiocall');
+  await setWords(words);
+
+  if (words) {
+    setLoading(false);
+  }
+};
+
+export const getBackUpWords = async (group, page, setLoading, setAdditionalWords) => {
+  setLoading(true);
+  const apollo = initializeApollo();
+
+  const { data } = await apollo.query({
+    query: AggregatedWordsDocument,
+    variables: {
+      input: { group: Number(group), page: page + 1 },
+      fetchPolicy: 'network-only',
+    },
+  });
+
+  let words = [...data.aggregatedWords];
+  if (words.length < 10 && page !== 0) {
+    const { data } = await apollo.query({
+      query: AggregatedWordsDocument,
+      variables: {
+        input: { group: Number(group), page: page + 2 },
+        fetchPolicy: 'network-only',
+      },
+    });
+    words = [...words, ...data.aggregatedWords];
+  }
+  console.log('words from getBackUpWords', words);
+  setAdditionalWords(words);
 
   if (words) {
     setLoading(false);
