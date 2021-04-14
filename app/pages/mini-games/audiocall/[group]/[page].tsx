@@ -5,14 +5,14 @@ import { Progress } from '@chakra-ui/react';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
 import {
+  editGlobalStatistic,
   fetchCurrentWordsAudiocall,
+  fetchUserStatistic,
+  fetchWordsFromComplexity,
+  fetchWordsFromDeleted,
+  fetchWordsFromStudied,
   getBackUpWords,
   userFetchAudiocall,
-  fetchWordsFromComplexity,
-  fetchWordsFromStudied,
-  fetchWordsFromDeleted,
-  fetchUserStatistic,
-  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -25,11 +25,11 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
-import { useAppContext } from '../../../../context/ContextApp';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -115,38 +115,46 @@ export default function AudiocallGamePage({ group, page }) {
 
       if (user && userStatistic) {
         const { globalRate, optional } = userStatistic;
-        const { audioCall, localRate, rightAnswers, wordsCount } = optional;
+
+        const {
+          audioCall,
+          savanna,
+          sprint,
+          newGame,
+          localRate,
+          rightAnswers,
+          wordsCount,
+        } = optional;
+
+        const { wordsCountCall, rightAnswersCall } = audioCall;
+
         const args = {
-          ...userStatistic,
           globalRate: globalRate + counter,
-          optional: {
-            audioCall: {
-              wordsCountCall: audioCall.wordsCountCall + learnedWords.length,
-              rightAnswersCall: audioCall.rightAnswersCall + totalTrue,
-              seriesCall: strike,
-            },
-            localRate: localRate + counter,
-            wordsCount: wordsCount + learnedWords.length,
-            rightAnswers: rightAnswers + totalTrue,
-          },
+          ...savanna,
+          ...sprint,
+          ...newGame,
+          wordsCountCall: wordsCountCall + learnedWords.length,
+          rightAnswersCall: rightAnswersCall + totalTrue,
+          seriesCall: strike,
+          localRate: localRate + counter,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
         };
 
-        setUserStatistic(args);
+        // console.log(args);
+        // setUserStatistic(args);
+        editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }
-  }, [endGame, user]);
+  }, [endGame]);
 
-  useEffect(() => console.log('userStatistic ', userStatistic), [userStatistic]);
+  // useEffect(() => console.log('userStatistic ', userStatistic), [userStatistic]);
 
   useEffect(() => {
     if (localState) {
       nonAuthUserStatistic('localStatistic', data?.localStatistics, localState);
     }
-    if (userStatistic) {
-      editGlobalStatistic(editStatistic, userStatistic);
-    }
-    console.log('statistic after editGlobalStatistic ', userStatistic);
-  }, [localState, userStatistic]);
+  }, [localState]);
 
   // const editGlobalStatistic = async (editStatistic,userStatistic) => {
   //   try {

@@ -3,10 +3,10 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import {
   fetchCurrentWords,
-  userFetch,
   fetchWordsFromComplexity,
-  fetchWordsFromStudied,
   fetchWordsFromDeleted,
+  fetchWordsFromStudied,
+  userFetch,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -21,10 +21,10 @@ import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
-import { useAppContext } from '../../../../context/ContextApp';
 
 export default function NewGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
