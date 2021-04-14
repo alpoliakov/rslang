@@ -255,16 +255,33 @@ export const getBackUpWords = async (group, page, setLoading, setAdditionalWords
   }
 };
 
-export const fetchUserStatistic = async (setUserStatistic, args) => {
+export const fetchUserStatistic = async () => {
   const apollo = initializeApollo();
 
   const { data } = await apollo.query({
     query: StatisticDocument,
-    variables: { args },
+    variables: {},
     fetchPolicy: 'network-only',
   });
 
+  console.log('data inside fetchUserStatistic', data);
+
   if (data.statistic._id) {
-    setUserStatistic(data.statistic);
+    return data.statistic;
+  }
+};
+
+export const editGlobalStatistic = async (editStatistic, userStatistic) => {
+  try {
+    const { data } = await editStatistic({
+      variables: { input: userStatistic },
+      fetchPolicy: 'network-only',
+    });
+
+    if (data.editStatistic._id) {
+      console.log(data);
+    }
+  } catch (err) {
+    console.error(err.message);
   }
 };

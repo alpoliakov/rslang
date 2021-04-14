@@ -8,6 +8,8 @@ import {
   fetchWordsFromComplexity,
   fetchWordsFromStudied,
   fetchWordsFromDeleted,
+  fetchUserStatistic,
+  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -20,6 +22,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
@@ -40,11 +43,13 @@ export default function SprintGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
   const [additionalWords, setAdditionalWords] = useState([]);
+  const [userStatistic, setUserStatistic] = useState(null);
 
   const [localState, setLocalState] = useState(null);
 
   const fullScreen = useFullScreenHandle();
   const { previousPageName } = useAppContext();
+  const [editStatistic] = useEditStatisticMutation();
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
@@ -59,26 +64,60 @@ export default function SprintGamePage({ group, page }) {
     }
   }, []);
 
-  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+  useEffect(() => {
+    if (!user) {
+      setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (timeOver) {
-      const { wordsCount, rightAnswers, sprint, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
+      if (!user) {
+        const { wordsCount, rightAnswers, sprint, localRate } = localState;
 
-      const args = {
-        ...localState,
-        wordsCount: wordsCount + learnedWords.length,
-        rightAnswers: rightAnswers + totalTrue,
-        localRate: localRate + counter,
-        sprint: {
-          wordsCount: sprint.wordsCount + learnedWords.length,
-          rightAnswers: sprint.rightAnswers + totalTrue,
-          series: strike,
-        },
-      };
-      setLocalState(args);
+        const args = {
+          ...localState,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+          localRate: localRate + counter,
+          sprint: {
+            wordsCount: sprint.wordsCount + learnedWords.length,
+            rightAnswers: sprint.rightAnswers + totalTrue,
+            series: strike,
+          },
+        };
+        setLocalState(args);
+      }
+      if (user) {
+        const { globalRate, optional } = userStatistic;
+        const { audioCall, localRate, rightAnswers, wordsCount } = optional;
+        const args = {
+          ...userStatistic,
+          globalRate: globalRate + counter,
+          optional: {
+            audioCall: {
+              wordsCountCall: audioCall.wordsCountCall + learnedWords.length,
+              rightAnswersCall: audioCall.rightAnswersCall + totalTrue,
+              seriesCall: strike,
+            },
+            localRate: localRate + counter,
+            wordsCount: wordsCount + learnedWords.length,
+            rightAnswers: rightAnswers + totalTrue,
+          },
+        };
+
+        setUserStatistic(args);
+      }
     }
   }, [timeOver]);
 
@@ -87,6 +126,12 @@ export default function SprintGamePage({ group, page }) {
       nonAuthUserStatistic('localStatistic', localStatistics, localState);
     }
   }, [localState]);
+
+  useEffect(() => {
+    if (userStatistic) {
+      editGlobalStatistic(editStatistic, userStatistic);
+    }
+  }, [userStatistic]);
 
   const fetchWords = async () => {
     if (user) {

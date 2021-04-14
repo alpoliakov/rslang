@@ -11,6 +11,8 @@ import {
   fetchWordsFromComplexity,
   fetchWordsFromStudied,
   fetchWordsFromDeleted,
+  fetchUserStatistic,
+  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -51,26 +53,30 @@ export default function AudiocallGamePage({ group, page }) {
   const [editStatistic] = useEditStatisticMutation();
   const { previousPageName } = useAppContext();
 
-  const {
-    // data: { statistic },
-    data,
-  } = useStatisticQuery();
-  console.log(data?.statistic, 'data from useStatisticQuery (global)');
+  // const {
+  //   // data: { statistic },
+  //   data,
+  // } = useStatisticQuery();
+  // console.log(data?.statistic, 'data from useStatisticQuery (global)');
 
-  const {
-    data: { localStatistics },
-  } = useQuery(GET_LOCAL_STATISTIC);
+  // useEffect(() => console.log('fetchUserStatistic', fetchUserStatistic()), []);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(
-    () =>
-      user
-        ? setLocalState(nonAuthUserStatistic('localStatistic', localStatistics))
-        : setUserStatistic(data?.statistic),
-    [user],
-  );
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', data?.localStatistics)), [
+    data,
+  ]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (chooseLevel) {
@@ -79,28 +85,37 @@ export default function AudiocallGamePage({ group, page }) {
   }, []);
 
   useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, audioCall, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
+      if (!user) {
+        const { wordsCount, rightAnswers, audioCall, localRate } = localState;
 
-      const args = {
-        ...localState,
-        wordsCount: wordsCount + learnedWords.length,
-        rightAnswers: rightAnswers + totalTrue,
-        localRate: localRate + counter,
-        audioCall: {
-          wordsCount: audioCall.wordsCount + learnedWords.length,
-          rightAnswers: audioCall.rightAnswers + totalTrue,
-          series: strike,
-        },
-      };
-      setLocalState(args);
+        const args = {
+          ...localState,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+          localRate: localRate + counter,
+          audioCall: {
+            wordsCount: audioCall.wordsCount + learnedWords.length,
+            rightAnswers: audioCall.rightAnswers + totalTrue,
+            series: strike,
+          },
+        };
+        setLocalState(args);
+      }
 
-      if (user) {
+      if (user && userStatistic) {
         const { globalRate, optional } = userStatistic;
         const { audioCall, localRate, rightAnswers, wordsCount } = optional;
-
         const args = {
           ...userStatistic,
           globalRate: globalRate + counter,
@@ -115,23 +130,33 @@ export default function AudiocallGamePage({ group, page }) {
             rightAnswers: rightAnswers + totalTrue,
           },
         };
-        console.log(args, JSON.stringify(args));
+
         setUserStatistic(args);
       }
     }
   }, [endGame, user]);
 
+  useEffect(() => console.log('userStatistic ', userStatistic), [userStatistic]);
+
   useEffect(() => {
     if (localState) {
-      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+      nonAuthUserStatistic('localStatistic', data?.localStatistics, localState);
     }
     if (userStatistic) {
-      editStatistic({
-        variables: { input: userStatistic },
-      });
+      editGlobalStatistic(editStatistic, userStatistic);
     }
-    console.log('statistic after editGlobalStatistic ', data?.statistic);
-  }, [localState, endGame, userStatistic]);
+    console.log('statistic after editGlobalStatistic ', userStatistic);
+  }, [localState, userStatistic]);
+
+  // const editGlobalStatistic = async (editStatistic,userStatistic) => {
+  //   try {
+  //     const {data} = await editStatistic({
+  //       variables: { input: userStatistic }
+  //     })
+  //   }catch (err) {
+  //     console.error(err.message);
+  //   }
+  // }
 
   const fetchWords = async () => {
     if (user) {
