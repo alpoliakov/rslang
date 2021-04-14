@@ -1,7 +1,13 @@
 import { initializeApollo } from '../../../lib/apollo';
 import { AggregatedWordDocument } from '../../../lib/graphql/aggregatedWord.graphql';
+import { AggregatedWordsComplexityDocument } from '../../../lib/graphql/aggregatedWordsComplexity.graphql';
+import { AggregatedWordsStudiedDocument } from '../../../lib/graphql/aggregatedWordsStudied.graphql';
+import { AggregatedWordsDeletedDocument } from '../../../lib/graphql/aggregatedWordsDeleted.graphql';
 import { AggregatedWordsDocument } from '../../../lib/graphql/aggregatedWords.graphql';
 import { WordsDocument } from '../../../lib/graphql/words.graphql';
+import { StatisticDocument } from '../../../lib/graphql/statistic.graphql';
+import { WORDS_IN_PAGE } from '../../../constants/index';
+import { toMatrix } from '../helpers/utils';
 
 export const fetchCurrentWords = async (group, page, setLoading, setWords) => {
   if (group === '') return;
@@ -119,6 +125,71 @@ export const userFetch = async (group, page, setLoading, setWords) => {
   }
 };
 
+export const fetchWordsFromComplexity = async (group, page, setLoading, setWords) => {
+  console.log('inside fetchCurrentWordsFromVocabulary', group, page);
+
+  const apollo = initializeApollo();
+  setLoading(true);
+  const { data } = await apollo.query({
+    query: AggregatedWordsComplexityDocument,
+    variables: { input: { group: Number(group), page }, fetchPolicy: 'network-only' },
+  });
+
+  const words = data.aggregatedWordsComplexity;
+  console.log('data from vocabulary aggregatedWordsComplexity', data);
+  const result = toMatrix(words, WORDS_IN_PAGE);
+
+  console.log('final result:', result);
+
+  await setWords(result[page]);
+  if (result) {
+    setLoading(false);
+  }
+};
+
+export const fetchWordsFromDeleted = async (group, page, setLoading, setWords) => {
+  console.log('inside AggregatedWordsDeletedDocument', group, page);
+
+  const apollo = initializeApollo();
+  setLoading(true);
+  const { data } = await apollo.query({
+    query: AggregatedWordsDeletedDocument,
+    variables: { input: { group: Number(group), page }, fetchPolicy: 'network-only' },
+  });
+
+  const words = data.aggregatedWordsDeleted;
+  console.log('data from vocabulary AggregatedWordsDeletedDocument', data);
+  const result = toMatrix(words, WORDS_IN_PAGE);
+
+  console.log('final result:', result);
+
+  await setWords(result[page]);
+  if (result) {
+    setLoading(false);
+  }
+};
+
+export const fetchWordsFromStudied = async (group, page, setLoading, setWords) => {
+  console.log('inside AggregatedWordsStudiedDocument', group, page);
+
+  const apollo = initializeApollo();
+  setLoading(true);
+  const { data } = await apollo.query({
+    query: AggregatedWordsStudiedDocument,
+    variables: { input: { group: Number(group), page }, fetchPolicy: 'network-only' },
+  });
+
+  const words = data.aggregatedWordsStudied;
+  const result = toMatrix(words, WORDS_IN_PAGE);
+
+  console.log('final result:', result);
+
+  await setWords(result[page]);
+  if (result) {
+    setLoading(false);
+  }
+};
+
 export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
   setLoading(true);
   const apollo = initializeApollo();
@@ -181,5 +252,36 @@ export const getBackUpWords = async (group, page, setLoading, setAdditionalWords
 
   if (words) {
     setLoading(false);
+  }
+};
+
+export const fetchUserStatistic = async () => {
+  const apollo = initializeApollo();
+
+  const { data } = await apollo.query({
+    query: StatisticDocument,
+    variables: {},
+    fetchPolicy: 'network-only',
+  });
+
+  console.log('data inside fetchUserStatistic', data);
+
+  if (data.statistic._id) {
+    return data.statistic;
+  }
+};
+
+export const editGlobalStatistic = async (editStatistic, userStatistic) => {
+  try {
+    const { data } = await editStatistic({
+      variables: { input: userStatistic },
+      fetchPolicy: 'network-only',
+    });
+
+    if (data.editStatistic._id) {
+      console.log(data);
+    }
+  } catch (err) {
+    console.error(err.message);
   }
 };

@@ -1,7 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { fetchCurrentWords, userFetch } from 'components/MiniGames/helpers/fetchWords';
+import {
+  fetchCurrentWords,
+  userFetch,
+  fetchWordsFromComplexity,
+  fetchWordsFromStudied,
+  fetchWordsFromDeleted,
+} from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
@@ -18,6 +24,7 @@ import { RiMusic2Fill } from 'react-icons/ri';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
+import { useAppContext } from '../../../../context/ContextApp';
 
 export default function NewGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -38,6 +45,7 @@ export default function NewGamePage({ group, page }) {
   const [localState, setLocalState] = useState(null);
 
   const fullScreen = useFullScreenHandle();
+  const { previousPageName } = useAppContext();
 
   const {
     data: { localStatistics },
@@ -82,47 +90,17 @@ export default function NewGamePage({ group, page }) {
     }
   }, []);
 
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
-  console.log(data?.localStatistics);
-
-  // useEffect(() => {
-  //   if (endGame) {
-  //     const { wordsCount, rightAnswers, newGame } = data.localStatistics;
-  //     const totalTrue = answersArr.filter((answer) => answer === true).length;
-  //     const strike = getStrike(answersArr);
-
-  //     const argsLocal = {
-  //       ...data?.localStatistics,
-  //       wordsCount: wordsCount + learnedWords.length,
-  //       rightAnswers: rightAnswers + totalTrue,
-  //       newGame: {
-  //         wordsCount: newGame.wordsCount + learnedWords.length,
-  //         rightAnswers: newGame.rightAnswers + totalTrue,
-  //         series: newGame.series + strike,
-  //       },
-  //     };
-
-  //     const argsStatistic = {
-  //       ...data?.StatisticQuery,
-  //       optional: {wordsCount: optional.wordsCount +learnedWords.length,
-  //         rightAnswers:optional.rightAnswers + totalTrue,
-  //         localRate: optional.localRate + counter
-  //       },
-  //       newGame: {
-  //         wordsCountNew:newGame.wordsCount + learnedWords.length,
-  //       rightAnswersNew: newGame.rightAnswers + totalTrue,
-  //       seriesNew: newGame.series + strike
-  //       },
-  //     }
-
-  //     user?changeStatistic(editStatistic, argsStatistic):EditLocalStatistics(argsLocal);
-  //     console.log(data?.localStatistics);
-  //   }
-  // }, [endGame]);
-
   const fetchWords = async () => {
     if (user) {
-      userFetch(currentGroup, currentPage, setLoading, setWords);
+      if (previousPageName === 'complex') {
+        fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'deleted') {
+        fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'studied') {
+        fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
+      } else {
+        userFetch(currentGroup, currentPage, setLoading, setWords);
+      }
     }
 
     if (!user) {

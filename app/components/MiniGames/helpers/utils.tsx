@@ -89,8 +89,6 @@ export const getNextWordAudiocall = (arr, learnedWords, reserveArr) => {
     .concat([mainWord])
     .sort(() => Math.random() - 0.5);
 
-  console.log('final translations:', translations);
-
   return { mainWord, translations };
 };
 
@@ -111,3 +109,10 @@ export const getStrike = (arr) => {
   }
   return maxStreak;
 };
+
+export const toMatrix = (arr, width) =>
+  arr.reduce(
+    (rows, key, index) =>
+      (index % width == 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) && rows,
+    [],
+  );

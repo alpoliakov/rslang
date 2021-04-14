@@ -8,6 +8,11 @@ import {
   fetchCurrentWordsAudiocall,
   getBackUpWords,
   userFetchAudiocall,
+  fetchWordsFromComplexity,
+  fetchWordsFromStudied,
+  fetchWordsFromDeleted,
+  fetchUserStatistic,
+  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -24,6 +29,7 @@ import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/qu
 import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
+import { useAppContext } from '../../../../context/ContextApp';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -40,23 +46,37 @@ export default function AudiocallGamePage({ group, page }) {
   const [isPaused, setPause] = useState(false);
   const { user } = useAuth();
   const [answersArr, setAnswersArr] = useState([]);
+  const [userStatistic, setUserStatistic] = useState(null);
 
   const [localState, setLocalState] = useState(null);
 
   const [editStatistic] = useEditStatisticMutation();
+  const { previousPageName } = useAppContext();
 
   // const {
-  //   data: { statistic },
+  //   // data: { statistic },
+  //   data,
   // } = useStatisticQuery();
-  // console.log(statistic, 'data from useStatisticQuery');
+  // console.log(data?.statistic, 'data from useStatisticQuery (global)');
 
-  const {
-    data: { localStatistics },
-  } = useQuery(GET_LOCAL_STATISTIC);
+  // useEffect(() => console.log('fetchUserStatistic', fetchUserStatistic()), []);
+
+  const { data } = useQuery(GET_LOCAL_STATISTIC);
+
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', data?.localStatistics)), [
+    data,
+  ]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (chooseLevel) {
@@ -65,35 +85,90 @@ export default function AudiocallGamePage({ group, page }) {
   }, []);
 
   useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, audioCall, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
+      if (!user) {
+        const { wordsCount, rightAnswers, audioCall, localRate } = localState;
 
-      const args = {
-        ...localState,
-        wordsCount: wordsCount + learnedWords.length,
-        rightAnswers: rightAnswers + totalTrue,
-        localRate: localRate + counter,
-        audioCall: {
-          wordsCount: audioCall.wordsCount + learnedWords.length,
-          rightAnswers: audioCall.rightAnswers + totalTrue,
-          series: strike,
-        },
-      };
-      setLocalState(args);
+        const args = {
+          ...localState,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+          localRate: localRate + counter,
+          audioCall: {
+            wordsCount: audioCall.wordsCount + learnedWords.length,
+            rightAnswers: audioCall.rightAnswers + totalTrue,
+            series: strike,
+          },
+        };
+        setLocalState(args);
+      }
+
+      if (user && userStatistic) {
+        const { globalRate, optional } = userStatistic;
+        const { audioCall, localRate, rightAnswers, wordsCount } = optional;
+        const args = {
+          ...userStatistic,
+          globalRate: globalRate + counter,
+          optional: {
+            audioCall: {
+              wordsCountCall: audioCall.wordsCountCall + learnedWords.length,
+              rightAnswersCall: audioCall.rightAnswersCall + totalTrue,
+              seriesCall: strike,
+            },
+            localRate: localRate + counter,
+            wordsCount: wordsCount + learnedWords.length,
+            rightAnswers: rightAnswers + totalTrue,
+          },
+        };
+
+        setUserStatistic(args);
+      }
     }
-  }, [endGame]);
+  }, [endGame, user]);
+
+  useEffect(() => console.log('userStatistic ', userStatistic), [userStatistic]);
 
   useEffect(() => {
     if (localState) {
-      nonAuthUserStatistic('localStatistic', localStatistics, localState);
+      nonAuthUserStatistic('localStatistic', data?.localStatistics, localState);
     }
-  }, [localState]);
+    if (userStatistic) {
+      editGlobalStatistic(editStatistic, userStatistic);
+    }
+    console.log('statistic after editGlobalStatistic ', userStatistic);
+  }, [localState, userStatistic]);
+
+  // const editGlobalStatistic = async (editStatistic,userStatistic) => {
+  //   try {
+  //     const {data} = await editStatistic({
+  //       variables: { input: userStatistic }
+  //     })
+  //   }catch (err) {
+  //     console.error(err.message);
+  //   }
+  // }
 
   const fetchWords = async () => {
     if (user) {
-      userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
+      if (previousPageName === 'complex') {
+        fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'deleted') {
+        fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
+      } else if (previousPageName === 'studied') {
+        fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
+      } else {
+        userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
+      }
     }
 
     if (!user) {
