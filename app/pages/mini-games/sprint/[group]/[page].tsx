@@ -123,9 +123,6 @@ export default function SprintGamePage({ group, page }) {
           rightAnswers: rightAnswers + totalTrue,
         };
 
-        console.log(args);
-
-        console.log('Edit statistic');
         editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }

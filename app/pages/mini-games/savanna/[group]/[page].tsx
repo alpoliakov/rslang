@@ -122,15 +122,12 @@ export default function SavannaGamePage({ group, page }) {
           ...sprint,
           wordsCountSavanna: wordsCountSavanna + learnedWords.length,
           rightAnswersSavanna: rightAnswersSavanna + totalTrue,
-          seriesNewGame: strike,
+          seriesSavanna: strike,
           localRate: localRate + counter,
           wordsCount: wordsCount + learnedWords.length,
           rightAnswers: rightAnswers + totalTrue,
         };
 
-        console.log(args);
-
-        console.log('Edit statistic');
         editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }

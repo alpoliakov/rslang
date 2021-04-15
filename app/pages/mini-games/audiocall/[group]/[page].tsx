@@ -5,14 +5,14 @@ import { Progress } from '@chakra-ui/react';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
 import {
+  editGlobalStatistic,
   fetchCurrentWordsAudiocall,
+  fetchUserStatistic,
+  fetchWordsFromComplexity,
+  fetchWordsFromDeleted,
+  fetchWordsFromStudied,
   getBackUpWords,
   userFetchAudiocall,
-  fetchWordsFromComplexity,
-  fetchWordsFromStudied,
-  fetchWordsFromDeleted,
-  fetchUserStatistic,
-  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -24,11 +24,11 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
+import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
-import { useAppContext } from '../../../../context/ContextApp';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -126,9 +126,6 @@ export default function AudiocallGamePage({ group, page }) {
           rightAnswers: rightAnswers + totalTrue,
         };
 
-        console.log(args);
-
-        console.log('Edit statistic');
         editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }

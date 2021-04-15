@@ -2,13 +2,13 @@ import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import {
+  editGlobalStatistic,
   fetchCurrentWords,
+  fetchUserStatistic,
   fetchWordsFromComplexity,
   fetchWordsFromDeleted,
   fetchWordsFromStudied,
   userFetch,
-  fetchUserStatistic,
-  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -22,10 +22,10 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
-import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 
 import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
@@ -126,9 +126,6 @@ export default function NewGamePage({ group, page }) {
           rightAnswers: rightAnswers + totalTrue,
         };
 
-        console.log(args);
-
-        console.log('Edit statistic');
         editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }
