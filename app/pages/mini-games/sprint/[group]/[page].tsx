@@ -137,16 +137,8 @@ export default function SprintGamePage({ group, page }) {
     }
   }, [localState]);
 
-  // useEffect(() => {
-  //   if (userStatistic) {
-  //     console.log('Edit statistic');
-  //     editGlobalStatistic(editStatistic, userStatistic).then((data) => console.log(data));
-  //   }
-  // }, [userStatistic]);
-
   const fetchWords = async () => {
     if (user) {
-      console.log('Откуда этот запрос');
       if (previousPageName === 'complex') {
         fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
       } else if (previousPageName === 'deleted') {
@@ -160,7 +152,6 @@ export default function SprintGamePage({ group, page }) {
 
     if (!user) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
-      //  Почему ты вызываешь этот метод при незалогинином юзере???
     }
   };
 
@@ -175,7 +166,6 @@ export default function SprintGamePage({ group, page }) {
   };
 
   useEffect(() => {
-    console.log('state words', words);
     if (words.length < 2) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }

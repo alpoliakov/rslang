@@ -21,6 +21,7 @@ const ModalQuit = ({ quitGame, setQuitGame, isPaused, setPause }) => {
           <div className="modal">
             <div className="modal-box">
               <div className="modal-ask">Хотите выйти из игры?</div>
+              <div className="content">Прогресс может быть утерян</div>
               <div className="actions">
                 <ButtonGroup size="md" spacing="12">
                   <Link href="/">

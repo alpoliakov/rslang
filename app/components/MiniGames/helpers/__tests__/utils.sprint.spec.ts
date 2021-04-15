@@ -62,7 +62,8 @@ describe('utils, sprint', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
-    expect(getNextWordSprint(words, learnedWords).translation).toHaveProperty('word');
+    const reserveArr = [];
+    expect(getNextWordSprint(words, learnedWords, reserveArr).translation).toHaveProperty('word');
   });
 
   it('should not contain elements from learnedWords', () => {
@@ -79,6 +80,10 @@ describe('utils, sprint', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
-    expect(learnedWords).not.toContainEqual(getNextWordSprint(words, learnedWords).translation);
+    const reserveArr = [];
+
+    expect(learnedWords).not.toContainEqual(
+      getNextWordSprint(words, learnedWords, reserveArr).translation,
+    );
   });
 });

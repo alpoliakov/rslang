@@ -126,8 +126,6 @@ export const userFetch = async (group, page, setLoading, setWords) => {
 };
 
 export const fetchWordsFromComplexity = async (group, page, setLoading, setWords) => {
-  console.log('inside fetchCurrentWordsFromVocabulary', group, page);
-
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -136,10 +134,7 @@ export const fetchWordsFromComplexity = async (group, page, setLoading, setWords
   });
 
   const words = data.aggregatedWordsComplexity;
-  console.log('data from vocabulary aggregatedWordsComplexity', data);
   const result = toMatrix(words, WORDS_IN_PAGE);
-
-  console.log('final result:', result);
 
   await setWords(result[page]);
   if (result) {
@@ -148,8 +143,6 @@ export const fetchWordsFromComplexity = async (group, page, setLoading, setWords
 };
 
 export const fetchWordsFromDeleted = async (group, page, setLoading, setWords) => {
-  console.log('inside AggregatedWordsDeletedDocument', group, page);
-
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -158,10 +151,7 @@ export const fetchWordsFromDeleted = async (group, page, setLoading, setWords) =
   });
 
   const words = data.aggregatedWordsDeleted;
-  console.log('data from vocabulary AggregatedWordsDeletedDocument', data);
   const result = toMatrix(words, WORDS_IN_PAGE);
-
-  console.log('final result:', result);
 
   await setWords(result[page]);
   if (result) {
@@ -170,8 +160,6 @@ export const fetchWordsFromDeleted = async (group, page, setLoading, setWords) =
 };
 
 export const fetchWordsFromStudied = async (group, page, setLoading, setWords) => {
-  console.log('inside AggregatedWordsStudiedDocument', group, page);
-
   const apollo = initializeApollo();
   setLoading(true);
   const { data } = await apollo.query({
@@ -181,8 +169,6 @@ export const fetchWordsFromStudied = async (group, page, setLoading, setWords) =
 
   const words = data.aggregatedWordsStudied;
   const result = toMatrix(words, WORDS_IN_PAGE);
-
-  console.log('final result:', result);
 
   await setWords(result[page]);
   if (result) {
@@ -216,7 +202,6 @@ export const userFetchAudiocall = async (group, page, setLoading, setWords) => {
   if (words.length > 10) {
     words.splice(9, 10);
   }
-  console.log(words, 'from userFetchAudiocall');
   await setWords(words);
 
   if (words) {
@@ -247,7 +232,6 @@ export const getBackUpWords = async (group, page, setLoading, setAdditionalWords
     });
     words = [...words, ...data.aggregatedWords];
   }
-  console.log('words from getBackUpWords', words);
   setAdditionalWords(words);
 
   if (words) {
@@ -263,8 +247,6 @@ export const fetchUserStatistic = async () => {
     variables: {},
     fetchPolicy: 'network-only',
   });
-
-  console.log('data inside fetchUserStatistic', data);
 
   if (data.statistic._id) {
     return data.statistic;
