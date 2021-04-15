@@ -17,7 +17,6 @@ import {
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
 import { ModalQuit } from 'components/MiniGames/Modals/ModalQuit';
-import { useStatisticQuery } from 'lib/graphql/statistic.graphql';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -150,9 +149,7 @@ export default function AudiocallGamePage({ group, page }) {
         fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
       } else if (previousPageName === 'studied') {
         fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
-      }
-      // if (!previousPageName)
-      else {
+      } else {
         userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
       }
     }
@@ -183,7 +180,7 @@ export default function AudiocallGamePage({ group, page }) {
   }, [learnedWords]);
 
   useEffect(() => {
-    if (words.length < 5) {
+    if (user && words.length < 5) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }
   }, [words]);

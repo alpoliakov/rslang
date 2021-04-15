@@ -166,7 +166,7 @@ export default function SprintGamePage({ group, page }) {
   };
 
   useEffect(() => {
-    if (words.length < 2) {
+    if (user && words.length < 2) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }
   }, [words]);
