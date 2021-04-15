@@ -183,7 +183,6 @@ export default function SavannaGamePage({ group, page }) {
   }, [lives, endGame, learnedWords]);
 
   useEffect(() => {
-    console.log(words, 'state words');
     if (user && words.length < 5) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }
