@@ -5,14 +5,14 @@ import { Progress } from '@chakra-ui/react';
 import { Audiocall } from 'components/MiniGames/Audiocall/Audiocall';
 import { ModalAudiocall } from 'components/MiniGames/Audiocall/AudiocallModal';
 import {
-  editGlobalStatistic,
   fetchCurrentWordsAudiocall,
-  fetchUserStatistic,
-  fetchWordsFromComplexity,
-  fetchWordsFromDeleted,
-  fetchWordsFromStudied,
   getBackUpWords,
   userFetchAudiocall,
+  fetchWordsFromComplexity,
+  fetchWordsFromStudied,
+  fetchWordsFromDeleted,
+  fetchUserStatistic,
+  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -25,11 +25,11 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { RiMusic2Fill } from 'react-icons/ri';
 
-import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
 import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
+import { useAppContext } from '../../../../context/ContextApp';
 
 export default function AudiocallGamePage({ group, page }) {
   const [quitGame, setQuitGame] = useState(false);
@@ -50,37 +50,24 @@ export default function AudiocallGamePage({ group, page }) {
 
   const [localState, setLocalState] = useState(null);
 
+  const fullScreen = useFullScreenHandle();
   const [editStatistic] = useEditStatisticMutation();
   const { previousPageName } = useAppContext();
-
-  // const {
-  //   // data: { statistic },
-  //   data,
-  // } = useStatisticQuery();
-  // console.log(data?.statistic, 'data from useStatisticQuery (global)');
-
-  // useEffect(() => console.log('fetchUserStatistic', fetchUserStatistic()), []);
-
-  const { data } = useQuery(GET_LOCAL_STATISTIC);
 
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', data?.localStatistics)), [
-    data,
-  ]);
-
-  useEffect(() => {
-    if (user) {
-      fetchUserStatistic().then((data) => {
-        setUserStatistic(data);
-      });
-    }
-  }, [user]);
+  const {
+    data: { localStatistics },
+  } = useQuery(GET_LOCAL_STATISTIC);
 
   useEffect(() => {
     if (chooseLevel) {
       setCurrentPage(Math.floor(Math.random() * 28));
+    }
+
+    if (!user) {
+      setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
     }
   }, []);
 
@@ -113,9 +100,8 @@ export default function AudiocallGamePage({ group, page }) {
         setLocalState(args);
       }
 
-      if (user && userStatistic) {
+      if (user) {
         const { globalRate, optional } = userStatistic;
-
         const {
           audioCall,
           savanna,
@@ -131,8 +117,8 @@ export default function AudiocallGamePage({ group, page }) {
         const args = {
           globalRate: globalRate + counter,
           ...savanna,
-          ...sprint,
           ...newGame,
+          ...sprint,
           wordsCountCall: wordsCountCall + learnedWords.length,
           rightAnswersCall: rightAnswersCall + totalTrue,
           seriesCall: strike,
@@ -141,40 +127,32 @@ export default function AudiocallGamePage({ group, page }) {
           rightAnswers: rightAnswers + totalTrue,
         };
 
-        // console.log(args);
-        // setUserStatistic(args);
+        console.log(args);
+
+        console.log('Edit statistic');
         editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
       }
     }
-  }, [endGame]);
-
-  // useEffect(() => console.log('userStatistic ', userStatistic), [userStatistic]);
+  }, [endGame, user]);
 
   useEffect(() => {
     if (localState) {
-      nonAuthUserStatistic('localStatistic', data?.localStatistics, localState);
+      nonAuthUserStatistic('localStatistic', localStatistics, localState);
     }
   }, [localState]);
 
-  // const editGlobalStatistic = async (editStatistic,userStatistic) => {
-  //   try {
-  //     const {data} = await editStatistic({
-  //       variables: { input: userStatistic }
-  //     })
-  //   }catch (err) {
-  //     console.error(err.message);
-  //   }
-  // }
-
   const fetchWords = async () => {
     if (user) {
+      console.log('previousPageName', previousPageName, typeof previousPageName);
       if (previousPageName === 'complex') {
         fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
       } else if (previousPageName === 'deleted') {
         fetchWordsFromDeleted(currentGroup, currentPage, setLoading, setWords);
       } else if (previousPageName === 'studied') {
         fetchWordsFromStudied(currentGroup, currentPage, setLoading, setWords);
-      } else {
+      }
+      // if (!previousPageName)
+      else {
         userFetchAudiocall(currentGroup, currentPage, setLoading, setWords);
       }
     }
@@ -187,8 +165,6 @@ export default function AudiocallGamePage({ group, page }) {
   useEffect(() => {
     fetchWords();
   }, [currentGroup, showGame, currentPage]);
-
-  const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
