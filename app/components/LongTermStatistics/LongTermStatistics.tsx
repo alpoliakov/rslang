@@ -9,7 +9,7 @@ const formatedDate = (date) => {
 
 const LongTermStatistics = ({ statistics }) => {
   if (statistics.length === 0) {
-    return <Heading>Недостаточно данных для статистики</Heading>
+    return <Heading>Недостаточно данных для статистики</Heading>;
   }
 
   const formatedStat = statistics.map(({ countWords, date }) => {
