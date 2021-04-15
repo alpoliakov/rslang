@@ -7,6 +7,8 @@ import {
   fetchWordsFromDeleted,
   fetchWordsFromStudied,
   userFetch,
+  fetchUserStatistic,
+  editGlobalStatistic,
 } from 'components/MiniGames/helpers/fetchWords';
 import { getStrike } from 'components/MiniGames/helpers/utils';
 import { ModalEndGame } from 'components/MiniGames/Modals/ModalEndGame';
@@ -20,6 +22,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 
 import { useAppContext } from '../../../../context/ContextApp';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
@@ -41,10 +44,12 @@ export default function NewGamePage({ group, page }) {
   const { user } = useAuth();
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
+  const [userStatistic, setUserStatistic] = useState(null);
 
   const [localState, setLocalState] = useState(null);
 
   const fullScreen = useFullScreenHandle();
+  const [editStatistic] = useEditStatisticMutation();
   const { previousPageName } = useAppContext();
 
   const {
@@ -53,28 +58,79 @@ export default function NewGamePage({ group, page }) {
   const { query } = useRouter();
   const chooseLevel = query.page === '0$menu=true';
 
-  useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
+  useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(Math.floor(Math.random() * 28));
+    }
+
+    if (!user) {
+      setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, newGame, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
+      if (!user) {
+        const { wordsCount, rightAnswers, newGame, localRate } = localState;
 
-      const args = {
-        ...localState,
-        wordsCount: wordsCount + learnedWords.length,
-        rightAnswers: rightAnswers + totalTrue,
-        localRate: localRate + counter,
-        newGame: {
-          wordsCount: newGame.wordsCount + learnedWords.length,
-          rightAnswers: newGame.rightAnswers + totalTrue,
-          series: strike,
-        },
-      };
-      setLocalState(args);
+        const args = {
+          ...localState,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+          localRate: localRate + counter,
+          newGame: {
+            wordsCount: newGame.wordsCount + learnedWords.length,
+            rightAnswers: newGame.rightAnswers + totalTrue,
+            series: strike,
+          },
+        };
+        setLocalState(args);
 
-      console.log('final localStatistic in new game', localState, 'final data');
+        console.log('final localStatistic in new game', localState, 'final data');
+      }
+
+      if (user) {
+        const { globalRate, optional } = userStatistic;
+        const {
+          audioCall,
+          savanna,
+          sprint,
+          newGame,
+          localRate,
+          rightAnswers,
+          wordsCount,
+        } = optional;
+
+        const { wordsCountNew, rightAnswersNew } = newGame;
+
+        const args = {
+          globalRate: globalRate + counter,
+          ...savanna,
+          ...audioCall,
+          ...sprint,
+          wordsCountNew: wordsCountNew + learnedWords.length,
+          rightAnswersNew: rightAnswersNew + totalTrue,
+          seriesNewGame: strike,
+          localRate: localRate + counter,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+        };
+
+        console.log(args);
+
+        console.log('Edit statistic');
+        editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
+      }
     }
   }, [endGame]);
 
@@ -83,12 +139,6 @@ export default function NewGamePage({ group, page }) {
       nonAuthUserStatistic('localStatistic', localStatistics, localState);
     }
   }, [localState]);
-
-  useEffect(() => {
-    if (chooseLevel) {
-      setCurrentPage(Math.floor(Math.random() * 28));
-    }
-  }, []);
 
   const fetchWords = async () => {
     if (user) {

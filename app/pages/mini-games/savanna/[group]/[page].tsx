@@ -2,7 +2,9 @@ import { useQuery } from '@apollo/client';
 import { CloseIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import {
+  editGlobalStatistic,
   fetchCurrentWords,
+  fetchUserStatistic,
   fetchWordsFromComplexity,
   fetchWordsFromDeleted,
   fetchWordsFromStudied,
@@ -23,8 +25,8 @@ import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { RiMusic2Fill } from 'react-icons/ri';
 
 import { useAppContext } from '../../../../context/ContextApp';
-import EditLocalStatistics from '../../../../context/statistic/operations/mutations/editStatistics';
 import { GET_LOCAL_STATISTIC } from '../../../../context/statistic/operations/queries/getLocalStatistic';
+import { useEditStatisticMutation } from '../../../../lib/graphql/editStatistic.graphql';
 import { useAuth } from '../../../../lib/useAuth';
 import { nonAuthUserStatistic } from '../../../../utils/processingUserLocalStatistic';
 
@@ -44,8 +46,14 @@ export default function SavannaGamePage({ group, page }) {
   const [learnedWords, setLearnedWord] = useState([]);
   const [answersArr, setAnswersArr] = useState([]);
   const [additionalWords, setAdditionalWords] = useState([]);
+  const [userStatistic, setUserStatistic] = useState(null);
+
+  const fullScreen = useFullScreenHandle();
 
   const [localState, setLocalState] = useState(null);
+  const [editStatistic] = useEditStatisticMutation();
+  const { query } = useRouter();
+  const chooseLevel = query.page === '0$menu=true';
 
   useEffect(() => setLocalState(nonAuthUserStatistic('localStatistic', localStatistics)), []);
 
@@ -56,23 +64,75 @@ export default function SavannaGamePage({ group, page }) {
   const { previousPageName } = useAppContext();
 
   useEffect(() => {
+    if (chooseLevel) {
+      setCurrentPage(Math.floor(Math.random() * 28));
+    }
+
+    if (!user) {
+      setLocalState(nonAuthUserStatistic('localStatistic', localStatistics));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStatistic().then((data) => {
+        setUserStatistic(data);
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (endGame) {
-      const { wordsCount, rightAnswers, savanna, localRate } = localState;
       const totalTrue = answersArr.filter((answer) => answer === true).length;
       const strike = getStrike(answersArr);
+      if (!user) {
+        const { wordsCount, rightAnswers, savanna, localRate } = localState;
 
-      const args = {
-        ...localState,
-        wordsCount: wordsCount + learnedWords.length,
-        rightAnswers: rightAnswers + totalTrue,
-        localRate: localRate + counter,
-        savanna: {
-          wordsCount: savanna.wordsCount + learnedWords.length,
-          rightAnswers: savanna.rightAnswers + totalTrue,
-          series: strike,
-        },
-      };
-      setLocalState(args);
+        const args = {
+          ...localState,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+          localRate: localRate + counter,
+          savanna: {
+            wordsCount: savanna.wordsCount + learnedWords.length,
+            rightAnswers: savanna.rightAnswers + totalTrue,
+            series: strike,
+          },
+        };
+        setLocalState(args);
+      }
+      if (user) {
+        const { globalRate, optional } = userStatistic;
+        const {
+          audioCall,
+          savanna,
+          sprint,
+          newGame,
+          localRate,
+          rightAnswers,
+          wordsCount,
+        } = optional;
+
+        const { wordsCountSavanna, rightAnswersSavanna } = savanna;
+
+        const args = {
+          globalRate: globalRate + counter,
+          ...newGame,
+          ...audioCall,
+          ...sprint,
+          wordsCountSavanna: wordsCountSavanna + learnedWords.length,
+          rightAnswersSavanna: rightAnswersSavanna + totalTrue,
+          seriesNewGame: strike,
+          localRate: localRate + counter,
+          wordsCount: wordsCount + learnedWords.length,
+          rightAnswers: rightAnswers + totalTrue,
+        };
+
+        console.log(args);
+
+        console.log('Edit statistic');
+        editGlobalStatistic(editStatistic, args).then((data) => setUserStatistic(data));
+      }
     }
   }, [endGame]);
 
@@ -99,21 +159,10 @@ export default function SavannaGamePage({ group, page }) {
       fetchCurrentWords(currentGroup, currentPage, setLoading, setWords);
     }
   };
-  const { query } = useRouter();
-  const chooseLevel = query.page === '0$menu=true';
-
-  useEffect(() => {
-    if (chooseLevel) {
-      setCurrentPage(Math.floor(Math.random() * 28));
-    }
-    console.log(previousPageName, 'previousPageName');
-  }, []);
 
   useEffect(() => {
     fetchWords(previousPageName);
   }, [currentGroup, showGame, currentPage, setGroup]);
-
-  const fullScreen = useFullScreenHandle();
 
   const onQuitGame = () => {
     setQuitGame(true);
@@ -134,8 +183,7 @@ export default function SavannaGamePage({ group, page }) {
   }, [lives, endGame, learnedWords]);
 
   useEffect(() => {
-    console.log(words, 'state words');
-    if (words.length < 5) {
+    if (user && words.length < 5) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }
   }, [words]);

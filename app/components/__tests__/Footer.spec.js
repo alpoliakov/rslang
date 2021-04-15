@@ -9,7 +9,6 @@ describe('Footer', () => {
 
     expect(screen.getByText('@ya-mashnenko')).toBeInTheDocument();
     expect(screen.getByText('@alpoliakov')).toBeInTheDocument();
-    expect(screen.getByText('@buiiz')).toBeInTheDocument();
     expect(screen.getByText('@w1r3d7')).toBeInTheDocument();
   });
 });

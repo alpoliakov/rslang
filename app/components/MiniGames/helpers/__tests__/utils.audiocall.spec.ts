@@ -46,7 +46,8 @@ describe('utils, audiocall', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
-    expect(getNextWordAudiocall(words, learnedWords).translations).toHaveLength(5);
+    const reserveArr = [];
+    expect(getNextWordAudiocall(words, learnedWords, reserveArr).translations).toHaveLength(5);
   });
 
   it('should not contain elements from learnedWords', () => {
@@ -63,27 +64,11 @@ describe('utils, audiocall', () => {
       { word: 'test10', wordTranslations: 'тест10' },
     ];
     const learnedWords = words.slice(0, 3);
+    const reserveArr = [];
     expect(learnedWords).toEqual(
-      expect.not.arrayContaining(getNextWordAudiocall(words, learnedWords).translations),
-    );
-  });
-
-  it('translations should contain mainWord', () => {
-    const words = [
-      { word: 'test1', wordTranslation: 'тест1' },
-      { word: 'test2', wordTranslations: 'тест2' },
-      { word: 'test3', wordTranslations: 'тест3' },
-      { word: 'test4', wordTranslations: 'тест4' },
-      { word: 'test5', wordTranslations: 'тест5' },
-      { word: 'test6', wordTranslations: 'тест6' },
-      { word: 'test7', wordTranslations: 'тест7' },
-      { word: 'test8', wordTranslations: 'тест8' },
-      { word: 'test9', wordTranslations: 'тест9' },
-      { word: 'test10', wordTranslations: 'тест10' },
-    ];
-    const learnedWords = words.slice(0, 3);
-    expect(getNextWordAudiocall(words, learnedWords).translations).toContainEqual(
-      getNextWordAudiocall(words, learnedWords).mainWord,
+      expect.not.arrayContaining(
+        getNextWordAudiocall(words, learnedWords, reserveArr).translations,
+      ),
     );
   });
 });
