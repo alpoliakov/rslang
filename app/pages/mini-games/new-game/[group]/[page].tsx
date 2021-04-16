@@ -95,8 +95,6 @@ export default function NewGamePage({ group, page }) {
           },
         };
         setLocalState(args);
-
-        console.log('final localStatistic in new game', localState, 'final data');
       }
 
       if (user) {
@@ -120,7 +118,7 @@ export default function NewGamePage({ group, page }) {
           ...sprint,
           wordsCountNew: wordsCountNew + learnedWords.length,
           rightAnswersNew: rightAnswersNew + totalTrue,
-          seriesNewGame: strike,
+          seriesNew: strike,
           localRate: localRate + counter,
           wordsCount: wordsCount + learnedWords.length,
           rightAnswers: rightAnswers + totalTrue,
