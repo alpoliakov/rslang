@@ -82,8 +82,6 @@ export default function Stat() {
     { ssr: false },
   );
 
-  console.log(statistic);
-
   return (
     <Container maxW="container.xl" p={2}>
       <Head>

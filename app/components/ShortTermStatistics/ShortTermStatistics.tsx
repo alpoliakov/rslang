@@ -48,8 +48,6 @@ const ShortTermStatistics = ({ statistics }) => {
     return <Heading>Недостаточно данных для статистики</Heading>;
   }
 
-  console.log(savanna);
-
   return (
     <Grid
       templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}

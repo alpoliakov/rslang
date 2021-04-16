@@ -66,11 +66,9 @@ export default function Home() {
   useEffect(() => {
     if (user) {
       fetchStatistic().then((data) => setStatistic(data));
-      console.log('User');
     }
 
     if (!user) {
-      console.log('Non user');
       nonAuthUserStatistic('localStatistic', localStatistics);
     }
   }, [user]);

@@ -55,7 +55,7 @@ export default function Navigation({ group, page }) {
       setPreviousPageName('deleted');
     } else if (pathname.match('studied')) {
       setPreviousPageName('studied');
-    } else {
+    } else if (pathname.match('textbook') || pathname.match('0$menu=true')) {
       setPreviousPageName('');
     }
 

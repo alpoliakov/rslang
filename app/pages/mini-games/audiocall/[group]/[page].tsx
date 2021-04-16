@@ -139,7 +139,7 @@ export default function AudiocallGamePage({ group, page }) {
 
   const fetchWords = async () => {
     if (user) {
-      console.log('previousPageName', previousPageName, typeof previousPageName);
+      console.log('previousPageName - ', previousPageName);
       if (previousPageName === 'complex') {
         fetchWordsFromComplexity(currentGroup, currentPage, setLoading, setWords);
       } else if (previousPageName === 'deleted') {
@@ -177,7 +177,7 @@ export default function AudiocallGamePage({ group, page }) {
   }, [learnedWords]);
 
   useEffect(() => {
-    if (user && words.length < 5) {
+    if (user && words && words.length < 5) {
       getBackUpWords(group, page, setLoading, setAdditionalWords);
     }
   }, [words]);

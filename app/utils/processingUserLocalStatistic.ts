@@ -33,6 +33,5 @@ export const nonAuthUserStatistic = (key, defaultValue, value = null) => {
     });
   }
 
-  console.log(JSON.parse(localStorage.getItem(key)));
   return JSON.parse(localStorage.getItem(key));
 };

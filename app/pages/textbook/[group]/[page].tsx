@@ -112,7 +112,6 @@ export default function Pages({ group, page }) {
       fetchPolicy: 'network-only',
     });
 
-    console.log(data);
     return data.aggregatedWords;
   };
 
@@ -155,7 +154,6 @@ export default function Pages({ group, page }) {
     if (session) {
       fetchWords();
       setSession(false);
-      console.log(localState);
     }
   }, [session]);
 
