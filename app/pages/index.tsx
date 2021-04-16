@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Box, Container, Flex, Heading } from '@chakra-ui/layout';
+import { Box, Container } from '@chakra-ui/layout';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -32,7 +32,6 @@ export default function Home() {
 
   const {
     data: { localStatistics },
-    loading,
   } = useQuery(GET_LOCAL_STATISTIC);
 
   const fetchStatistic = async () => {

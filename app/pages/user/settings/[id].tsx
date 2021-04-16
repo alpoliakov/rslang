@@ -38,7 +38,7 @@ import imageUpload from '../../../utils/imageUpload';
 
 export default function Settings() {
   const { error, signOut, user } = useAuth();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(user);
   const [signUpError, setSignUpError] = useState('');
   const [loading, setLoading] = useState(false);
   const [remove, setRemove] = useState(false);
