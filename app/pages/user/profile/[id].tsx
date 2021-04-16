@@ -8,7 +8,7 @@ import { useAuth } from '../../../lib/useAuth';
 
 export default function Profile() {
   const { user } = useAuth();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(user);
 
   useEffect(() => {
     if (user) {

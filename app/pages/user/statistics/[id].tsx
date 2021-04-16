@@ -10,10 +10,11 @@ import { useAuth } from '../../../lib/useAuth';
 
 export default function UserRate() {
   const { user } = useAuth();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(user);
 
   const {
     data: { statistic },
+    loading,
   } = useStatisticQuery();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function UserRate() {
     }
   }, [user]);
 
-  if (!userData) {
+  if (loading || !userData) {
     return <Loading />;
   }
 
