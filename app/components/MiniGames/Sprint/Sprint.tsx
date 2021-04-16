@@ -109,12 +109,17 @@ const Sprint = ({
 
   useEffect(() => changePicture(correctAnswersArr.length, setPic), [correctAnswersArr]);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   useHotkeys('left', () => handleAnswer(false), [
     counter,
     correctAnswersArr,
     isMusicOn,
     combination,
   ]);
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   useHotkeys('right', () => handleAnswer(true), [
     counter,
     correctAnswersArr,

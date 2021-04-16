@@ -1,10 +1,13 @@
 import './env';
 import 'reflect-metadata';
 
+import nextApp from '@rslang/app';
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import express from 'express';
 import path from 'path';
+
+const handle = nextApp.getRequestHandler();
 
 import createSchema from '../schema';
 import createSession from '../session';
@@ -18,7 +21,6 @@ async function createServer() {
     const app = express();
 
     const corsOptions = {
-      origin: 'http://localhost:3000',
       credentials: true,
     };
 
@@ -42,6 +44,9 @@ async function createServer() {
     });
 
     apolloServer.applyMiddleware({ app, cors: corsOptions });
+
+    await nextApp.prepare();
+    app.get('*', (req, res) => handle(req, res));
 
     app.listen({ port }, () => {
       console.log(`🚀 Server ready at http://localhost:${port}${apolloServer.graphqlPath}`);

@@ -8,7 +8,10 @@
   "private": true,
   "scripts": {
     "test": "lint-staged",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "build": "yarn workspace @rslang/app run build",
+    "start": "yarn workspace @rslang/api run start",
+    "dev": "yarn workspace @rslang/api run dev"
   },
   "lint-staged": {
     "./**/*.{js,jsx,ts,tsx}": [
@@ -16,6 +19,10 @@
     ],
     "*.{css,md}": "prettier --write"
   },
+  "workspaces": [
+    "api",
+    "app"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",

@@ -1,11 +1,11 @@
 {
-  "name": "app",
+  "name": "@rslang/app",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npx graphql-let && next build",
     "start": "next start",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch"

@@ -33,11 +33,15 @@ const StatItem = ({ title, count }) => {
 const ShortTermStatistics = ({ statistics }) => {
   const mainBorderColor = useColorModeValue(PASSIVE_BUTTON_COLOR.LIGHT, PASSIVE_BUTTON_COLOR.DARK);
   let stat = {};
+  // eslint-disable-next-line no-prototype-builtins
   if (statistics.hasOwnProperty('optional')) {
     stat = statistics.optional;
   } else {
     stat = statistics;
   }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const { audioCall, savanna, newGame, sprint, wordsCount, rightAnswers } = stat;
 
   if (wordsCount === 0) {

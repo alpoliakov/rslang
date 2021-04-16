@@ -48,11 +48,15 @@ const NewGame = ({
 
   const [playWord] = useSound(wordAudioUrl);
 
+  const handlePlayWord = () => {
+    playWord();
+  };
+
   const handleOnChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleAnswer = async (event) => {
+  const handleAnswer = async (event?) => {
     event?.preventDefault();
     setIsAnswered(true);
     const isUserAnswerCorrect = checkAnswerNewGame(combination.mainWord, inputValue, user);
@@ -166,7 +170,7 @@ const NewGame = ({
               variant="outline"
               _hover={{ bg: 'rgba(255, 255, 255, 0.089)' }}
               className="audiocall-button-sound"
-              onClick={playWord}>
+              onClick={handlePlayWord}>
               <Icon
                 className="newgame-sound"
                 as={GiSpeaker}

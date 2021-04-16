@@ -24,7 +24,7 @@ import { initializeApollo } from '../../lib/apollo';
 import { AggregatedWordDocument } from '../../lib/graphql/aggregatedWord.graphql';
 import { useEditAggregatedWordMutation } from '../../lib/graphql/editAggregatedWord.graphql';
 
-export default function WordCard({ word, right, wrong, chapter, refetch }) {
+export default function WordCard({ word, right, wrong, chapter, refetch }: any) {
   const [wordAudioUrl, setWordAudioUrl] = useState('');
   const [audioMeaning, setAudioMeaning] = useState('');
   const [audioExample, setAudioExample] = useState('');
