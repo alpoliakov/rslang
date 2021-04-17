@@ -52,6 +52,7 @@ export default function Home() {
 
   const clearAuthUserStatistic = async () => {
     const { data } = await clearStatistic();
+
     if (data.clearDayStatistic._id) {
       toast.success('Дневная статистика очищена');
     }

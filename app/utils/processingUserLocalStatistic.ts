@@ -1,13 +1,13 @@
 import { DAY_IN_mSECONDS } from '../constants';
 import EditLocalStatistics from '../context/statistic/operations/mutations/editStatistics';
 
-export const processingTimeStatistics = async (time, func) => {
+export const processingTimeStatistics = (time, func) => {
   const dataStatistic = new Date(time).getTime();
   const currentTime = new Date().getTime();
   const difTimeInDays = (currentTime - dataStatistic) / DAY_IN_mSECONDS;
 
   if (difTimeInDays > 1) {
-    await func();
+    func();
   }
 };
 
