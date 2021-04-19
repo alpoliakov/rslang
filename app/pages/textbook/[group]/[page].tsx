@@ -398,7 +398,7 @@ export default function Pages({ group, page }) {
                                 ? word.word.textExampleTranslate
                                 : word.textExampleTranslate
                             }</p>`
-                          : `<p>${currentUser ? word.textExample : word.textExample}</p>`,
+                          : `<p>${currentUser ? word.word.textExample : word.textExample}</p>`,
                       }}
                     />
                   </Box>

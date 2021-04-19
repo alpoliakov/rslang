@@ -5,6 +5,7 @@ export const processingTimeStatistics = (time, func) => {
   const dataStatistic = new Date(time).getTime();
   const currentTime = new Date().getTime();
   const difTimeInDays = (currentTime - dataStatistic) / DAY_IN_mSECONDS;
+  // console.log((new Date().valueOf() - new Date(time).valueOf()) / (1000 * 3600 * 24));
 
   if (difTimeInDays > 1) {
     func();
