@@ -1,0 +1,15 @@
+query Settings {
+  settings {
+    _id
+    wordsPerDay
+    user {
+      _id
+      name,
+      email
+    }
+    optional {
+      title
+      description
+    }
+  }
+}

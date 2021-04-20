@@ -1,0 +1,18 @@
+query Word($wordId: ObjectId!) {
+  word(wordId: $wordId) {
+    _id
+    group
+    page
+    word
+    image
+    audio
+    audioMeaning
+    audioExample
+    textMeaning
+    textExample
+    transcription
+    textExampleTranslate
+    textMeaningTranslate
+    wordTranslate
+  }
+}

@@ -1,0 +1,77 @@
+.audiocall-container {
+  background-color: rgb(107 106 89);
+  background-blend-mode: overlay;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 10% auto 15%;
+  grid-template-rows: 10% 90%;
+  background-image: url('https://images.pexels.com/photos/1527934/pexels-photo-1527934.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.audiocall-progress {
+  width: 100%;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.audiocall-sound-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+  margin-bottom: 20px;
+  margin-top: -60px;
+}
+
+.audiocall-answer-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+  margin-bottom: 20px;
+  margin-top: -60px;
+}
+
+.audiocall-answer-box {
+  display: flex;
+  justify-content: center;
+}
+
+.audiocall-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.audiocall-sound {
+  color: white;
+}
+
+.audiocall-answer {
+  margin: auto 20px;
+  color: white;
+  font-size: 30px;
+}
+
+.audiocall-button {
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+  .audiocall-sound-box {
+    margin-top: -100px;
+  }
+  .audiocall-button {
+    margin: 10px;
+  }
+  .audiocall-sound-box {
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,31 @@
+query AllUserWords {
+  allUserWords {
+    _id
+    optional {
+      title
+      repeat
+    }
+    difficulty
+    word {
+      _id
+      group
+      page
+      word
+      image
+      audio
+      audioMeaning
+      audioExample
+      textMeaning
+      textExample
+      transcription
+      textExampleTranslate
+      textMeaningTranslate
+      wordTranslate
+    }
+    user {
+      _id
+      name
+      email
+    }
+  }
+}

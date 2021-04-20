@@ -1,0 +1,47 @@
+mutation EditStatistic($input: StatisticInput!) {
+  editStatistic(input: $input) {
+    _id
+    user {
+      _id
+      name
+      email
+    }
+    globalRate
+    statisticPerDay {
+      countWords
+      date
+    }
+    optional {
+      wordsCount
+      rightAnswers
+      percentsRight
+      localRate
+      createDate
+      savanna {
+        wordsCountSavanna
+        rightAnswersSavanna
+        percentsRightSavanna
+        seriesSavanna
+      }
+      audioCall {
+        wordsCountCall
+        rightAnswersCall
+        percentsRightCall
+        seriesCall
+      }
+      sprint {
+        wordsCountSprint
+        rightAnswersSprint
+        percentsRightSprint
+        seriesSprint
+      }
+      newGame {
+        wordsCountNew
+        rightAnswersNew
+        percentsRightNew
+        seriesNew
+      }
+    }
+  }
+}
+

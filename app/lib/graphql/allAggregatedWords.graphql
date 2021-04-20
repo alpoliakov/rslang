@@ -1,0 +1,34 @@
+query AllAggregatedWords {
+  allAggregatedWords {
+    _id
+    complexity
+    deleted
+    studied
+    optional {
+      rightAnswers
+      repeat
+      wrongAnswers
+    }
+    user {
+      _id
+      name
+      email
+    }
+    word {
+      _id
+      group
+      page
+      word
+      image
+      audio
+      audioMeaning
+      audioExample
+      textMeaning
+      textExample
+      transcription
+      textExampleTranslate
+      textMeaningTranslate
+      wordTranslate
+    }
+  }
+}

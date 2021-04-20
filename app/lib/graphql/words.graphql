@@ -1,0 +1,18 @@
+query Words ($group: Float!, $page: Float!) {
+  words(input: {group: $group, page: $page}) {
+    _id
+    group
+    page
+    word
+    image
+    audio
+    audioMeaning
+    audioExample
+    textMeaning
+    textExample
+    transcription
+    textExampleTranslate
+    textMeaningTranslate
+    wordTranslate
+  }
+}

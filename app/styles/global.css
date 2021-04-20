@@ -1,0 +1,74 @@
+/* ----------- Variables ------------- */
+@import url('./variables.css');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'Alegreya', serif;
+  height: 100%;
+  width: 100%;
+}
+
+.main_container {
+  min-height: 100vh;
+  max-width: 100%;
+  margin: 0 auto;
+  display: grid;
+  row-gap: 20px;
+  align-items: center;
+  justify-items: center;
+  grid-template-rows: auto 1fr auto;
+  /*background: linear-gradient(to top, var(--ds-color__indigo) 0, var(--ds-color__indigo) 100%);*/
+}
+
+/* ----------- Loading ------------- */
+
+@import url('./loading.css');
+
+/* ----------- Shadow text -------------- */
+
+/*Shadow*/
+
+.shadow__item {
+  filter: drop-shadow(10px 10px 10px hsl(0, 0%, 15%));
+  transition: 0.4s ease-in-out;
+}
+
+.hover__item {
+  transition: 0.4s ease-in-out;
+}
+
+.hover__item:hover {
+  filter: drop-shadow(5px 5px 5px hsl(0, 0%, 15%));
+}
+
+.text-light-shadow {
+  text-shadow: 1px 1px 1px #000;
+}
+
+i {
+  color: orange;
+}
+
+/* ----------- Mini Games -------------- */
+
+@import url('components/MiniGames/Sprint/sprint.styles.css');
+
+@import url('components/MiniGames/ChooseLevelModal/ChooseLevelModal.styles.css');
+
+@import url('components/MiniGames/Modals/Modals.styles.css');
+
+@import url('components/MiniGames/Savanna/savanna.styles.css');
+
+@import url('components/MiniGames/Audiocall/audiocall.styles.css');
+
+@import url('components/MiniGames/NewGame/newGame.styles.css');
+
+/* ----------- Pagination -------------- */
+
+@import url('components/Pagination/pagination.styles.css');

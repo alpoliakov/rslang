@@ -1,0 +1,117 @@
+.modal-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(249, 185, 183);
+  display: flex;
+  align-items: center;
+}
+
+.modal {
+  width: 500px;
+  height: 50%;
+  background-color: #96c9dc;
+  font-size: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 10px;
+  border-radius: 0.75rem;
+  transition: 1.1s ease-out;
+  margin: 20% auto;
+}
+
+.modal-box {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modalEnd-result {
+  text-align: center;
+  color: rgb(59, 58, 58);
+  font-weight: bold;
+  font-size: 26px;
+}
+
+.modal-ask {
+  text-align: center;
+  color: rgb(59, 58, 58);
+  font-weight: bold;
+  font-size: 26px;
+}
+
+.content {
+  color: rgb(59, 58, 58);
+  text-align: center;
+  padding: 1rem;
+  font-size: 20px;
+}
+.actions {
+  padding: 0.5rem 1rem;
+}
+
+@media screen and (max-width: 649px) {
+  .modal {
+    width: 90%;
+    font-size: 4vw;
+  }
+}
+
+.modal-accordion-button {
+  color: white;
+}
+
+.modal-extended-information {
+  color: white;
+  font-size: small;
+  font-weight: 300;
+  overflow: auto;
+  height: 80px;
+  text-align: left;
+}
+
+.answerlist {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 10% 90%;
+}
+
+.answers-container {
+  width: 100%;
+  display: grid;
+  grid-row-start: 2;
+  grid-template-columns: 20% 20% 40% 20%;
+}
+
+.total-results {
+  grid-row-start: 1;
+  font-weight: 500;
+  color: rgb(59, 58, 58);
+  text-align: center;
+}
+
+.answers-icons-column {
+  grid-column-start: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.answers-icons-column > * {
+  margin: 5px;
+}
+
+.answers-words-column {
+  grid-column-start: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.answers-words-column > * {
+  padding: 2px;
+}
